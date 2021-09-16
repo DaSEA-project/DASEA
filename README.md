@@ -1,2 +1,1 @@
-# DASEA
-**DA**ta for **S**oftware **E**cosystem **A**nalysis
+# **DA**ta for **S**oftware **E**cosystem **A**nalysis (DASEA)

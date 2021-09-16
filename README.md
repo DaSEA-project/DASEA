@@ -1,2 +1,2 @@
 # DASEA
-DAta for Software Ecosystem Analysis
+**DA**ta for **S**oftware **E**cosystem **A**nalysis

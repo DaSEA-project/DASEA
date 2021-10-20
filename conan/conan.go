@@ -46,73 +46,30 @@ type Item struct {
 	Folder string `yaml:"folder"`
 }
 
-// Clone executes a bash command to run bash or powershell script that clones repository
-func clone(c string, p string) {
-	cmd := exec.Command(c, p)
+func externalCommand(name string, args ...string) {
+	cmd := exec.Command(name, args...)
 	stdout, err := cmd.Output()
 	log.Info(string(stdout))
 
 	if err != nil {
 		log.Errorf("Failed cloning repository with error '%s'", err)
 	}
-
 }
 
-// TODO: Make this a vardiac function together with func clone
-func conan_info(name string, version string) {
+func conanInfo(name string, version string) {
+
 	arg0 := "conan"
-	arg1 := "info"
+	arg1 := "info" // TODO: Test if --update flag reduces time !if find other mechanism to not load cached packages
 	arg2 := "-n"
 	arg3 := "requires"
-	arg4 := name + "/" + version + "@"
+	arg4 := fmt.Sprintf("%s/%s@", name, version)
 	arg5 := "--json"
+	out := fmt.Sprintf("out/%s/%s.json", name, version)
 
-	out_file := "out" + "/" + name + "/" + version + ".json"
-
-	cmd := exec.Command(arg0, arg1, arg2, arg3, arg4, arg5, out_file)
-	stdout, err := cmd.Output()
-
-	log.Info(string(stdout))
-
-	if err != nil {
-		log.Errorf("Failed calling conan api with error %s", err)
-	}
+	externalCommand(arg0, arg1, arg2, arg3, arg4, arg5, out)
 }
 
-// Traverse walks the file tree of "recipes"
-func traverse() {
-	// var recipes []string
-
-	err := filepath.Walk("repo/src/recipes", func(path string, info os.FileInfo, err error) error {
-
-		if err != nil {
-			fmt.Printf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
-			return err
-		}
-
-		dir, file := filepath.Split(path)
-
-		if file == "config.yml" {
-			tmp := strings.Split(dir, "/")
-			name := tmp[len(tmp)-2]
-			test := parse_yaml(path)
-			version := test[0]
-
-			conan_info(name, version)
-			parse_JSON(name, version)
-		}
-
-		// recipes = append(recipes, path)
-		return nil
-	})
-
-	if err != nil {
-		log.Fatalf("Error when walking directories: %v\n", err)
-	}
-}
-
-// Parse_yaml opens a config.yml file and parses the content into a map
-func parse_yaml(path string) []string {
+func parseYAML(path string) []string {
 	var res []string
 	m := make(map[string]map[string]Item)
 
@@ -136,9 +93,9 @@ func parse_yaml(path string) []string {
 	return res
 }
 
-// Parse-JSON parses conan info json file to dependenceis struct
-func parse_JSON(name string, version string) {
-	file, err := os.Open("out/" + name + "/" + version + ".json")
+func parseJSON(name string, version string) {
+	fname := fmt.Sprintf("out/%s/%s.json", name, version)
+	file, err := os.Open(fname)
 
 	if err != nil {
 		log.Info(err)
@@ -154,9 +111,37 @@ func parse_JSON(name string, version string) {
 	for i := 0; i < len(dependencies); i++ {
 
 		if dependencies[i].DisplayName == name+"/"+version {
-			log.Info(name + "/" + version + " requires: ")
+			log.Infof("%s/%s requires: ", name, version) //TODO: Change output to csv or what will be decided
 			log.Info(dependencies[i].Requires)
 		}
+	}
+}
+
+func traverse() {
+	err := filepath.Walk("repo/src/recipes", func(path string, info os.FileInfo, err error) error {
+
+		if err != nil {
+			log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
+			return err
+		}
+
+		dir, file := filepath.Split(path)
+
+		if file == "config.yml" {
+			tmp := strings.Split(dir, "/")
+			name := tmp[len(tmp)-2]
+			test := parseYAML(path)
+			version := test[0]
+
+			conanInfo(name, version)
+			parseJSON(name, version)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		log.Fatalf("Error when walking directories: %v\n", err)
 	}
 }
 
@@ -165,13 +150,13 @@ func main() {
 		path := "ps\\clone.ps1"
 		cmd := "powershell"
 
-		clone(cmd, path)
+		externalCommand(cmd, path)
 
 	} else {
 		cmd := "/bin/sh"
 		path := "bash/clone.sh"
 
-		clone(cmd, path)
+		externalCommand(cmd, path)
 	}
-	traverse()
+	parseJSON("poco", "1.11.0")
 }

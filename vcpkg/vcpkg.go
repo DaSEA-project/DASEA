@@ -11,9 +11,9 @@ import (
 
 
 type Response struct {
-	GeneratedOn string                	`json:"Generated On"`
-	Size int 														`json:"Size"`
-	Packages []Package									`json:"Source"`
+	GeneratedOn string                 	   `json:"Generated On"`
+	Size int 															 `json:"Size"`
+	Packages []Package										 `json:"Source"`
 }
 
 type Package struct {
@@ -22,7 +22,7 @@ type Package struct {
 	Description     string                 `json:"Description"`
 	Supports        string                 `json:"Supports"`
 	Features     	  []Feature              `json:"Features"`
-	Dependencies    []interface{} `json:"Dependencies"`
+	Dependencies    []interface{} 				 `json:"Dependencies"`
 }
 
 type Feature struct {

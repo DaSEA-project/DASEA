@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	log "github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 type Dependencies []struct {
@@ -158,5 +158,5 @@ func main() {
 
 		externalCommand(cmd, path)
 	}
-	parseJSON("poco", "1.11.0")
+	parseJSON("poco", "1.11.0") // traverse()
 }

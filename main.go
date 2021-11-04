@@ -8,5 +8,8 @@ import (
 
 func main() {
 	fmt.Println("hello world!")
-	helpers.ParseJSON()
+	// helpers.ParseJSON()
+	// fpm.Traverse()
+	helpers.ZenodoAPI()
+
 }

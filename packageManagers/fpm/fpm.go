@@ -1,4 +1,4 @@
-package main
+package fpm
 
 import (
 	"encoding/json"
@@ -34,12 +34,12 @@ import (
 
 ///////////////////////////////////////////////////////////////////////////////
 
-type Response struct {
+type response struct {
 	Packages  map[string]interface{} `json:"packages"`
 	IndexDate string                 `json:"index-date"`
 }
 
-type Package struct {
+type pkg struct {
 	Name            string                 `json:"name"`
 	Version         string                 `json:"version"`
 	License         string                 `json:"license"`
@@ -63,8 +63,8 @@ const (
 	PACKAGE_REGESTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json"
 )
 
-func UnmarshalResponse(data []byte) (Response, error) {
-	var r Response
+func UnmarshalResponse(data []byte) (response, error) {
+	var r response
 	err := json.Unmarshal(data, &r)
 	return r, err
 }
@@ -83,7 +83,8 @@ func getKeys(m map[string]interface{}) []string {
 	return keys
 }
 
-func traverse() {
+// call this
+func Traverse() {
 	response, err := http.Get(PACKAGE_REGESTRY)
 	handleError(err)
 	defer response.Body.Close()
@@ -93,8 +94,4 @@ func traverse() {
 	keys := getKeys(res.Packages)
 	fmt.Println(keys)
 
-}
-
-func main() {
-	traverse()
 }

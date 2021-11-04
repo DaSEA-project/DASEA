@@ -1,4 +1,4 @@
-package main
+package vcpkg
 
 import (
 	"encoding/json"
@@ -10,27 +10,27 @@ import (
 )
 
 
-type Response struct {
+type response struct {
 	GeneratedOn string                 	   `json:"Generated On"`
 	Size int 															 `json:"Size"`
-	Packages []Package										 `json:"Source"`
+	Packages []pkg										 `json:"Source"`
 }
 
-type Package struct {
+type pkg struct {
 	Name            string                 `json:"Name"`
 	Version         string                 `json:"Version"`
 	Description     string                 `json:"Description"`
 	Supports        string                 `json:"Supports"`
-	Features     	  []Feature              `json:"Features"`
+	Features     	  []feature              `json:"Features"`
 	Dependencies    []interface{} 				 `json:"Dependencies"`
 }
 
-type Feature struct {
+type feature struct {
 	Name            string                 `json:"Name"`
 	Description     string            	   `json:"Description"`
 }
 
-type Dependency struct {
+type dependency struct {
 	Name            string                 `json:"name"`
 	Platform        string                 `json:"platform"`
 }
@@ -38,15 +38,15 @@ type Dependency struct {
 type PackageWithFormattedDependency struct {
 	Name            string                 `json:"name"`
 	Version       	string                 `json:"Version"`
-	Dependencies    []Dependency
+	Dependencies    []dependency
 }
 
 const (
 	VCPKG_PACKAGES_OUTPUT = "https://vcpkg.io/output.json"
 )
 
-func UnmarshalResponse(data []byte) (Response, error) {
-	var r Response
+func UnmarshalResponse(data []byte) (response, error) {
+	var r response
 	err := json.Unmarshal(data, &r)
 	return r, err
 }
@@ -57,7 +57,7 @@ func handleError(err error) {
 	}
 }
 
-func getPackagesWithFormattedDependencies(packages []Package) []PackageWithFormattedDependency {
+func getPackagesWithFormattedDependencies(packages []pkg) []PackageWithFormattedDependency {
 	formattedPackages := make([]PackageWithFormattedDependency, 0, len(packages));
 
 	for _,p := range packages {
@@ -73,11 +73,11 @@ func getPackagesWithFormattedDependencies(packages []Package) []PackageWithForma
 	return formattedPackages
 }
 
-func getDependencies(dependencies []interface{}) []Dependency {
-	formattedDependencies := make([]Dependency, 0, len(dependencies));
+func getDependencies(dependencies []interface{}) []dependency {
+	formattedDependencies := make([]dependency, 0, len(dependencies));
 
 	for _, dep := range dependencies {
-		var formattedDep Dependency
+		var formattedDep dependency
 		if reflect.TypeOf(dep).Kind() == reflect.String {
 			formattedDep.Name = dep.(string);
 			formattedDep.Platform = ""
@@ -103,8 +103,4 @@ func traverse() {
 func writeToFile(data []PackageWithFormattedDependency) {
 	file, _ := json.MarshalIndent(data, "", " ")
 	_ = ioutil.WriteFile("./dependencies.json", file, 0644)
-}
-
-func main() {
-	traverse()
 }

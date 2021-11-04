@@ -1,4 +1,4 @@
-package main
+package conan
 
 import (
 	"encoding/json"
@@ -14,7 +14,7 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-type Dependencies []struct {
+type dependencies []struct {
 	Revision        string      `json:"revision"`
 	Reference       string      `json:"reference"`
 	IsRef           bool        `json:"is_ref"`
@@ -22,7 +22,7 @@ type Dependencies []struct {
 	ID              string      `json:"id"`
 	BuildID         interface{} `json:"build_id"`
 	Context         string      `json:"context"`
-	Remote          Remote      `json:"remote"`
+	Remote          remote      `json:"remote"`
 	URL             string      `json:"url"`
 	Homepage        string      `json:"homepage"`
 	License         []string    `json:"license"`
@@ -37,12 +37,12 @@ type Dependencies []struct {
 	RequiredBy      []string    `json:"required_by,omitempty"`
 	Requires        []string    `json:"requires,omitempty"`
 }
-type Remote struct {
+type remote struct {
 	Name string `json:"name"`
 	URL  string `json:"url"`
 }
 
-type Item struct {
+type item struct {
 	Folder string `yaml:"folder"`
 }
 
@@ -71,7 +71,7 @@ func conanInfo(name string, version string) {
 
 func parseYAML(path string) []string {
 	var res []string
-	m := make(map[string]map[string]Item)
+	m := make(map[string]map[string]item)
 
 	file, err := ioutil.ReadFile(path)
 
@@ -104,7 +104,7 @@ func parseJSON(name string, version string) {
 
 	byte_val, _ := ioutil.ReadAll(file)
 
-	var dependencies Dependencies
+	var dependencies dependencies
 
 	json.Unmarshal(byte_val, &dependencies)
 

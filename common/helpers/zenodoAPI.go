@@ -15,7 +15,6 @@ const (
 	ZENODO_API = "https://zenodo.org/api/"
 )
 
-
 func ZenodoAPI() {
 	zenodoToken := getEnvVariable("ZENODO_API_KEY")
 	endpoint := ZENODO_API + "deposit/depositions?access_token=" + zenodoToken

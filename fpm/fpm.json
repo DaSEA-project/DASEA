@@ -1,0 +1,1278 @@
+{
+    "packages": {
+        "datetime": {
+            "1.7.0": {
+                "name": "libdatetime",
+                "version": "1.7.0",
+                "license": "MIT",
+                "author": "Milan Curcic",
+                "maintainer": "caomaco@gmail.com",
+                "copyright": "2013-2020 datetime-fortran contributors",
+                "description": null,
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/wavebitscientific/datetime-fortran",
+                "git-tag": "v1.7.0"
+            },
+            "latest": {
+                "name": "datetime",
+                "version": "1.7.1",
+                "license": "MIT",
+                "author": "Milan Curcic",
+                "maintainer": "caomaco@gmail.com",
+                "copyright": "2013-2020 datetime-fortran contributors",
+                "description": null,
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/wavebitscientific/datetime-fortran",
+                "git-tag": null
+            }
+        },
+        "iso_varying_string": {
+            "latest": {
+                "name": "iso_varying_string",
+                "version": "2.3.0",
+                "license": "MIT",
+                "author": "Brad Richardson",
+                "maintainer": "everythingfunctional@protonmail.com",
+                "copyright": "2020 Brad Richardson",
+                "description": null,
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": {
+                    "vegetables": {
+                        "git": "https://gitlab.com/everythingfunctional/vegetables",
+                        "tag": "v7.1.0"
+                    },
+                    "strff": {
+                        "git": "https://gitlab.com/everythingfunctional/strff",
+                        "tag": "v2.1.0"
+                    }
+                },
+                "git": "https://gitlab.com/everythingfunctional/iso_varying_string",
+                "git-tag": null
+            }
+        },
+        "jsonff": {
+            "latest": {
+                "name": "jsonff",
+                "version": "3.0.0",
+                "license": "MIT",
+                "author": "Brad Richardson",
+                "maintainer": "everythingfunctional@protonmail.com",
+                "copyright": "2020 Brad Richardson",
+                "description": null,
+                "executable": null,
+                "dependencies": {
+                    "erloff": {
+                        "git": "https://gitlab.com/everythingfunctional/erloff.git",
+                        "tag": "v2.1.0"
+                    },
+                    "iso_varying_string": {
+                        "git": "https://gitlab.com/everythingfunctional/iso_varying_string.git",
+                        "tag": "v2.2.0"
+                    },
+                    "parff": {
+                        "git": "https://gitlab.com/everythingfunctional/parff.git",
+                        "tag": "v3.1.4"
+                    },
+                    "strff": {
+                        "git": "https://gitlab.com/everythingfunctional/strff.git",
+                        "tag": "v2.1.0"
+                    }
+                },
+                "dev-dependencies": {
+                    "vegetables": {
+                        "git": "https://gitlab.com/everythingfunctional/vegetables",
+                        "tag": "v7.2.0"
+                    }
+                },
+                "git": "https://gitlab.com/everythingfunctional/jsonff",
+                "git-tag": null
+            }
+        },
+        "M_calculator": {
+            "latest": {
+                "name": "M_calculator",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "basic numeric expression parser",
+                "executable": [
+                    {
+                        "name": "compute",
+                        "source-dir": "app",
+                        "main": "compute.f90"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": {
+                    "M_msg": {
+                        "git": "https://github.com/urbanjost/M_msg.git"
+                    }
+                },
+                "git": "https://github.com/urbanjost/M_calculator",
+                "git-tag": null
+            }
+        },
+        "M_change": {
+            "latest": {
+                "name": "M_match",
+                "version": "0.1.0",
+                "license": "MIT",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "Basic Regular Expressions",
+                "executable": [
+                    {
+                        "name": "seek",
+                        "source-dir": "app",
+                        "main": "seek.f90"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_change",
+                "git-tag": null
+            }
+        },
+        "M_color": {
+            "latest": {
+                "name": "M_color",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "conversions between common color models ",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_color",
+                "git-tag": null
+            }
+        },
+        "M_history": {
+            "latest": {
+                "name": "M_history",
+                "version": "0.1.0",
+                "license": "MIT",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "Input History Editor",
+                "executable": null,
+                "dependencies": {
+                    "M_strings": {
+                        "git": "https://github.com/urbanjost/M_strings.git"
+                    }
+                },
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_history",
+                "git-tag": null
+            }
+        },
+        "M_io": {
+            "latest": {
+                "name": "M_io",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "I/O-related tools",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_io",
+                "git-tag": null
+            }
+        },
+        "M_msg": {
+            "latest": {
+                "name": "M_msg",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "converts any standard scalar type to a string and support unit testing",
+                "executable": [
+                    {
+                        "name": "hlp",
+                        "source-dir": "app",
+                        "main": "hlp.f90",
+                        "dependencies": {
+                            "M_io": {
+                                "git": "https://github.com/urbanjost/M_io.git"
+                            }
+                        }
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_msg",
+                "git-tag": null
+            }
+        },
+        "M_process": {
+            "latest": {
+                "name": "M_process",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "ISO_C_BINDING interface to popen(3c) and related system procedures ",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_process",
+                "git-tag": null
+            }
+        },
+        "M_strings": {
+            "latest": {
+                "name": "M_strings",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "string manipulation",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_strings",
+                "git-tag": null
+            }
+        },
+        "M_time": {
+            "latest": {
+                "name": "M_time",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John Urban",
+                "description": "date and time conversion, formatting and computation ",
+                "executable": [
+                    {
+                        "name": "now",
+                        "source-dir": "app/",
+                        "main": "now.f90",
+                        "dependencies": {
+                            "M_kracken95": {
+                                "git": "https://github.com/urbanjost/M_kracken95.git"
+                            },
+                            "M_strings": {
+                                "git": "https://github.com/urbanjost/M_strings.git"
+                            }
+                        }
+                    },
+                    {
+                        "name": "sec2days",
+                        "source-dir": "app/",
+                        "main": "sec2days.f90",
+                        "dependencies": {
+                            "M_kracken95": {
+                                "git": "https://github.com/urbanjost/M_kracken95.git"
+                            },
+                            "M_strings": {
+                                "git": "https://github.com/urbanjost/M_strings.git"
+                            }
+                        }
+                    },
+                    {
+                        "name": "days2sec",
+                        "main": "days2sec.f90",
+                        "dependencies": {
+                            "M_kracken95": {
+                                "git": "https://github.com/urbanjost/M_kracken95.git"
+                            },
+                            "M_strings": {
+                                "git": "https://github.com/urbanjost/M_strings.git"
+                            }
+                        }
+                    },
+                    {
+                        "name": "month",
+                        "source-dir": "app/",
+                        "main": "month.f90",
+                        "dependencies": {
+                            "M_kracken95": {
+                                "git": "https://github.com/urbanjost/M_kracken95.git"
+                            }
+                        }
+                    },
+                    {
+                        "name": "today",
+                        "source-dir": "app/",
+                        "main": "today.f90",
+                        "dependencies": {
+                            "M_kracken95": {
+                                "git": "https://github.com/urbanjost/M_kracken95.git"
+                            }
+                        }
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_time",
+                "git-tag": null
+            }
+        },
+        "quaff": {
+            "latest": {
+                "name": "quaff",
+                "version": "0.4.0",
+                "license": "MIT",
+                "author": "Brad Richardson",
+                "maintainer": "everythingfunctional@protonmail.com",
+                "copyright": "2020 Brad Richardson",
+                "description": null,
+                "executable": null,
+                "dependencies": {
+                    "erloff": {
+                        "git": "https://gitlab.com/everythingfunctional/erloff.git",
+                        "tag": "v2.1.0"
+                    },
+                    "iso_varying_string": {
+                        "git": "https://gitlab.com/everythingfunctional/iso_varying_string.git",
+                        "tag": "v2.0.0"
+                    },
+                    "parff": {
+                        "git": "https://gitlab.com/everythingfunctional/parff.git",
+                        "tag": "v3.1.0"
+                    },
+                    "strff": {
+                        "git": "https://gitlab.com/everythingfunctional/strff.git",
+                        "tag": "v2.0.1"
+                    }
+                },
+                "dev-dependencies": {
+                    "quaff_asserts": {
+                        "path": "quaff_asserts"
+                    },
+                    "vegetables": {
+                        "git": "https://gitlab.com/everythingfunctional/vegetables",
+                        "tag": "v7.0.3"
+                    }
+                },
+                "git": "https://gitlab.com/everythingfunctional/quaff",
+                "git-tag": null
+            }
+        },
+        "sqliteff": {
+            "latest": {
+                "name": "sqliteff",
+                "version": "1.0.0",
+                "license": "MIT",
+                "author": "Brad Richardson",
+                "maintainer": "everythingfunctional@protonmail.com",
+                "copyright": "2020 Brad Richardson",
+                "description": null,
+                "executable": null,
+                "dependencies": {
+                    "iso_varying_string": {
+                        "git": "https://gitlab.com/everythingfunctional/iso_varying_string.git",
+                        "tag": "v1.0.0"
+                    }
+                },
+                "dev-dependencies": {
+                    "vegetables": {
+                        "git": "https://gitlab.com/everythingfunctional/vegetables.git",
+                        "tag": "v5.0.0"
+                    }
+                },
+                "git": "https://gitlab.com/everythingfunctional/sqliteff",
+                "git-tag": null
+            }
+        },
+        "strff": {
+            "latest": {
+                "name": "strff",
+                "version": "2.1.0",
+                "license": "MIT",
+                "author": "Brad Richardson",
+                "maintainer": "everythingfunctional@protonmail.com",
+                "copyright": "2020 Brad Richardson",
+                "description": null,
+                "executable": null,
+                "dependencies": {
+                    "iso_varying_string": {
+                        "git": "https://gitlab.com/everythingfunctional/iso_varying_string.git",
+                        "tag": "v2.1.0"
+                    }
+                },
+                "dev-dependencies": {
+                    "vegetables": {
+                        "git": "https://gitlab.com/everythingfunctional/vegetables.git",
+                        "tag": "v7.0.2"
+                    }
+                },
+                "git": "https://gitlab.com/everythingfunctional/strff",
+                "git-tag": null
+            }
+        },
+        "vegetables": {
+            "latest": {
+                "name": "vegetables",
+                "version": "7.2.2",
+                "license": "MIT",
+                "author": "Brad Richardson",
+                "maintainer": "everythingfunctional@protonmail.com",
+                "copyright": "2020 Brad Richardson",
+                "description": null,
+                "executable": null,
+                "dependencies": {
+                    "iso_varying_string": {
+                        "git": "https://gitlab.com/everythingfunctional/iso_varying_string.git",
+                        "tag": "v2.1.0"
+                    },
+                    "strff": {
+                        "git": "https://gitlab.com/everythingfunctional/strff.git",
+                        "tag": "v2.1.0"
+                    }
+                },
+                "dev-dependencies": null,
+                "git": "https://gitlab.com/everythingfunctional/vegetables",
+                "git-tag": null
+            }
+        },
+        "M_draw": {
+            "latest": {
+                "name": "M_draw",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "basic vector graphics package",
+                "executable": [
+                    {
+                        "name": "make_hershey",
+                        "source-dir": "app/make_hershey",
+                        "main": "make_hershey.f90"
+                    },
+                    {
+                        "name": "h2v",
+                        "source-dir": "app/MAKE_HERSHEY",
+                        "main": "h2v.c"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_draw",
+                "git-tag": null
+            }
+        },
+        "M_kracken95": {
+            "latest": {
+                "name": "M_kracken95",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": " command line parsing using Fortran 95 (LICENSE:PD)",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_kracken95",
+                "git-tag": null
+            }
+        },
+        "M_pixel": {
+            "latest": {
+                "name": "M_pixel",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John Urban",
+                "description": "basic vector drawing into a pixel graphics format",
+                "executable": [
+                    {
+                        "name": "slices",
+                        "source-dir": "app/slices",
+                        "main": "pixel_slices.f90"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_pixel",
+                "git-tag": null
+            }
+        },
+        "M_system": {
+            "latest": {
+                "name": "M_system",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "(mostly)POSIX system routine interface",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": {
+                    "M_msg": {
+                        "git": "https://github.com/urbanjost/M_msg.git"
+                    },
+                    "M_time": {
+                        "git": "https://github.com/urbanjost/M_time.git"
+                    },
+                    "M_process": {
+                        "git": "https://github.com/urbanjost/M_process.git"
+                    }
+                },
+                "git": "https://github.com/urbanjost/M_system",
+                "git-tag": null
+            }
+        },
+        "pointsets": {
+            "latest": {
+                "name": "pointsets",
+                "version": "0.1.0",
+                "license": "MIT",
+                "author": "Arjen Markus",
+                "maintainer": "arjen.markus895@gmail.com",
+                "copyright": "2020 Arjen Markus",
+                "description": null,
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/arjenmarkus/pointsets",
+                "git-tag": null
+            }
+        },
+        "M_escape": {
+            "latest": {
+                "name": "M_escape",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "ANSI control escape sequences using an XML-like syntax for attributes like color on video displays and emulators",
+                "executable": [
+                    {
+                        "name": "plain",
+                        "source-dir": "app",
+                        "main": "plain.f90"
+                    },
+                    {
+                        "name": "light",
+                        "source-dir": "app",
+                        "main": "light.f90"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_escape",
+                "git-tag": null
+            }
+        },
+        "fhash": {
+            "0.1.0": {
+                "name": "fhash",
+                "version": "0.1.0",
+                "license": "MIT",
+                "author": "Laurence Kedward",
+                "maintainer": "laurencekedward@gmail.com",
+                "copyright": "Laurence Kedward 2020",
+                "description": "Implements a hash table type with support for generic keys and values.",
+                "executable": [
+                    {
+                        "source-dir": "app/0-simple-demo",
+                        "main": "main.f90",
+                        "name": "simple-demo"
+                    },
+                    {
+                        "source-dir": "app/1-methods-demo",
+                        "main": "main.f90",
+                        "name": "methods-demo"
+                    },
+                    {
+                        "source-dir": "app/2-derived-type-demo",
+                        "main": "main.f90",
+                        "name": "derived-type-demo"
+                    },
+                    {
+                        "source-dir": "app/bench",
+                        "main": "main.f90",
+                        "name": "benchmark"
+                    },
+                    {
+                        "source-dir": "app/3-custom-key-demo",
+                        "main": "main.f90",
+                        "name": "custom-key-demo"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/LKedward/fhash",
+                "git-tag": "v0.1.0"
+            },
+            "latest": {
+                "name": "fhash",
+                "version": "0.1.0",
+                "license": "MIT",
+                "author": "Laurence Kedward",
+                "maintainer": "laurencekedward@gmail.com",
+                "copyright": "Laurence Kedward 2020",
+                "description": "Implements a hash table type with support for generic keys and values.",
+                "executable": [
+                    {
+                        "source-dir": "app/0-simple-demo",
+                        "main": "main.f90",
+                        "name": "simple-demo"
+                    },
+                    {
+                        "source-dir": "app/1-methods-demo",
+                        "main": "main.f90",
+                        "name": "methods-demo"
+                    },
+                    {
+                        "source-dir": "app/2-derived-type-demo",
+                        "main": "main.f90",
+                        "name": "derived-type-demo"
+                    },
+                    {
+                        "source-dir": "app/bench",
+                        "main": "main.f90",
+                        "name": "benchmark"
+                    },
+                    {
+                        "source-dir": "app/3-custom-key-demo",
+                        "main": "main.f90",
+                        "name": "custom-key-demo"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/LKedward/fhash",
+                "git-tag": null
+            }
+        },
+        "mctc-gcp": {
+            "latest": {
+                "name": "mctc-gcp",
+                "version": "2.1.2",
+                "license": "GPL-3.0-or-later",
+                "author": [
+                    "Stefan Grimme",
+                    "J. Gerit Brandenburg",
+                    "Holger Kruse"
+                ],
+                "maintainer": [
+                    "@grimme-lab"
+                ],
+                "copyright": "2012-2021 Grimme group",
+                "description": "Geometrical Counter-Poise correction",
+                "executable": [
+                    {
+                        "name": "mctc-gcp",
+                        "main": "main.f90",
+                        "source-dir": "app"
+                    }
+                ],
+                "dependencies": {
+                    "mctc-lib": {
+                        "git": "https://github.com/grimme-lab/mctc-lib",
+                        "tag": "v0.2.0"
+                    }
+                },
+                "dev-dependencies": {
+                    "mstore": {
+                        "git": "https://github.com/grimme-lab/mstore",
+                        "tag": "v0.1.1"
+                    }
+                },
+                "git": "https://github.com/grimme-lab/gcp.git",
+                "git-tag": null
+            }
+        },
+        "mctc-lib": {
+            "latest": {
+                "name": "mctc-lib",
+                "version": "0.2.3",
+                "license": "Apache-2.0",
+                "author": [
+                    "Sebastian Ehlert"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "2020-2021 Sebastian Ehlert",
+                "description": "Modular computation tool chain library",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/grimme-lab/mctc-lib.git",
+                "git-tag": null
+            }
+        },
+        "mstore": {
+            "latest": {
+                "name": "mstore",
+                "version": "0.2.0",
+                "license": "Apache-2.0",
+                "author": [
+                    "Sebastian Ehlert"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "2020-2021 Sebastian Ehlert",
+                "description": "Molecular structure store for testing",
+                "executable": [
+                    {
+                        "name": "mstore-fortranize",
+                        "source-dir": "app/fortranize"
+                    },
+                    {
+                        "name": "mstore-info",
+                        "source-dir": "app/info"
+                    }
+                ],
+                "dependencies": {
+                    "mctc-lib": {
+                        "git": "https://github.com/grimme-lab/mctc-lib"
+                    }
+                },
+                "dev-dependencies": null,
+                "git": "https://github.com/grimme-lab/mstore.git",
+                "git-tag": null
+            }
+        },
+        "s-dftd3": {
+            "latest": {
+                "name": "s-dftd3",
+                "version": "0.4.1",
+                "license": "LGPL-3.0-or-later",
+                "author": [
+                    "Sebastian Ehlert"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "2019-2021 Sebastian Ehlert",
+                "description": "Simple reimplementation of the DFT-D3 method",
+                "executable": null,
+                "dependencies": {
+                    "mctc-lib": {
+                        "git": "https://github.com/grimme-lab/mctc-lib",
+                        "tag": "v0.2.3"
+                    }
+                },
+                "dev-dependencies": {
+                    "mstore": {
+                        "git": "https://github.com/grimme-lab/mstore",
+                        "tag": "v0.1.2"
+                    }
+                },
+                "git": "https://github.com/awvwgk/simple-dftd3.git",
+                "git-tag": null
+            }
+        },
+        "toml-f": {
+            "latest": {
+                "name": "toml-f",
+                "version": "0.2.2",
+                "license": "Apache-2.0 OR MIT",
+                "author": [
+                    "Sebastian Ehlert"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "2019-2021 Sebastian Ehlert",
+                "description": "TOML parser implementation for data serialization and deserialization",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/toml-f/toml-f.git",
+                "git-tag": null
+            }
+        },
+        "M_CLI": {
+            "latest": {
+                "name": "M_CLI",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "Unix-style commandline parsing using a prototype command and NAMELIST (STD:f2008)",
+                "executable": [
+                    {
+                        "name": "demo1",
+                        "source-dir": "example",
+                        "main": "demo1.f90"
+                    },
+                    {
+                        "name": "demo2",
+                        "source-dir": "example",
+                        "main": "demo2.f90"
+                    },
+                    {
+                        "name": "demo3",
+                        "source-dir": "example",
+                        "main": "demo3.f90"
+                    },
+                    {
+                        "name": "demo4",
+                        "source-dir": "example",
+                        "main": "demo4.f90"
+                    },
+                    {
+                        "name": "demo5",
+                        "source-dir": "example",
+                        "main": "demo5.f90"
+                    },
+                    {
+                        "name": "demo6",
+                        "source-dir": "example",
+                        "main": "demo6.f90"
+                    },
+                    {
+                        "name": "demo7",
+                        "source-dir": "example",
+                        "main": "demo7.f90"
+                    },
+                    {
+                        "name": "demo9",
+                        "source-dir": "example",
+                        "main": "segments.f90"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_CLI",
+                "git-tag": null
+            }
+        },
+        "M_CLI2": {
+            "latest": {
+                "name": "M_CLI2",
+                "version": "0.1.0",
+                "license": "Public Domain",
+                "author": "John S. Urban",
+                "maintainer": "urbanjost@comcast.net",
+                "copyright": "2020 John S. Urban",
+                "description": "Unix-style commandline parsing using a prototype command",
+                "executable": [
+                    {
+                        "name": "demo1",
+                        "source-dir": "example",
+                        "main": "demo1.f90"
+                    },
+                    {
+                        "name": "demo2",
+                        "source-dir": "example",
+                        "main": "demo2.f90"
+                    },
+                    {
+                        "name": "demo3",
+                        "source-dir": "example",
+                        "main": "demo3.f90"
+                    },
+                    {
+                        "name": "demo4",
+                        "source-dir": "example",
+                        "main": "demo4.f90"
+                    },
+                    {
+                        "name": "demo5",
+                        "source-dir": "example",
+                        "main": "demo5.f90"
+                    },
+                    {
+                        "name": "demo6",
+                        "source-dir": "example",
+                        "main": "demo6.f90"
+                    },
+                    {
+                        "name": "demo7",
+                        "source-dir": "example",
+                        "main": "demo7.f90"
+                    },
+                    {
+                        "name": "demo8",
+                        "source-dir": "example",
+                        "main": "demo8.f90"
+                    },
+                    {
+                        "name": "demo9",
+                        "source-dir": "example",
+                        "main": "demo9.f90"
+                    },
+                    {
+                        "name": "demo10",
+                        "source-dir": "example",
+                        "main": "demo10.f90"
+                    },
+                    {
+                        "name": "demo_get_args_fixed_size",
+                        "source-dir": "example/demos",
+                        "main": "demo_get_args_fixed_size.f90"
+                    },
+                    {
+                        "name": "demo_get_args_fixed_length",
+                        "source-dir": "example/demos",
+                        "main": "demo_get_args_fixed_length.f90"
+                    },
+                    {
+                        "name": "demo_get_args",
+                        "source-dir": "example/demos",
+                        "main": "demo_get_args.f90"
+                    },
+                    {
+                        "name": "demo_set_args",
+                        "source-dir": "example/demos",
+                        "main": "demo_set_args.f90"
+                    },
+                    {
+                        "name": "demo_get_subcommand",
+                        "source-dir": "example/demos",
+                        "main": "demo_get_subcommand.f90"
+                    },
+                    {
+                        "name": "demo_specified",
+                        "source-dir": "example/demos",
+                        "main": "demo_specified.f90"
+                    },
+                    {
+                        "name": "demo_M_CLI2",
+                        "source-dir": "example/demos",
+                        "main": "demo_M_CLI2.f90"
+                    }
+                ],
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/urbanjost/M_CLI2",
+                "git-tag": null
+            }
+        },
+        "dftd4": {
+            "latest": {
+                "name": "dftd4",
+                "version": "3.3.0",
+                "license": "LGPL-3.0-or-later",
+                "author": [
+                    "Eike Caldeweyher",
+                    "Sebastian Ehlert",
+                    "Stefan Grimme"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "Copyright 2017-2021 E. Caldeweyher, S. Ehlert, S. Grimme",
+                "description": "Generally Applicable Atomic-Charge Dependent London Dispersion Correction",
+                "executable": null,
+                "dependencies": {
+                    "mctc-lib": {
+                        "git": "https://github.com/grimme-lab/mctc-lib.git",
+                        "tag": "v0.2.2"
+                    },
+                    "multicharge": {
+                        "git": "https://github.com/grimme-lab/multicharge.git",
+                        "tag": "v0.1.1"
+                    }
+                },
+                "dev-dependencies": {
+                    "mstore": {
+                        "git": "https://github.com/grimme-lab/mstore.git",
+                        "tag": "v0.1.2"
+                    }
+                },
+                "git": "https://github.com/dftd4/dftd4",
+                "git-tag": null
+            }
+        },
+        "multicharge": {
+            "latest": {
+                "name": "multicharge",
+                "version": "0.1.2",
+                "license": "Apache-2.0",
+                "author": [
+                    "Sebastian Ehlert"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "Copyright 2021 Sebastian Ehlert",
+                "description": null,
+                "executable": null,
+                "dependencies": {
+                    "mctc-lib": {
+                        "git": "https://github.com/grimme-lab/mctc-lib.git"
+                    }
+                },
+                "dev-dependencies": {
+                    "mstore": {
+                        "git": "https://github.com/grimme-lab/mstore.git"
+                    }
+                },
+                "git": "https://github.com/grimme-lab/multicharge.git",
+                "git-tag": null
+            }
+        },
+        "finterp": {
+            "1.2.2": {
+                "name": "finterp",
+                "version": "1.2.2",
+                "license": "BSD",
+                "author": "Jacob Williams",
+                "maintainer": "Jacob Williams",
+                "copyright": "Copyright (c) 2016-2021, Jacob Williams",
+                "description": "Modern Fortran Multidimensional Linear Interpolation",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/jacobwilliams/finterp",
+                "git-tag": "1.2.2"
+            },
+            "latest": {
+                "name": "finterp",
+                "version": "1.2.2",
+                "license": "BSD",
+                "author": "Jacob Williams",
+                "maintainer": "Jacob Williams",
+                "copyright": "Copyright (c) 2016-2021, Jacob Williams",
+                "description": "Modern Fortran Multidimensional Linear Interpolation",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/jacobwilliams/finterp",
+                "git-tag": null
+            }
+        },
+        "forlab": {
+            "1.0.1": {
+                "name": "forlab",
+                "version": "0.1.1",
+                "license": "MIT",
+                "author": "keurfonluu",
+                "maintainer": "keurfon.luu@mines-paristech.fr",
+                "copyright": "2016-2021 forlab contributors",
+                "description": null,
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/zoziha/forlab",
+                "git-tag": "v1.0.1"
+            },
+            "latest": {
+                "name": "forlab",
+                "version": "1.0.1",
+                "license": "MIT",
+                "author": "forlab contributors",
+                "maintainer": "https://github.com/fortran-fans/forlab",
+                "copyright": "2016-2021 forlab contributors",
+                "description": "A Fortran module that provides a lot of functions for scientific computing",
+                "executable": null,
+                "dependencies": {
+                    "stdlib": {
+                        "git": "https://github.com/LKedward/stdlib-fpm.git"
+                    }
+                },
+                "dev-dependencies": null,
+                "git": "https://github.com/zoziha/forlab",
+                "git-tag": null
+            }
+        },
+        "functional": {
+            "latest": {
+                "name": "functional",
+                "version": "0.6.1",
+                "license": "BSD-3-Clause",
+                "author": "Milan Curcic",
+                "maintainer": "milancurcic@hey.com",
+                "copyright": "Copyright (c) 2016-2020, functional-fortran contributors",
+                "description": null,
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/wavebitscientific/functional-fortran",
+                "git-tag": null
+            }
+        },
+        "neural-fortran": {
+            "latest": {
+                "name": "neural-fortran",
+                "version": "0.1.0",
+                "license": "MIT",
+                "author": "Milan Curcic",
+                "maintainer": "milancurcic@hey.com",
+                "copyright": "Copyright 2018-2021, neural-fortran contributors",
+                "description": null,
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/modern-fortran/neural-fortran",
+                "git-tag": null
+            }
+        },
+        "fpm": {
+            "latest": {
+                "name": "fpm",
+                "version": "0.4.0",
+                "license": "MIT",
+                "author": "fpm maintainers",
+                "maintainer": "",
+                "copyright": "2020 fpm contributors",
+                "description": null,
+                "executable": null,
+                "dependencies": {
+                    "toml-f": {
+                        "git": "https://github.com/toml-f/toml-f",
+                        "rev": "2f5eaba864ff630ba0c3791126a3f811b6e437f3"
+                    },
+                    "M_CLI2": {
+                        "git": "https://github.com/urbanjost/M_CLI2.git",
+                        "rev": "ea6bbffc1c2fb0885e994d37ccf0029c99b19f24"
+                    }
+                },
+                "dev-dependencies": null,
+                "git": "https://github.com/fortran-lang/fpm",
+                "git-tag": null
+            }
+        },
+        "test-drive": {
+            "latest": {
+                "name": "test-drive",
+                "version": "0.3.0",
+                "license": "Apache-2.0 OR MIT",
+                "author": [
+                    "Sebastian Ehlert"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "2020-2021 Sebastian Ehlert",
+                "description": "The simple testing framework",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/awvwgk/test-drive",
+                "git-tag": null
+            }
+        },
+        "nlopt-f": {
+            "latest": {
+                "name": "nlopt-f",
+                "version": "0.1.0",
+                "license": "MIT",
+                "author": [
+                    "Sebastian Ehlert"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "Copyright 2021 S. Ehlert",
+                "description": "Interface to NLopt library",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": {
+                    "test-drive": {
+                        "git": "https://github.com/awvwgk/test-drive"
+                    }
+                },
+                "git": "https://github.com/grimme-lab/nlopt-f",
+                "git-tag": null
+            }
+        },
+        "tblite": {
+            "latest": {
+                "name": "tblite",
+                "version": "0.1.0",
+                "license": "LGPL-3.0-or-later",
+                "author": [
+                    "Sebastian Ehlert"
+                ],
+                "maintainer": [
+                    "@awvwgk"
+                ],
+                "copyright": "Copyright 2021 S. Ehlert",
+                "description": "Light-weight tight-binding framework",
+                "executable": null,
+                "dependencies": {
+                    "mctc-lib": {
+                        "git": "https://github.com/grimme-lab/mctc-lib"
+                    },
+                    "dftd4": {
+                        "git": "https://github.com/dftd4/dftd4"
+                    },
+                    "s-dftd3": {
+                        "git": "https://github.com/awvwgk/simple-dftd3"
+                    },
+                    "toml-f": {
+                        "git": "https://github.com/toml-f/toml-f"
+                    }
+                },
+                "dev-dependencies": {
+                    "mstore": {
+                        "git": "https://github.com/grimme-lab/mstore"
+                    }
+                },
+                "git": "https://github.com/awvwgk/tblite",
+                "git-tag": null
+            }
+        },
+        "fftpack": {
+            "4.0.0": {
+                "name": "fftpack",
+                "version": "4.0.0",
+                "license": "Public Domain",
+                "author": "Paul N. Swarztrauber",
+                "maintainer": "@fortran-lang",
+                "copyright": "Copyright 1985 National Center for Atmospheric Research, Boulder, CO",
+                "description": "A package of fortran subprograms for the fast fourier transform of periodic and other symmetric sequences",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/fortran-lang/fftpack",
+                "git-tag": "v4.0.0"
+            },
+            "latest": {
+                "name": "fftpack",
+                "version": "4.0.0",
+                "license": "Public Domain",
+                "author": "Paul N. Swarztrauber",
+                "maintainer": "@fortran-lang",
+                "copyright": "Copyright 1985 National Center for Atmospheric Research, Boulder, CO",
+                "description": "A package of fortran subprograms for the fast fourier transform of periodic and other symmetric sequences",
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/fortran-lang/fftpack",
+                "git-tag": null
+            }
+        },
+        "stdlib": {
+            "latest": {
+                "name": "stdlib",
+                "version": "0.0.0",
+                "license": "MIT",
+                "author": "stdlib contributors",
+                "maintainer": "@fortran-lang/stdlib",
+                "copyright": "2019-2021 stdlib contributors",
+                "description": null,
+                "executable": null,
+                "dependencies": null,
+                "dev-dependencies": null,
+                "git": "https://github.com/fortran-lang/stdlib",
+                "git-tag": "stdlib-fpm"
+            }
+        }
+    },
+    "index-date": "Sat Sep 18 14:21:29 2021"
+}

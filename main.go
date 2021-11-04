@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/heyjoakim/DASEA/helpers"
+	"github.com/heyjoakim/DASEA/common/helpers"
 )
 
-func main(){
+func main() {
 	fmt.Println("hello world!")
 	helpers.ParseJSON()
 }

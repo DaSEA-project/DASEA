@@ -1,5 +1,5 @@
 # How to contribute to this project
-All changes, submissions or suggestions happens through github pull requests. Please read below section about our branching model.
+All changes, submissions or suggestions happens through github pull requests. Please read below about branching.
 
 1. Make a fork of the repository and create a branch from `main`
 2. Add your changes, features etc. but only 1 feature pr. PR 

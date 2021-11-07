@@ -5,7 +5,8 @@ import (
 	"os/exec"
 )
 
-func sysCommand(name string, args ... string) {
+// Run system commands
+func Run(name string, args ...string) {
 	cmd := exec.Command(name, args...)
 	stdout, err := cmd.Output()
 	fmt.Print(string(stdout)) //TODO: Use logger library?

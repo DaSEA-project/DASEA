@@ -1,13 +1,16 @@
 package helpers
 
-func ParseJSON () {
-	return
+// Parse json to struct type
+func ParseJSON() int {
+	return 42
 }
 
-func ParseYAML () {
-	return
+// Parse yaml to struct type
+func ParseYAML() int {
+	return 42
 }
 
-func JSONToCSV() {
-	return
+// Write json to CSV file
+func JSONToCSV() int {
+	return 42
 }

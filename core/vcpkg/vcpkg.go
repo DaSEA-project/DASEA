@@ -2,7 +2,6 @@ package vcpkg
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"reflect"
@@ -29,7 +28,7 @@ type pkg struct {
 }
 
 type dependency struct {
-	TargetName     string 	`json:"name",mapstructure:"name"`
+	Name     			 	string 				`json:"name",mapstructure:"name"`
 }
 
 const (
@@ -83,8 +82,9 @@ func getDependencies(dependencies []interface{}) []models.Dependency {
 			formattedDep.TargetName = dep.(string)
 			formattedDep.Constraints = ""
 		} else {
-			mapstructure.Decode(dep, &formattedDep)
-			fmt.Println(formattedDep)
+			var tempDep dependency;
+			mapstructure.Decode(dep, &tempDep)
+			formattedDep.TargetName = tempDep.Name
 		}
 		formattedDependencies = append(formattedDependencies, formattedDep)
 	}

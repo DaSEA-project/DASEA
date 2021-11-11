@@ -21,8 +21,9 @@ type pkg struct {
 	Version         string        `json:"Version"`
 	PackageManager  string
 	Description     string        `json:"Description"`
-	Supports        string        `json:"Supports"`
-	Features        []feature     `json:"Features"`
+	Homepage 	      string 				`json:"Homepage"`
+	Maintainer     string 				`json:"Maintainers"`
+	License        string 				`json:"License"`
 	Dependencies    []interface{} `json:"Dependencies"`
 }
 
@@ -58,18 +59,27 @@ func handleError(err error) {
 	}
 }
 
-func getPackagesWithFormattedDependencies(packages []pkg) []models.Package {
-	formattedPackages := make([]models.Package, 0, len(packages))
+func formatPackagesForCSVExport(packages []pkg) []models.CSVInput {
+	formattedPackages := make([]models.CSVInput, 0, len(packages))
 
 	for _, p := range packages {
+		var csvInput models.CSVInput
 		var pckg models.Package
 		pckg.Name = p.Name
 		pckg.PackageManager = "Vcpkg"
 		pckg.Platform = "C/C++"
+		pckg.Description = p.Description
+		pckg.HomepageURL = p.Homepage
+		pckg.SourceCodeURL = ""
+		pckg.Maintainer = p.Maintainer
+		pckg.License = p.License
+		pckg.Author = ""
+		csvInput.Pkg = pckg
+		csvInput.Versions = []models.Version{ { Version: p.Version } }
 		if len(p.Dependencies) > 0 {
-			pckg.Dependencies = getDependencies(p.Dependencies)
+			csvInput.Dependencies = getDependencies(p.Dependencies)
 		}
-		formattedPackages = append(formattedPackages, pckg)
+		formattedPackages = append(formattedPackages, csvInput)
 	}
 
 	return formattedPackages
@@ -98,11 +108,11 @@ func Traverse() {
 	data, err := ioutil.ReadAll(response.Body)
 	handleError(err)
 	res, _ := UnmarshalResponse(data)
-	deps := getPackagesWithFormattedDependencies(res.Packages)
+	deps := formatPackagesForCSVExport(res.Packages)
 	writeToFile(deps)
 }
 
-func writeToFile(data []models.Package) {
+func writeToFile(data []models.CSVInput) {
 	file, _ := json.MarshalIndent(data, "", " ")
 	_ = ioutil.WriteFile("./dependencies.json", file, 0644)
 }

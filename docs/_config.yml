@@ -24,7 +24,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   A continuously updated dataset of software dependencies covering various package manager ecosystems.
 domain: heyjoakim.github.io # if you want to force HTTPS, specify the domain without the http at the start, e.g. example.com
 url: https://heyjoakim.github.io/ # the base hostname and protocol for your site, e.g. http://example.com
-baseurl: '' # place folder name if the site is served in a subfolder
+baseurl: 'docs' # place folder name if the site is served in a subfolder
 
 # Build settings
 theme: minima

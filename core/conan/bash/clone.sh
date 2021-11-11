@@ -10,7 +10,7 @@ if [ -d src/recipes ]
         git pull
     else
         echo "Cloned git repository"
-        git clone -v $URL
+        git clone -v $URL src
 fi
 
 # End

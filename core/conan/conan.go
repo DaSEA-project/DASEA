@@ -118,7 +118,7 @@ func parseJSON(name string, version string) {
 }
 
 func traverse() {
-	err := filepath.Walk("repo/src/recipes", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk("core/conan/assets/repo/src/recipes", func(path string, info os.FileInfo, err error) error {
 
 		if err != nil {
 			log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
@@ -159,5 +159,6 @@ func Traverse() {
 
 		externalCommand(cmd, path)
 	}
-	// parseJSON("poco", "1.11.0") // traverse()
+
+	traverse()
 }

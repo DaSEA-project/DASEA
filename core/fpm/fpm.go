@@ -17,12 +17,6 @@ type response struct {
 	IndexDate string                 `json:"index-date"`
 }
 
-type full struct {
-	pkg          models.Package
-	versions     []models.Version
-	dependencies []models.Dependency
-}
-
 const (
 	PACKAGE_REGESTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json"
 )
@@ -39,8 +33,8 @@ func handleError(err error) {
 	}
 }
 
-func parsePackage(pkg map[string]interface{}) full {
-	full := full{}
+func parsePackage(pkg map[string]interface{}) models.CSVInput {
+	full := models.CSVInput{}
 
 	latestPkg := pkg["latest"].(map[string]interface{})
 
@@ -133,9 +127,9 @@ func parsePackage(pkg map[string]interface{}) full {
 	/////////////// DEPENDENCIES //////////////////
 	///////////////////////////////////////////////
 
-	full.pkg = model
-	full.versions = versions
-	full.dependencies = append(getDependencies(deps), getDependencies(devDeps)...)
+	full.Pkg = model
+	full.Versions = versions
+	full.Dependencies = append(getDependencies(deps), getDependencies(devDeps)...)
 
 	fmt.Println(full)
 
@@ -178,7 +172,7 @@ func getKeys(m map[string]interface{}) []string {
 }
 
 // call this
-func Traverse() {
+func Traverse() []models.CSVInput {
 	response, err := http.Get(PACKAGE_REGESTRY)
 	handleError(err)
 	defer response.Body.Close()
@@ -186,7 +180,7 @@ func Traverse() {
 	handleError(err)
 	res, _ := unmarshalResponse(data)
 	keys := getKeys(res.Packages)
-	pkgs := make([]full, 0, len(keys))
+	pkgs := make([]models.CSVInput, 0, len(keys))
 	for _, key := range keys {
 		pkg := res.Packages[key]
 		pp := parsePackage(pkg.(map[string]interface{}))

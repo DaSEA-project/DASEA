@@ -21,6 +21,7 @@ func JSONToCSV() int {
 	return 42
 }
 
+// Write 2D array to CSV file. The first row is the header.
 func WriteToCsv(data [][]string, filePath string) {
 	tokens := strings.Split(filePath, "/")
 	path := strings.Join(tokens[:len(tokens)-1], "/")

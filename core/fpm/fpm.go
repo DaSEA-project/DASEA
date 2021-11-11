@@ -9,7 +9,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/heyjoakim/DASEA/common/helpers"
 	"github.com/heyjoakim/DASEA/common/models"
 )
 
@@ -40,7 +39,7 @@ func handleError(err error) {
 	}
 }
 
-func parsePackage(pkg map[string]interface{}) models.Package {
+func parsePackage(pkg map[string]interface{}) full {
 	full := full{}
 
 	latestPkg := pkg["latest"].(map[string]interface{})
@@ -140,7 +139,7 @@ func parsePackage(pkg map[string]interface{}) models.Package {
 
 	fmt.Println(full)
 
-	return model
+	return full
 }
 
 func getDependencies(deps map[string]interface{}) []models.Dependency {
@@ -187,19 +186,13 @@ func Traverse() {
 	handleError(err)
 	res, _ := unmarshalResponse(data)
 	keys := getKeys(res.Packages)
-	pkgs := make([]models.Package, 0, len(keys))
+	pkgs := make([]full, 0, len(keys))
 	for _, key := range keys {
 		pkg := res.Packages[key]
 		pp := parsePackage(pkg.(map[string]interface{}))
 		pkgs = append(pkgs, pp)
 	}
 
-	csvData := make([][]string, 0)
-	q := models.Package{}
-	csvData = append(csvData, q.GetKeys())
-	for _, p := range pkgs {
-		csvData = append(csvData, p.GetValues())
-	}
-	helpers.WriteToCsv(csvData, "core/fpm/out/packages.csv")
+	return pkgs
 
 }

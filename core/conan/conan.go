@@ -145,18 +145,19 @@ func traverse() {
 	}
 }
 
-func main() {
+// Traverses the conan package mange recipes
+func Traverse() {
 	if runtime.GOOS == "windows" {
-		path := "ps\\clone.ps1"
+		path := "core\\conan\\ps\\clone.ps1"
 		cmd := "powershell"
 
 		externalCommand(cmd, path)
 
 	} else {
 		cmd := "/bin/sh"
-		path := "bash/clone.sh"
+		path := "core/conan/bash/clone.sh"
 
 		externalCommand(cmd, path)
 	}
-	parseJSON("poco", "1.11.0") // traverse()
+	// parseJSON("poco", "1.11.0") // traverse()
 }

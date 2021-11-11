@@ -1,7 +1,8 @@
 #!/bin/bash
 
-mkdir repo; cd repo
+mkdir core/conan/assets/repo ; cd core/conan/assets/repo
 URL=https://github.com/conan-io/conan-center-index
+
 
 if [ -d src/recipes ]
     then
@@ -9,7 +10,7 @@ if [ -d src/recipes ]
         git pull
     else
         echo "Cloned git repository"
-        git clone -v $URL src
+        git clone -v $URL
 fi
 
 # End

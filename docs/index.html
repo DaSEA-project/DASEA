@@ -104,7 +104,7 @@
       let datasetsList = document.querySelector("#datasets");
       datasets.forEach(dataset => {
         let datasetListItem = document.createElement("li");
-        datasetListItem.innerHTML = `<a href="${dataset.url}">${dataset.date}</a>`;
+        datasetListItem.innerHTML = `<a href="${dataset.url}" target="_blank">${dataset.date}</a>`;
         datasetsList.appendChild(datasetListItem);
       });
     });

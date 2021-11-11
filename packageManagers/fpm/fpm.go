@@ -2,7 +2,6 @@ package fpm
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"reflect"
@@ -65,9 +64,11 @@ func parsePackage(pkg map[string]interface{}) models.Package {
 			fallthrough
 		case reflect.Array:
 			sb := strings.Builder{}
-			for _, v := range latestPkg["maintainer"].([]interface{}) {
+			for i, v := range latestPkg["maintainer"].([]interface{}) {
 				sb.WriteString(v.(string))
-				sb.WriteString(";")
+				if i < len(latestPkg["maintainer"].([]interface{}))-1 {
+					sb.WriteString(";")
+				}
 			}
 			model.Maintainer = sb.String()
 		default:
@@ -86,9 +87,11 @@ func parsePackage(pkg map[string]interface{}) models.Package {
 			fallthrough
 		case reflect.Array:
 			sb := strings.Builder{}
-			for _, v := range latestPkg["author"].([]interface{}) {
+			for i, v := range latestPkg["author"].([]interface{}) {
 				sb.WriteString(v.(string))
-				sb.WriteString(";")
+				if i < len(latestPkg["author"].([]interface{}))-1 {
+					sb.WriteString(";")
+				}
 			}
 			model.Author = sb.String()
 		default:
@@ -134,6 +137,5 @@ func Traverse() {
 		csvData = append(csvData, p.GetValues())
 	}
 	helpers.WriteToCsv(csvData, "packageManagers/fpm/out/packages.csv")
-	fmt.Printf("%+v", pkgs[0])
 
 }

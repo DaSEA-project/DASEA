@@ -16,7 +16,7 @@ ID,Name,PackageManager,Platform,Description,HomepageURL,SourceCodeURL,Maintainer
 14,M_system,FPM,Fortran,(mostly)POSIX system routine interface,,https://github.com/urbanjost/M_system,urbanjost@comcast.net,Public Domain,John S. Urban
 15,M_time,FPM,Fortran,"date and time conversion, formatting and computation ",,https://github.com/urbanjost/M_time,urbanjost@comcast.net,Public Domain,John S. Urban
 16,datetime,FPM,Fortran,,,https://github.com/wavebitscientific/datetime-fortran,caomaco@gmail.com,MIT,Milan Curcic
-17,dftd4,FPM,Fortran,Generally Applicable Atomic-Charge Dependent London Dispersion Correction,,https://github.com/dftd4/dftd4,@awvwgk;,LGPL-3.0-or-later,Eike Caldeweyher;Sebastian Ehlert;Stefan Grimme;
+17,dftd4,FPM,Fortran,Generally Applicable Atomic-Charge Dependent London Dispersion Correction,,https://github.com/dftd4/dftd4,@awvwgk,LGPL-3.0-or-later,Eike Caldeweyher;Sebastian Ehlert;Stefan Grimme
 18,fftpack,FPM,Fortran,A package of fortran subprograms for the fast fourier transform of periodic and other symmetric sequences,,https://github.com/fortran-lang/fftpack,@fortran-lang,Public Domain,Paul N. Swarztrauber
 19,fhash,FPM,Fortran,Implements a hash table type with support for generic keys and values.,,https://github.com/LKedward/fhash,laurencekedward@gmail.com,MIT,Laurence Kedward
 20,finterp,FPM,Fortran,Modern Fortran Multidimensional Linear Interpolation,,https://github.com/jacobwilliams/finterp,Jacob Williams,BSD,Jacob Williams
@@ -25,19 +25,19 @@ ID,Name,PackageManager,Platform,Description,HomepageURL,SourceCodeURL,Maintainer
 23,functional,FPM,Fortran,,,https://github.com/wavebitscientific/functional-fortran,milancurcic@hey.com,BSD-3-Clause,Milan Curcic
 24,iso_varying_string,FPM,Fortran,,,https://gitlab.com/everythingfunctional/iso_varying_string,everythingfunctional@protonmail.com,MIT,Brad Richardson
 25,jsonff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/jsonff,everythingfunctional@protonmail.com,MIT,Brad Richardson
-26,mctc-gcp,FPM,Fortran,Geometrical Counter-Poise correction,,https://github.com/grimme-lab/gcp.git,@grimme-lab;,GPL-3.0-or-later,Stefan Grimme;J. Gerit Brandenburg;Holger Kruse;
-27,mctc-lib,FPM,Fortran,Modular computation tool chain library,,https://github.com/grimme-lab/mctc-lib.git,@awvwgk;,Apache-2.0,Sebastian Ehlert;
-28,mstore,FPM,Fortran,Molecular structure store for testing,,https://github.com/grimme-lab/mstore.git,@awvwgk;,Apache-2.0,Sebastian Ehlert;
-29,multicharge,FPM,Fortran,,,https://github.com/grimme-lab/multicharge.git,@awvwgk;,Apache-2.0,Sebastian Ehlert;
+26,mctc-gcp,FPM,Fortran,Geometrical Counter-Poise correction,,https://github.com/grimme-lab/gcp.git,@grimme-lab,GPL-3.0-or-later,Stefan Grimme;J. Gerit Brandenburg;Holger Kruse
+27,mctc-lib,FPM,Fortran,Modular computation tool chain library,,https://github.com/grimme-lab/mctc-lib.git,@awvwgk,Apache-2.0,Sebastian Ehlert
+28,mstore,FPM,Fortran,Molecular structure store for testing,,https://github.com/grimme-lab/mstore.git,@awvwgk,Apache-2.0,Sebastian Ehlert
+29,multicharge,FPM,Fortran,,,https://github.com/grimme-lab/multicharge.git,@awvwgk,Apache-2.0,Sebastian Ehlert
 30,neural-fortran,FPM,Fortran,,,https://github.com/modern-fortran/neural-fortran,milancurcic@hey.com,MIT,Milan Curcic
-31,nlopt-f,FPM,Fortran,Interface to NLopt library,,https://github.com/grimme-lab/nlopt-f,@awvwgk;,MIT,Sebastian Ehlert;
+31,nlopt-f,FPM,Fortran,Interface to NLopt library,,https://github.com/grimme-lab/nlopt-f,@awvwgk,MIT,Sebastian Ehlert
 32,pointsets,FPM,Fortran,,,https://github.com/arjenmarkus/pointsets,arjen.markus895@gmail.com,MIT,Arjen Markus
 33,quaff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/quaff,everythingfunctional@protonmail.com,MIT,Brad Richardson
-34,s-dftd3,FPM,Fortran,Simple reimplementation of the DFT-D3 method,,https://github.com/awvwgk/simple-dftd3.git,@awvwgk;,LGPL-3.0-or-later,Sebastian Ehlert;
+34,s-dftd3,FPM,Fortran,Simple reimplementation of the DFT-D3 method,,https://github.com/awvwgk/simple-dftd3.git,@awvwgk,LGPL-3.0-or-later,Sebastian Ehlert
 35,sqliteff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/sqliteff,everythingfunctional@protonmail.com,MIT,Brad Richardson
 36,stdlib,FPM,Fortran,,,https://github.com/fortran-lang/stdlib,@fortran-lang/stdlib,MIT,stdlib contributors
 37,strff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/strff,everythingfunctional@protonmail.com,MIT,Brad Richardson
-38,tblite,FPM,Fortran,Light-weight tight-binding framework,,https://github.com/awvwgk/tblite,@awvwgk;,LGPL-3.0-or-later,Sebastian Ehlert;
-39,test-drive,FPM,Fortran,The simple testing framework,,https://github.com/awvwgk/test-drive,@awvwgk;,Apache-2.0 OR MIT,Sebastian Ehlert;
-40,toml-f,FPM,Fortran,TOML parser implementation for data serialization and deserialization,,https://github.com/toml-f/toml-f.git,@awvwgk;,Apache-2.0 OR MIT,Sebastian Ehlert;
+38,tblite,FPM,Fortran,Light-weight tight-binding framework,,https://github.com/awvwgk/tblite,@awvwgk,LGPL-3.0-or-later,Sebastian Ehlert
+39,test-drive,FPM,Fortran,The simple testing framework,,https://github.com/awvwgk/test-drive,@awvwgk,Apache-2.0 OR MIT,Sebastian Ehlert
+40,toml-f,FPM,Fortran,TOML parser implementation for data serialization and deserialization,,https://github.com/toml-f/toml-f.git,@awvwgk,Apache-2.0 OR MIT,Sebastian Ehlert
 41,vegetables,FPM,Fortran,,,https://gitlab.com/everythingfunctional/vegetables,everythingfunctional@protonmail.com,MIT,Brad Richardson

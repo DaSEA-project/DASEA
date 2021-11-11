@@ -1,15 +1,11 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/heyjoakim/DASEA/packageManagers/fpm"
-)
+import "github.com/heyjoakim/DASEA/core/conan"
 
 func main() {
-	fmt.Println("hello world!")
 	// helpers.ParseJSON()
-	fpm.Traverse()
+	// fpm.Traverse()
+	conan.Traverse()
 	//helpers.ZenodoAPI()
 
 }

@@ -139,7 +139,7 @@ func parseJSON(name string, version string) {
 			model.HomepageURL = dependencies[i].URL
 			model.SourceCodeURL = ""
 			model.Maintainer = ""
-			model.License = dependencies[i].License
+			model.License = dependencies[i].License[0]
 			model.Author = ""
 		} else {
 			log.Errorf("Package %s does not exist in conan info", name + version)

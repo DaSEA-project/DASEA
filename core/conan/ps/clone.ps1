@@ -1,5 +1,5 @@
 $url = 'https://github.com/conan-io/conan-center-index'
-$folder = 'src/recipes'
+$folder = 'core/assets/recipes'
 
 Set-Location repo
 

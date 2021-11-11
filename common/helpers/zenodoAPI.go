@@ -8,27 +8,27 @@ import (
 )
 
 type ZENODOBucketResponse struct {
-	Bucket  string `njson:"links.bucket"`
+	Bucket string `njson:"links.bucket"`
 }
 
 const (
 	ZENODO_API = "https://zenodo.org/api/"
 )
 
+// Send data to Zendo API
 func ZenodoAPI() {
+	//TODO: naming
 	zenodoToken := getEnvVariable("ZENODO_API_KEY")
 	endpoint := ZENODO_API + "deposit/depositions?access_token=" + zenodoToken
 	payload := strings.NewReader("{}")
-	response := httpRequest("POST",endpoint,payload)
-	res,_ := UnmarshalResponse(response)
+	response := httpRequest("POST", endpoint, payload)
+	res, _ := UnmarshalResponse(response)
 	buckerURL := res.Bucket
 	fmt.Println(buckerURL)
 
 	// TODO: use bucket URL to upload the file in the bucket
 	// bucketURL/fileName?access_token=zenodoToken
 
-
-	return
 }
 
 func UnmarshalResponse(data []byte) (ZENODOBucketResponse, error) {

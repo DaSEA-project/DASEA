@@ -7,9 +7,9 @@ import (
 	"net/http"
 )
 
-func httpRequest(method, url string, payload io.Reader) ([]byte) {
+func httpRequest(method, url string, payload io.Reader) []byte {
 	req, err := http.NewRequest(method, url, payload)
-	if(method == "POST") {
+	if method == "POST" {
 		req.Header.Add("Content-Type", "application/json")
 	}
 	handleError(err)

@@ -9,19 +9,12 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/heyjoakim/DASEA/common/helpers"
 	"github.com/heyjoakim/DASEA/common/models"
 )
 
 type response struct {
 	Packages  map[string]interface{} `json:"packages"`
 	IndexDate string                 `json:"index-date"`
-}
-
-type full struct {
-	pkg          models.Package
-	versions     []models.Version
-	dependencies []models.Dependency
 }
 
 const (
@@ -40,8 +33,8 @@ func handleError(err error) {
 	}
 }
 
-func parsePackage(pkg map[string]interface{}) models.Package {
-	full := full{}
+func parsePackage(pkg map[string]interface{}) models.CSVInput {
+	full := models.CSVInput{}
 
 	latestPkg := pkg["latest"].(map[string]interface{})
 
@@ -134,13 +127,13 @@ func parsePackage(pkg map[string]interface{}) models.Package {
 	/////////////// DEPENDENCIES //////////////////
 	///////////////////////////////////////////////
 
-	full.pkg = model
-	full.versions = versions
-	full.dependencies = append(getDependencies(deps), getDependencies(devDeps)...)
+	full.Pkg = model
+	full.Versions = versions
+	full.Dependencies = append(getDependencies(deps), getDependencies(devDeps)...)
 
 	fmt.Println(full)
 
-	return model
+	return full
 }
 
 func getDependencies(deps map[string]interface{}) []models.Dependency {
@@ -179,7 +172,7 @@ func getKeys(m map[string]interface{}) []string {
 }
 
 // call this
-func Traverse() {
+func Traverse() []models.CSVInput {
 	response, err := http.Get(PACKAGE_REGESTRY)
 	handleError(err)
 	defer response.Body.Close()
@@ -187,19 +180,13 @@ func Traverse() {
 	handleError(err)
 	res, _ := unmarshalResponse(data)
 	keys := getKeys(res.Packages)
-	pkgs := make([]models.Package, 0, len(keys))
+	pkgs := make([]models.CSVInput, 0, len(keys))
 	for _, key := range keys {
 		pkg := res.Packages[key]
 		pp := parsePackage(pkg.(map[string]interface{}))
 		pkgs = append(pkgs, pp)
 	}
 
-	csvData := make([][]string, 0)
-	q := models.Package{}
-	csvData = append(csvData, q.GetKeys())
-	for _, p := range pkgs {
-		csvData = append(csvData, p.GetValues())
-	}
-	helpers.WriteToCsv(csvData, "core/fpm/out/packages.csv")
+	return pkgs
 
 }

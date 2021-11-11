@@ -94,7 +94,7 @@ func parseYAML(path string) []string {
 }
 
 func parseJSON(name string, version string) {
-	fname := fmt.Sprintf("out/%s/%s.json", name, version)
+	fname := fmt.Sprintf("core/conan/out/%s/%s.json", name, version)
 	file, err := os.Open(fname)
 
 	if err != nil {
@@ -160,5 +160,8 @@ func Traverse() {
 		externalCommand(cmd, path)
 	}
 
-	traverse()
+	// traverse()
+	parseJSON("poco", "1.10.0")
+	parseJSON("zulu-open-jdk", "11.0.8")
+	parseJSON("zstd", "1.5.0")
 }

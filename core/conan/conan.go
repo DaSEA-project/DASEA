@@ -118,7 +118,7 @@ func parseJSON(name string, version string) {
 	model.Name = name
 	model.PackageManager = "Conan"
 	model.Platform = "C/C++"
-	model.Description = 
+	model.Description = ""
 	model.HomepageURL = ""
 	model.SourceCodeURL = ""
 	model.Maintainer = ""

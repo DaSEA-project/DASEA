@@ -2,6 +2,7 @@ package vcpkg
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"reflect"
@@ -11,9 +12,9 @@ import (
 )
 
 type response struct {
-	GeneratedOn 		string `json:"Generated On"`
-	Size        		int    `json:"Size"`
-	Packages    		[]pkg  `json:"Source"`
+	GeneratedOn 		string 			 `json:"Generated On"`
+	Size        		int    			 `json:"Size"`
+	Packages    		[]pkg  			 `json:"Source"`
 }
 
 type pkg struct {
@@ -22,25 +23,13 @@ type pkg struct {
 	PackageManager  string
 	Description     string        `json:"Description"`
 	Homepage 	      string 				`json:"Homepage"`
-	Maintainer     string 				`json:"Maintainers"`
-	License        string 				`json:"License"`
+	Maintainer      string 				`json:"Maintainers"`
+	License         string 				`json:"License"`
 	Dependencies    []interface{} `json:"Dependencies"`
 }
 
-type feature struct {
-	Name        string `json:"Name"`
-	Description string `json:"Description"`
-}
-
 type dependency struct {
-	Name     string `json:"name"`
-	Platform string `json:"platform"`
-}
-
-type PackageWithFormattedDependency struct {
-	Name         string `json:"name"`
-	Version      string `json:"Version"`
-	Dependencies []dependency
+	TargetName     string 	`json:"name",mapstructure:"name"`
 }
 
 const (
@@ -95,6 +84,7 @@ func getDependencies(dependencies []interface{}) []models.Dependency {
 			formattedDep.Constraints = ""
 		} else {
 			mapstructure.Decode(dep, &formattedDep)
+			fmt.Println(formattedDep)
 		}
 		formattedDependencies = append(formattedDependencies, formattedDep)
 	}
@@ -114,5 +104,5 @@ func Traverse() {
 
 func writeToFile(data []models.CSVInput) {
 	file, _ := json.MarshalIndent(data, "", " ")
-	_ = ioutil.WriteFile("./dependencies.json", file, 0644)
+	_ = ioutil.WriteFile("./core/vcpkg/dependencies.json", file, 0644)
 }

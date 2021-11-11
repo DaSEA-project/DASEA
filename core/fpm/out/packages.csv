@@ -1,43 +1,43 @@
-ID,Name,PackageManager,Platform,Description,HomepageURL,SourceCodeURL,Maintainer,License,Author
-0,M_CLI,FPM,Fortran,Unix-style commandline parsing using a prototype command and NAMELIST (STD:f2008),,https://github.com/urbanjost/M_CLI,urbanjost@comcast.net,Public Domain,John S. Urban
-1,M_CLI2,FPM,Fortran,Unix-style commandline parsing using a prototype command,,https://github.com/urbanjost/M_CLI2,urbanjost@comcast.net,Public Domain,John S. Urban
-2,M_calculator,FPM,Fortran,basic numeric expression parser,,https://github.com/urbanjost/M_calculator,urbanjost@comcast.net,Public Domain,John S. Urban
-3,M_match,FPM,Fortran,Basic Regular Expressions,,https://github.com/urbanjost/M_change,urbanjost@comcast.net,MIT,John S. Urban
-4,M_color,FPM,Fortran,conversions between common color models ,,https://github.com/urbanjost/M_color,urbanjost@comcast.net,Public Domain,John S. Urban
-5,M_draw,FPM,Fortran,basic vector graphics package,,https://github.com/urbanjost/M_draw,urbanjost@comcast.net,Public Domain,John S. Urban
-6,M_escape,FPM,Fortran,ANSI control escape sequences using an XML-like syntax for attributes like color on video displays and emulators,,https://github.com/urbanjost/M_escape,urbanjost@comcast.net,Public Domain,John S. Urban
-7,M_history,FPM,Fortran,Input History Editor,,https://github.com/urbanjost/M_history,urbanjost@comcast.net,MIT,John S. Urban
-8,M_io,FPM,Fortran,I/O-related tools,,https://github.com/urbanjost/M_io,urbanjost@comcast.net,Public Domain,John S. Urban
-9,M_kracken95,FPM,Fortran," command line parsing using Fortran 95 (LICENSE:PD)",,https://github.com/urbanjost/M_kracken95,urbanjost@comcast.net,Public Domain,John S. Urban
-10,M_msg,FPM,Fortran,converts any standard scalar type to a string and support unit testing,,https://github.com/urbanjost/M_msg,urbanjost@comcast.net,Public Domain,John S. Urban
-11,M_pixel,FPM,Fortran,basic vector drawing into a pixel graphics format,,https://github.com/urbanjost/M_pixel,urbanjost@comcast.net,Public Domain,John S. Urban
-12,M_process,FPM,Fortran,ISO_C_BINDING interface to popen(3c) and related system procedures ,,https://github.com/urbanjost/M_process,urbanjost@comcast.net,Public Domain,John S. Urban
-13,M_strings,FPM,Fortran,string manipulation,,https://github.com/urbanjost/M_strings,urbanjost@comcast.net,Public Domain,John S. Urban
-14,M_system,FPM,Fortran,(mostly)POSIX system routine interface,,https://github.com/urbanjost/M_system,urbanjost@comcast.net,Public Domain,John S. Urban
-15,M_time,FPM,Fortran,"date and time conversion, formatting and computation ",,https://github.com/urbanjost/M_time,urbanjost@comcast.net,Public Domain,John S. Urban
-16,datetime,FPM,Fortran,,,https://github.com/wavebitscientific/datetime-fortran,caomaco@gmail.com,MIT,Milan Curcic
-17,dftd4,FPM,Fortran,Generally Applicable Atomic-Charge Dependent London Dispersion Correction,,https://github.com/dftd4/dftd4,@awvwgk,LGPL-3.0-or-later,Eike Caldeweyher;Sebastian Ehlert;Stefan Grimme
-18,fftpack,FPM,Fortran,A package of fortran subprograms for the fast fourier transform of periodic and other symmetric sequences,,https://github.com/fortran-lang/fftpack,@fortran-lang,Public Domain,Paul N. Swarztrauber
-19,fhash,FPM,Fortran,Implements a hash table type with support for generic keys and values.,,https://github.com/LKedward/fhash,laurencekedward@gmail.com,MIT,Laurence Kedward
-20,finterp,FPM,Fortran,Modern Fortran Multidimensional Linear Interpolation,,https://github.com/jacobwilliams/finterp,Jacob Williams,BSD,Jacob Williams
-21,forlab,FPM,Fortran,A Fortran module that provides a lot of functions for scientific computing,,https://github.com/zoziha/forlab,https://github.com/fortran-fans/forlab,MIT,forlab contributors
-22,fpm,FPM,Fortran,,,https://github.com/fortran-lang/fpm,,MIT,fpm maintainers
-23,functional,FPM,Fortran,,,https://github.com/wavebitscientific/functional-fortran,milancurcic@hey.com,BSD-3-Clause,Milan Curcic
-24,iso_varying_string,FPM,Fortran,,,https://gitlab.com/everythingfunctional/iso_varying_string,everythingfunctional@protonmail.com,MIT,Brad Richardson
-25,jsonff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/jsonff,everythingfunctional@protonmail.com,MIT,Brad Richardson
-26,mctc-gcp,FPM,Fortran,Geometrical Counter-Poise correction,,https://github.com/grimme-lab/gcp.git,@grimme-lab,GPL-3.0-or-later,Stefan Grimme;J. Gerit Brandenburg;Holger Kruse
-27,mctc-lib,FPM,Fortran,Modular computation tool chain library,,https://github.com/grimme-lab/mctc-lib.git,@awvwgk,Apache-2.0,Sebastian Ehlert
-28,mstore,FPM,Fortran,Molecular structure store for testing,,https://github.com/grimme-lab/mstore.git,@awvwgk,Apache-2.0,Sebastian Ehlert
-29,multicharge,FPM,Fortran,,,https://github.com/grimme-lab/multicharge.git,@awvwgk,Apache-2.0,Sebastian Ehlert
-30,neural-fortran,FPM,Fortran,,,https://github.com/modern-fortran/neural-fortran,milancurcic@hey.com,MIT,Milan Curcic
-31,nlopt-f,FPM,Fortran,Interface to NLopt library,,https://github.com/grimme-lab/nlopt-f,@awvwgk,MIT,Sebastian Ehlert
-32,pointsets,FPM,Fortran,,,https://github.com/arjenmarkus/pointsets,arjen.markus895@gmail.com,MIT,Arjen Markus
-33,quaff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/quaff,everythingfunctional@protonmail.com,MIT,Brad Richardson
-34,s-dftd3,FPM,Fortran,Simple reimplementation of the DFT-D3 method,,https://github.com/awvwgk/simple-dftd3.git,@awvwgk,LGPL-3.0-or-later,Sebastian Ehlert
-35,sqliteff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/sqliteff,everythingfunctional@protonmail.com,MIT,Brad Richardson
-36,stdlib,FPM,Fortran,,,https://github.com/fortran-lang/stdlib,@fortran-lang/stdlib,MIT,stdlib contributors
-37,strff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/strff,everythingfunctional@protonmail.com,MIT,Brad Richardson
-38,tblite,FPM,Fortran,Light-weight tight-binding framework,,https://github.com/awvwgk/tblite,@awvwgk,LGPL-3.0-or-later,Sebastian Ehlert
-39,test-drive,FPM,Fortran,The simple testing framework,,https://github.com/awvwgk/test-drive,@awvwgk,Apache-2.0 OR MIT,Sebastian Ehlert
-40,toml-f,FPM,Fortran,TOML parser implementation for data serialization and deserialization,,https://github.com/toml-f/toml-f.git,@awvwgk,Apache-2.0 OR MIT,Sebastian Ehlert
-41,vegetables,FPM,Fortran,,,https://gitlab.com/everythingfunctional/vegetables,everythingfunctional@protonmail.com,MIT,Brad Richardson
+Name,PackageManager,Platform,Description,HomepageURL,SourceCodeURL,Maintainer,License,Author
+M_CLI,FPM,Fortran,Unix-style commandline parsing using a prototype command and NAMELIST (STD:f2008),,https://github.com/urbanjost/M_CLI,urbanjost@comcast.net,Public Domain,John S. Urban
+M_CLI2,FPM,Fortran,Unix-style commandline parsing using a prototype command,,https://github.com/urbanjost/M_CLI2,urbanjost@comcast.net,Public Domain,John S. Urban
+M_calculator,FPM,Fortran,basic numeric expression parser,,https://github.com/urbanjost/M_calculator,urbanjost@comcast.net,Public Domain,John S. Urban
+M_match,FPM,Fortran,Basic Regular Expressions,,https://github.com/urbanjost/M_change,urbanjost@comcast.net,MIT,John S. Urban
+M_color,FPM,Fortran,conversions between common color models ,,https://github.com/urbanjost/M_color,urbanjost@comcast.net,Public Domain,John S. Urban
+M_draw,FPM,Fortran,basic vector graphics package,,https://github.com/urbanjost/M_draw,urbanjost@comcast.net,Public Domain,John S. Urban
+M_escape,FPM,Fortran,ANSI control escape sequences using an XML-like syntax for attributes like color on video displays and emulators,,https://github.com/urbanjost/M_escape,urbanjost@comcast.net,Public Domain,John S. Urban
+M_history,FPM,Fortran,Input History Editor,,https://github.com/urbanjost/M_history,urbanjost@comcast.net,MIT,John S. Urban
+M_io,FPM,Fortran,I/O-related tools,,https://github.com/urbanjost/M_io,urbanjost@comcast.net,Public Domain,John S. Urban
+M_kracken95,FPM,Fortran," command line parsing using Fortran 95 (LICENSE:PD)",,https://github.com/urbanjost/M_kracken95,urbanjost@comcast.net,Public Domain,John S. Urban
+M_msg,FPM,Fortran,converts any standard scalar type to a string and support unit testing,,https://github.com/urbanjost/M_msg,urbanjost@comcast.net,Public Domain,John S. Urban
+M_pixel,FPM,Fortran,basic vector drawing into a pixel graphics format,,https://github.com/urbanjost/M_pixel,urbanjost@comcast.net,Public Domain,John S. Urban
+M_process,FPM,Fortran,ISO_C_BINDING interface to popen(3c) and related system procedures ,,https://github.com/urbanjost/M_process,urbanjost@comcast.net,Public Domain,John S. Urban
+M_strings,FPM,Fortran,string manipulation,,https://github.com/urbanjost/M_strings,urbanjost@comcast.net,Public Domain,John S. Urban
+M_system,FPM,Fortran,(mostly)POSIX system routine interface,,https://github.com/urbanjost/M_system,urbanjost@comcast.net,Public Domain,John S. Urban
+M_time,FPM,Fortran,"date and time conversion, formatting and computation ",,https://github.com/urbanjost/M_time,urbanjost@comcast.net,Public Domain,John S. Urban
+datetime,FPM,Fortran,,,https://github.com/wavebitscientific/datetime-fortran,caomaco@gmail.com,MIT,Milan Curcic
+dftd4,FPM,Fortran,Generally Applicable Atomic-Charge Dependent London Dispersion Correction,,https://github.com/dftd4/dftd4,@awvwgk,LGPL-3.0-or-later,Eike Caldeweyher;Sebastian Ehlert;Stefan Grimme
+fftpack,FPM,Fortran,A package of fortran subprograms for the fast fourier transform of periodic and other symmetric sequences,,https://github.com/fortran-lang/fftpack,@fortran-lang,Public Domain,Paul N. Swarztrauber
+fhash,FPM,Fortran,Implements a hash table type with support for generic keys and values.,,https://github.com/LKedward/fhash,laurencekedward@gmail.com,MIT,Laurence Kedward
+finterp,FPM,Fortran,Modern Fortran Multidimensional Linear Interpolation,,https://github.com/jacobwilliams/finterp,Jacob Williams,BSD,Jacob Williams
+forlab,FPM,Fortran,A Fortran module that provides a lot of functions for scientific computing,,https://github.com/zoziha/forlab,https://github.com/fortran-fans/forlab,MIT,forlab contributors
+fpm,FPM,Fortran,,,https://github.com/fortran-lang/fpm,,MIT,fpm maintainers
+functional,FPM,Fortran,,,https://github.com/wavebitscientific/functional-fortran,milancurcic@hey.com,BSD-3-Clause,Milan Curcic
+iso_varying_string,FPM,Fortran,,,https://gitlab.com/everythingfunctional/iso_varying_string,everythingfunctional@protonmail.com,MIT,Brad Richardson
+jsonff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/jsonff,everythingfunctional@protonmail.com,MIT,Brad Richardson
+mctc-gcp,FPM,Fortran,Geometrical Counter-Poise correction,,https://github.com/grimme-lab/gcp.git,@grimme-lab,GPL-3.0-or-later,Stefan Grimme;J. Gerit Brandenburg;Holger Kruse
+mctc-lib,FPM,Fortran,Modular computation tool chain library,,https://github.com/grimme-lab/mctc-lib.git,@awvwgk,Apache-2.0,Sebastian Ehlert
+mstore,FPM,Fortran,Molecular structure store for testing,,https://github.com/grimme-lab/mstore.git,@awvwgk,Apache-2.0,Sebastian Ehlert
+multicharge,FPM,Fortran,,,https://github.com/grimme-lab/multicharge.git,@awvwgk,Apache-2.0,Sebastian Ehlert
+neural-fortran,FPM,Fortran,,,https://github.com/modern-fortran/neural-fortran,milancurcic@hey.com,MIT,Milan Curcic
+nlopt-f,FPM,Fortran,Interface to NLopt library,,https://github.com/grimme-lab/nlopt-f,@awvwgk,MIT,Sebastian Ehlert
+pointsets,FPM,Fortran,,,https://github.com/arjenmarkus/pointsets,arjen.markus895@gmail.com,MIT,Arjen Markus
+quaff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/quaff,everythingfunctional@protonmail.com,MIT,Brad Richardson
+s-dftd3,FPM,Fortran,Simple reimplementation of the DFT-D3 method,,https://github.com/awvwgk/simple-dftd3.git,@awvwgk,LGPL-3.0-or-later,Sebastian Ehlert
+sqliteff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/sqliteff,everythingfunctional@protonmail.com,MIT,Brad Richardson
+stdlib,FPM,Fortran,,,https://github.com/fortran-lang/stdlib,@fortran-lang/stdlib,MIT,stdlib contributors
+strff,FPM,Fortran,,,https://gitlab.com/everythingfunctional/strff,everythingfunctional@protonmail.com,MIT,Brad Richardson
+tblite,FPM,Fortran,Light-weight tight-binding framework,,https://github.com/awvwgk/tblite,@awvwgk,LGPL-3.0-or-later,Sebastian Ehlert
+test-drive,FPM,Fortran,The simple testing framework,,https://github.com/awvwgk/test-drive,@awvwgk,Apache-2.0 OR MIT,Sebastian Ehlert
+toml-f,FPM,Fortran,TOML parser implementation for data serialization and deserialization,,https://github.com/toml-f/toml-f.git,@awvwgk,Apache-2.0 OR MIT,Sebastian Ehlert
+vegetables,FPM,Fortran,,,https://gitlab.com/everythingfunctional/vegetables,everythingfunctional@protonmail.com,MIT,Brad Richardson

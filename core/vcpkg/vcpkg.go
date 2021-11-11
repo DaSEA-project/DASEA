@@ -9,36 +9,35 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-
 type response struct {
-	GeneratedOn string                 	   `json:"Generated On"`
-	Size int 															 `json:"Size"`
-	Packages []pkg										 `json:"Source"`
+	GeneratedOn string `json:"Generated On"`
+	Size        int    `json:"Size"`
+	Packages    []pkg  `json:"Source"`
 }
 
 type pkg struct {
-	Name            string                 `json:"Name"`
-	Version         string                 `json:"Version"`
-	Description     string                 `json:"Description"`
-	Supports        string                 `json:"Supports"`
-	Features     	  []feature              `json:"Features"`
-	Dependencies    []interface{} 				 `json:"Dependencies"`
+	Name         string        `json:"Name"`
+	Version      string        `json:"Version"`
+	Description  string        `json:"Description"`
+	Supports     string        `json:"Supports"`
+	Features     []feature     `json:"Features"`
+	Dependencies []interface{} `json:"Dependencies"`
 }
 
 type feature struct {
-	Name            string                 `json:"Name"`
-	Description     string            	   `json:"Description"`
+	Name        string `json:"Name"`
+	Description string `json:"Description"`
 }
 
 type dependency struct {
-	Name            string                 `json:"name"`
-	Platform        string                 `json:"platform"`
+	Name     string `json:"name"`
+	Platform string `json:"platform"`
 }
 
 type PackageWithFormattedDependency struct {
-	Name            string                 `json:"name"`
-	Version       	string                 `json:"Version"`
-	Dependencies    []dependency
+	Name         string `json:"name"`
+	Version      string `json:"Version"`
+	Dependencies []dependency
 }
 
 const (
@@ -58,13 +57,13 @@ func handleError(err error) {
 }
 
 func getPackagesWithFormattedDependencies(packages []pkg) []PackageWithFormattedDependency {
-	formattedPackages := make([]PackageWithFormattedDependency, 0, len(packages));
+	formattedPackages := make([]PackageWithFormattedDependency, 0, len(packages))
 
-	for _,p := range packages {
+	for _, p := range packages {
 		var pckg PackageWithFormattedDependency
 		pckg.Name = p.Name
 		pckg.Version = p.Version
-		if  len(p.Dependencies) > 0 {
+		if len(p.Dependencies) > 0 {
 			pckg.Dependencies = getDependencies(p.Dependencies)
 		}
 		formattedPackages = append(formattedPackages, pckg)
@@ -74,14 +73,14 @@ func getPackagesWithFormattedDependencies(packages []pkg) []PackageWithFormatted
 }
 
 func getDependencies(dependencies []interface{}) []dependency {
-	formattedDependencies := make([]dependency, 0, len(dependencies));
+	formattedDependencies := make([]dependency, 0, len(dependencies))
 
 	for _, dep := range dependencies {
 		var formattedDep dependency
 		if reflect.TypeOf(dep).Kind() == reflect.String {
-			formattedDep.Name = dep.(string);
+			formattedDep.Name = dep.(string)
 			formattedDep.Platform = ""
-		}	else {
+		} else {
 			mapstructure.Decode(dep, &formattedDep)
 		}
 		formattedDependencies = append(formattedDependencies, formattedDep)
@@ -89,7 +88,7 @@ func getDependencies(dependencies []interface{}) []dependency {
 	return formattedDependencies
 }
 
-func traverse() {
+func Traverse() {
 	response, err := http.Get(VCPKG_PACKAGES_OUTPUT)
 	handleError(err)
 	defer response.Body.Close()

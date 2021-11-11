@@ -2,12 +2,10 @@ package models
 
 import (
 	"reflect"
-	"strconv"
 )
 
 // Package defining type package
 type Package struct {
-	ID             int64  `json:"id"`
 	Name           string `json:"name"`
 	PackageManager string `json:"package_manager"`
 	Platform       string `json:"platform"`
@@ -17,6 +15,11 @@ type Package struct {
 	Maintainer     string `json:"maintainer"`
 	License        string `json:"license"`
 	Author         string `json:"author"`
+}
+
+type CsvPackage struct {
+	ID int64 `json:"id"`
+	Package
 }
 
 func (p *Package) GetKeys() []string {
@@ -30,7 +33,6 @@ func (p *Package) GetKeys() []string {
 
 func (p *Package) GetValues() []string {
 	values := make([]string, 0)
-	values = append(values, strconv.FormatInt(p.ID, 10))
 	values = append(values, p.Name)
 	values = append(values, p.PackageManager)
 	values = append(values, p.Platform)

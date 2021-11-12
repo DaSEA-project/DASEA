@@ -1,4 +1,4 @@
 # Dependencies in Conan c++ package manger ecosystem
 
 ### Requiements
-Conan, Git, Powershell (Windows)
+Conan, Git, Bash / Powershell (Windows)

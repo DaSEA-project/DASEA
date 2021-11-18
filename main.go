@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/heyjoakim/DASEA/common/helpers"
 	"github.com/heyjoakim/DASEA/core/conan"
 	"github.com/heyjoakim/DASEA/core/fpm"
 	"github.com/heyjoakim/DASEA/core/vcpkg"
@@ -20,6 +21,8 @@ func main() {
 			vcpkg.Traverse()
 		case "conan":
 			conan.Traverse()
+		case "release-dataset":
+			helpers.ReleaseDataset()
 		default:
 			fmt.Println("Unknown command:", arg)
 		}

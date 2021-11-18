@@ -1,6 +1,7 @@
 {
   "managers": ["Conan", "FPM", "VCPKG"],
   "datasets": [
+    { "date": "18-11-2021", "url": "https://sandbox.zenodo.org/record/963817" },
     {
       "date": "11-11-2021",
       "url": "https://zenodo.org/record/5645250#.YYze0L1Khb8"

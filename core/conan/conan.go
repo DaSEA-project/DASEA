@@ -9,15 +9,17 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"sort"
 	"strings"
 	"time"
 
+	"github.com/heyjoakim/DASEA/common/helpers"
 	"github.com/heyjoakim/DASEA/common/models"
 	log "github.com/sirupsen/logrus"
 	yaml "gopkg.in/yaml.v2"
 )
 
-type dependencies []struct {
+type packageJSON []struct {
 	Revision        string      `json:"revision"`
 	Reference       string      `json:"reference"`
 	IsRef           bool        `json:"is_ref"`
@@ -50,7 +52,8 @@ type item struct {
 }
 
 var (
-	PKGS_MAP = make(map[string]int)
+	PKGS_MAP     = make(map[string]int)
+	VERSIONS_MAP = make(map[string][]string)
 )
 
 func externalCommand(name string, args ...string) {
@@ -59,6 +62,25 @@ func externalCommand(name string, args ...string) {
 
 	if err != nil {
 		log.Errorf(string(stdout))
+	}
+}
+
+func loggerInit() {
+	currentTime := time.Now()
+	date := currentTime.Format("01-02-2006")
+	var filename string = fmt.Sprintf("core/conan/logs/%s.log", date)
+
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	formatter := new(log.TextFormatter)
+	formatter.TimestampFormat = "02-01-2006 15:04:05"
+	formatter.FullTimestamp = true
+	log.SetFormatter(formatter)
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		mw := io.MultiWriter(f, os.Stdout)
+		log.SetOutput(mw)
 	}
 }
 
@@ -100,8 +122,8 @@ func parseYAML(path string) []string {
 	return res
 }
 
-func parseJSON(name string, version string) {
-	model := models.Package{}
+func parseJSON(name string, version string, id int) {
+	pkg := models.Package{}
 
 	fname := fmt.Sprintf("core/conan/out/%s/%s.json", name, version)
 	file, err := os.Open(fname)
@@ -115,43 +137,36 @@ func parseJSON(name string, version string) {
 
 	byte_val, _ := ioutil.ReadAll(file)
 
-	var dependencies dependencies
+	var packages packageJSON
 
-	json.Unmarshal(byte_val, &dependencies)
+	json.Unmarshal(byte_val, &packages)
 
-	model.Name = name
-	model.PackageManager = "Conan"
-	model.Platform = "C/C++"
-	model.Description = ""
-	model.HomepageURL = ""
-	model.SourceCodeURL = ""
-	model.Maintainer = ""
-	model.License = ""
-	model.Author = ""
-
-	for i := 0; i < len(dependencies); i++ {
+	for i := 0; i < len(packages); i++ {
 
 		// We only want to get info about the current package and dont know if all is at index 0
-		if dependencies[i].DisplayName == name+"/"+version {
-			log.Infof("%s/%s requires: ", name, version) //TODO: Change output to csv or what will be decided
-			log.Info(dependencies[i].Requires)
+		if packages[i].DisplayName == name+"/"+version {
+			pkg.ID = int64(id)
+			pkg.Name = name
+			pkg.PackageManager = "Conan"
+			pkg.Platform = "C/C++"
+			pkg.Description = packages[i].Description
+			pkg.HomepageURL = packages[i].URL
+			pkg.SourceCodeURL = ""
+			pkg.Maintainer = ""
+			pkg.License = packages[i].License[0]
+			pkg.Author = ""
 
-			model.Name = dependencies[i].DisplayName
-			model.PackageManager = "Conan"
-			model.Platform = "C/C++"
-			model.Description = dependencies[i].Description
-			model.HomepageURL = dependencies[i].URL
-			model.SourceCodeURL = ""
-			model.Maintainer = ""
-			model.License = dependencies[i].License[0]
-			model.Author = ""
+			helpers.WriteLineToCsv(pkg, "data/conan/conan_packages.csv")
+
 		} else {
 			log.Errorf("Package %s does not exist in conan info", name+version)
 		}
 	}
 }
 
-func traverse() {
+func generateMaps() (map[string]int, map[string][]string) {
+	i := 0
+
 	err := filepath.Walk("core/conan/assets/repo/src/recipes", func(path string, info os.FileInfo, err error) error {
 
 		if err != nil {
@@ -164,12 +179,9 @@ func traverse() {
 		if file == "config.yml" {
 			tmp := strings.Split(dir, "/")
 			name := tmp[len(tmp)-2]
-			versions := parseYAML(path)
-
-			for _, version := range versions {
-				conanInfo(name, version)
-				parseJSON(name, version)
-			}
+			PKGS_MAP[name] = i //TODO: Save this to CSV INSTEAD
+			VERSIONS_MAP[name] = parseYAML(path)
+			i++
 		}
 
 		return nil
@@ -178,24 +190,26 @@ func traverse() {
 	if err != nil {
 		log.Fatalf("Error when walking directories: %v\n", err)
 	}
+
+	return PKGS_MAP, VERSIONS_MAP
+
 }
 
-func loggerInit() {
-	currentTime := time.Now()
-	date := currentTime.Format("01-02-2006")
-	var filename string = fmt.Sprintf("core/conan/logs/%s.log", date)
+func traverse() {
+	keys := make([]string, 0, len(PKGS_MAP)) //TODO: SMARTER
+	for k := range PKGS_MAP {
+		keys = append(keys, k)
+	}
 
-	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
-	formatter := new(log.TextFormatter)
-	formatter.TimestampFormat = "02-01-2006 15:04:05"
-	formatter.FullTimestamp = true
-	log.SetFormatter(formatter)
+	sort.Strings(keys)
 
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		mw := io.MultiWriter(f, os.Stdout)
-		log.SetOutput(mw)
+	for id, name := range keys {
+		pkgVersions := VERSIONS_MAP[name]
+
+		for _, version := range pkgVersions {
+			// conanInfo(name, version)
+			parseJSON(name, version, id)
+		}
 	}
 }
 
@@ -216,5 +230,8 @@ func Traverse() {
 		externalCommand(cmd, path)
 	}
 
+	fmt.Println(PKGS_MAP)
+
+	generateMaps()
 	traverse()
 }

@@ -3,13 +3,16 @@ package conan
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
+	"github.com/heyjoakim/DASEA/common/models"
 	log "github.com/sirupsen/logrus"
 	yaml "gopkg.in/yaml.v2"
 )
@@ -48,11 +51,10 @@ type item struct {
 
 func externalCommand(name string, args ...string) {
 	cmd := exec.Command(name, args...)
-	stdout, err := cmd.Output()
-	log.Info(string(stdout))
+	stdout, err := cmd.CombinedOutput()
 
 	if err != nil {
-		log.Errorf("Failed cloning repository with error '%s'", err)
+		log.Errorf(string(stdout))
 	}
 }
 
@@ -66,6 +68,7 @@ func conanInfo(name string, version string) {
 	arg5 := "--json"
 	out := fmt.Sprintf("out/%s/%s.json", name, version)
 
+	log.Infof("Getting info from %s/%s", name, version)
 	externalCommand(arg0, arg1, arg2, arg3, arg4, arg5, out)
 }
 
@@ -94,8 +97,12 @@ func parseYAML(path string) []string {
 }
 
 func parseJSON(name string, version string) {
+	model := models.Package{}
+
 	fname := fmt.Sprintf("core/conan/out/%s/%s.json", name, version)
 	file, err := os.Open(fname)
+
+	log.Infof("Writing %s", fname)
 
 	if err != nil {
 		log.Info(err)
@@ -108,11 +115,34 @@ func parseJSON(name string, version string) {
 
 	json.Unmarshal(byte_val, &dependencies)
 
+	model.Name = name
+	model.PackageManager = "Conan"
+	model.Platform = "C/C++"
+	model.Description = ""
+	model.HomepageURL = ""
+	model.SourceCodeURL = ""
+	model.Maintainer = ""
+	model.License = ""
+	model.Author = ""
+
 	for i := 0; i < len(dependencies); i++ {
 
+		// We only want to get info about the current package and dont know if all is at index 0
 		if dependencies[i].DisplayName == name+"/"+version {
 			log.Infof("%s/%s requires: ", name, version) //TODO: Change output to csv or what will be decided
 			log.Info(dependencies[i].Requires)
+
+			model.Name = dependencies[i].DisplayName
+			model.PackageManager = "Conan"
+			model.Platform = "C/C++"
+			model.Description = dependencies[i].Description
+			model.HomepageURL = dependencies[i].URL
+			model.SourceCodeURL = ""
+			model.Maintainer = ""
+			model.License = dependencies[i].License[0]
+			model.Author = ""
+		} else {
+			log.Errorf("Package %s does not exist in conan info", name + version)
 		}
 	}
 }
@@ -130,11 +160,12 @@ func traverse() {
 		if file == "config.yml" {
 			tmp := strings.Split(dir, "/")
 			name := tmp[len(tmp)-2]
-			test := parseYAML(path)
-			version := test[0]
+			versions := parseYAML(path)
 
-			conanInfo(name, version)
-			parseJSON(name, version)
+			for _, version := range versions {
+				conanInfo(name, version)
+				parseJSON(name, version)
+			}
 		}
 
 		return nil
@@ -145,8 +176,29 @@ func traverse() {
 	}
 }
 
+func loggerInit() {
+	currentTime := time.Now()
+	date := currentTime.Format("01-02-2006")
+	var filename string = fmt.Sprintf("core/conan/logs/%s.log", date)
+
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	formatter := new(log.TextFormatter)
+	formatter.TimestampFormat = "02-01-2006 15:04:05"
+	formatter.FullTimestamp = true
+	log.SetFormatter(formatter)
+
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		mw := io.MultiWriter(f, os.Stdout)
+		log.SetOutput(mw)
+	}
+}
+
 // Traverses the conan package mange recipes
 func Traverse() {
+	loggerInit()
+
 	if runtime.GOOS == "windows" {
 		path := "core\\conan\\ps\\clone.ps1"
 		cmd := "powershell"
@@ -160,8 +212,5 @@ func Traverse() {
 		externalCommand(cmd, path)
 	}
 
-	// traverse()
-	parseJSON("poco", "1.10.0")
-	parseJSON("zulu-open-jdk", "11.0.8")
-	parseJSON("zstd", "1.5.0")
+	traverse()
 }

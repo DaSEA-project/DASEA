@@ -164,7 +164,7 @@ func parseJSON(name string, version string, id int) {
 	}
 }
 
-func generateMaps() (map[string]int, map[string][]string) {
+func generateMaps() {
 	i := 0
 
 	err := filepath.Walk("core/conan/assets/repo/src/recipes", func(path string, info os.FileInfo, err error) error {
@@ -190,9 +190,6 @@ func generateMaps() (map[string]int, map[string][]string) {
 	if err != nil {
 		log.Fatalf("Error when walking directories: %v\n", err)
 	}
-
-	return PKGS_MAP, VERSIONS_MAP
-
 }
 
 func traverse() {
@@ -229,8 +226,6 @@ func Traverse() {
 
 		externalCommand(cmd, path)
 	}
-
-	fmt.Println(PKGS_MAP)
 
 	generateMaps()
 	traverse()

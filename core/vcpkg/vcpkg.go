@@ -11,19 +11,19 @@ import (
 )
 
 type response struct {
-	GeneratedOn 		string `json:"Generated On"`
-	Size        		int    `json:"Size"`
-	Packages    		[]pkg  `json:"Source"`
+	GeneratedOn string `json:"Generated On"`
+	Size        int    `json:"Size"`
+	Packages    []pkg  `json:"Source"`
 }
 
 type pkg struct {
-	Name         	  string        `json:"Name"`
-	Version         string        `json:"Version"`
-	PackageManager  string
-	Description     string        `json:"Description"`
-	Supports        string        `json:"Supports"`
-	Features        []feature     `json:"Features"`
-	Dependencies    []interface{} `json:"Dependencies"`
+	Name           string `json:"Name"`
+	Version        string `json:"Version"`
+	PackageManager string
+	Description    string        `json:"Description"`
+	Supports       string        `json:"Supports"`
+	Features       []feature     `json:"Features"`
+	Dependencies   []interface{} `json:"Dependencies"`
 }
 
 type feature struct {
@@ -67,7 +67,7 @@ func getPackagesWithFormattedDependencies(packages []pkg) []models.Package {
 		pckg.PackageManager = "Vcpkg"
 		pckg.Platform = "C/C++"
 		if len(p.Dependencies) > 0 {
-			pckg.Dependencies = getDependencies(p.Dependencies)
+			// pckg.Dependencies = getDependencies(p.Dependencies)
 		}
 		formattedPackages = append(formattedPackages, pckg)
 	}

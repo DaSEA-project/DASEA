@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/heyjoakim/DASEA/common/helpers"
 	"github.com/heyjoakim/DASEA/common/models"
 )
 
@@ -19,6 +20,10 @@ type response struct {
 
 const (
 	PACKAGE_REGESTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json"
+)
+
+var (
+	PKGS_MAP = make(map[string]int)
 )
 
 func unmarshalResponse(data []byte) (response, error) {
@@ -33,18 +38,38 @@ func handleError(err error) {
 	}
 }
 
+func unknownToString(property interface{}) string {
+	_type := reflect.TypeOf(property)
+	switch _type.Kind() {
+	case reflect.String:
+		return property.(string)
+	case reflect.Slice:
+		fallthrough
+	case reflect.Array:
+		sb := strings.Builder{}
+		for i, v := range property.([]interface{}) {
+			sb.WriteString(v.(string))
+			if i < len(property.([]interface{}))-1 {
+				sb.WriteString(";")
+			}
+		}
+		return sb.String()
+	default:
+		panic("unsupported type")
+	}
+}
+
 func parsePackage(pkg map[string]interface{}) models.CSVInput {
 	full := models.CSVInput{}
+	model := models.Package{}
 
 	latestPkg := pkg["latest"].(map[string]interface{})
 
-	model := models.Package{}
-
+	model.ID = int64(PKGS_MAP[latestPkg["name"].(string)])
 	model.PackageManager = "FPM"
 	model.Platform = "Fortran"
 	if latestPkg["name"] != nil {
 		model.Name = latestPkg["name"].(string)
-		fmt.Println(model.Name)
 	}
 	if latestPkg["description"] != nil {
 		model.Description = latestPkg["description"].(string)
@@ -53,47 +78,13 @@ func parsePackage(pkg map[string]interface{}) models.CSVInput {
 		model.SourceCodeURL = latestPkg["git"].(string)
 	}
 	if latestPkg["maintainer"] != nil {
-		_type := reflect.TypeOf(latestPkg["maintainer"])
-		switch _type.Kind() {
-		case reflect.String:
-			model.Maintainer = latestPkg["maintainer"].(string)
-		case reflect.Slice:
-			fallthrough
-		case reflect.Array:
-			sb := strings.Builder{}
-			for i, v := range latestPkg["maintainer"].([]interface{}) {
-				sb.WriteString(v.(string))
-				if i < len(latestPkg["maintainer"].([]interface{}))-1 {
-					sb.WriteString(";")
-				}
-			}
-			model.Maintainer = sb.String()
-		default:
-			panic("unsupported type")
-		}
+		model.Maintainer = unknownToString(latestPkg["maintainer"])
 	}
 	if latestPkg["license"] != nil {
 		model.License = latestPkg["license"].(string)
 	}
 	if latestPkg["author"] != nil {
-		_type := reflect.TypeOf(latestPkg["author"])
-		switch _type.Kind() {
-		case reflect.String:
-			model.Author = latestPkg["author"].(string)
-		case reflect.Slice:
-			fallthrough
-		case reflect.Array:
-			sb := strings.Builder{}
-			for i, v := range latestPkg["author"].([]interface{}) {
-				sb.WriteString(v.(string))
-				if i < len(latestPkg["author"].([]interface{}))-1 {
-					sb.WriteString(";")
-				}
-			}
-			model.Author = sb.String()
-		default:
-			panic("unsupported type")
-		}
+		model.Author = unknownToString(latestPkg["author"])
 	}
 
 	//////////////// VERSIONS /////////////////////
@@ -107,31 +98,30 @@ func parsePackage(pkg map[string]interface{}) models.CSVInput {
 
 	for _, version := range versionKeys {
 		v := pkg[version].(map[string]interface{})
+		// check if version is not already added, since package can contain dupes
 		if contains(versions, v["version"].(string)) {
 			continue
 		}
-		versions = append(versions, models.Version{Version: v["version"].(string)})
+		versions = append(versions, models.Version{ID: 99999, PackageID: model.ID, Version: v["version"].(string)})
 		ds := v["dependencies"]
-		fmt.Println(ds)
 		if ds != nil {
 			deps = ds.(map[string]interface{})
 		}
 		dds := v["dependencies"]
-		fmt.Println(dds)
 		if ds != nil {
 			devDeps = dds.(map[string]interface{})
 		}
-
 	}
 
 	/////////////// DEPENDENCIES //////////////////
 	///////////////////////////////////////////////
 
+	helpers.WriteLineToCsv(model, "core/fpm/out/what.csv")
 	full.Pkg = model
 	full.Versions = versions
 	full.Dependencies = append(getDependencies(deps), getDependencies(devDeps)...)
 
-	fmt.Println(full)
+	// fmt.Println(full)
 
 	return full
 }
@@ -181,12 +171,15 @@ func Traverse() []models.CSVInput {
 	res, _ := unmarshalResponse(data)
 	keys := getKeys(res.Packages)
 	pkgs := make([]models.CSVInput, 0, len(keys))
-	for _, key := range keys {
+	fmt.Println(keys)
+	for i, key := range keys {
+		PKGS_MAP[key] = i
 		pkg := res.Packages[key]
 		pp := parsePackage(pkg.(map[string]interface{}))
 		pkgs = append(pkgs, pp)
 	}
 
+	fmt.Println(PKGS_MAP)
+	// fmt.Println(pkgs)
 	return pkgs
-
 }

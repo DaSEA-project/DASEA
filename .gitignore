@@ -13,3 +13,6 @@
 
 # Env files
 .env
+
+# Dataset files
+data/

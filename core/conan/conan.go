@@ -49,6 +49,10 @@ type item struct {
 	Folder string `yaml:"folder"`
 }
 
+var (
+	PKGS_MAP = make(map[string]int)
+)
+
 func externalCommand(name string, args ...string) {
 	cmd := exec.Command(name, args...)
 	stdout, err := cmd.CombinedOutput()
@@ -142,7 +146,7 @@ func parseJSON(name string, version string) {
 			model.License = dependencies[i].License[0]
 			model.Author = ""
 		} else {
-			log.Errorf("Package %s does not exist in conan info", name + version)
+			log.Errorf("Package %s does not exist in conan info", name+version)
 		}
 	}
 }

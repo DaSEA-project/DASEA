@@ -82,3 +82,14 @@ func WriteLineToCsv(model models.Package, filePath string) {
 
 	writer.Write(model.GetValues())
 }
+
+func checkFile(filename string) error {
+	_, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		_, err := os.Create(filename)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

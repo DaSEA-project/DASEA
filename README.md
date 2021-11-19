@@ -14,6 +14,31 @@ Current:
 
 Access datasets at [DASEA](https://heyjoakim.github.io/DASEA/)
 
+## Executables
+
+### Generate csv files locally
+
+```bash
+go run main.go packageManagerName
+```
+
+### Create .env file
+
+```bash
+cp .env.example .env
+```
+
+Populate the .env file with your Zenodo API ACCESS_TOKEN key, where you want the dataset to be published. You can create one [here](https://zenodo.org/account/settings/applications/tokens/new/)
+
+### Publish a new dataset
+
+After you generate the csv files for the package managers, to publish the final dataset, run:
+
+```bash
+go run main.go publish-dataset
+
+```
+
 # Contribute
 
 See [CONTRIBUTE.md](https://github.com/heyjoakim/DASEA/blob/main/CONTRIBUTE.md) file

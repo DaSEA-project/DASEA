@@ -18,8 +18,8 @@ func httpRequest(method, url string, payload io.Reader, contentType string) []by
 	defer res.Body.Close()
 	body, _ := ioutil.ReadAll(res.Body)
 	statusOK := res.StatusCode >= 200 && res.StatusCode < 300
-	if(!statusOK){
-		panic(fmt.Sprintln("Zenodo API Error %s", string(body)))
+	if !statusOK {
+		panic(fmt.Sprintf("Zenodo API Error %s\n", string(body)))
 	}
 	return body
 }

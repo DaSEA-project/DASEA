@@ -16,3 +16,7 @@
 
 # Dataset files
 data/
+*.zip
+
+# OS files
+.DS_Store

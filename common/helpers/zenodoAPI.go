@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"archive/zip"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -55,6 +56,16 @@ const (
 func ReleaseDataset() {
 	zenodoToken := getEnvVariable("ZENODO_API_KEY")
 
+	// Create Zip file for upload
+	fmt.Println("Creating zip file...")
+	zipFileName := time.Now().Format("02-01-2006") + "-dataset.zip"
+	zipErr := zipSource("data/",zipFileName)
+	if (zipErr != nil) {
+		fmt.Println("Error creating zip file: %s", zipErr)
+	}
+	fmt.Println("Created zip file")
+
+
 	// Create deposit (bucket) for the dataset
 	endpoint := ZENODO_API + "deposit/depositions?access_token=" + zenodoToken
 	bodyObject := ZenodoRequestBody{
@@ -74,7 +85,7 @@ func ReleaseDataset() {
 	fmt.Println("Generated Bucket on Zenodo")
 
 	// Upload dataset to bucket
-  uploadFileToBucket("sample.pdf", buckerURL, zenodoToken)
+  uploadFileToBucket(zipFileName, buckerURL, zenodoToken)
 
 	// Publish dataset
 	webURL := publishDataset(publishURL, zenodoToken)
@@ -162,6 +173,62 @@ func updateDatasetPage(datasetUrl string) {
     if err != nil {
         logrus.Error(err)
     }
+}
+
+func zipSource(source, target string) error {
+    // 1. Create a ZIP file and zip.Writer
+    f, err := os.Create(target)
+    if err != nil {
+        return err
+    }
+    defer f.Close()
+
+    writer := zip.NewWriter(f)
+    defer writer.Close()
+
+    // 2. Go through all the files of the source
+    return filepath.Walk(source, func(path string, info os.FileInfo, err error) error {
+        if err != nil {
+            return err
+        }
+
+        // 3. Create a local file header
+        header, err := zip.FileInfoHeader(info)
+        if err != nil {
+            return err
+        }
+
+        // set compression
+        header.Method = zip.Deflate
+
+        // 4. Set relative path of a file as the header name
+        header.Name, err = filepath.Rel(filepath.Dir(source), path)
+        if err != nil {
+            return err
+        }
+        if info.IsDir() {
+            header.Name += "/"
+        }
+
+        // 5. Create writer for the file header and save content of the file
+        headerWriter, err := writer.CreateHeader(header)
+        if err != nil {
+            return err
+        }
+
+        if info.IsDir() {
+            return nil
+        }
+
+        f, err := os.Open(path)
+        if err != nil {
+            return err
+        }
+        defer f.Close()
+
+        _, err = io.Copy(headerWriter, f)
+        return err
+    })
 }
 
 func unmarshalResponse(data []byte) (ZENODOResponse, error) {

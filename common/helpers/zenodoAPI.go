@@ -154,7 +154,6 @@ func updateDatasetPage(datasetUrl string) {
 
     data := DatasetStruct{}
 
-    // Here the magic happens!
     json.Unmarshal(file, &data)
     latestDataset := &DatasetInfo{
         Date: time.Now().Format("02-01-2006"),
@@ -163,7 +162,6 @@ func updateDatasetPage(datasetUrl string) {
 
     data.Datasets = append([]DatasetInfo{*latestDataset}, data.Datasets...)
 
-    // Preparing the data to be marshalled and written.
     dataBytes, err := json.Marshal(data)
     if err != nil {
         logrus.Error(err)

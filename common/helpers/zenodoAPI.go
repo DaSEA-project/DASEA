@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"archive/zip"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -55,6 +56,15 @@ const (
 func ReleaseDataset() {
 	zenodoToken := getEnvVariable("ZENODO_API_KEY")
 
+	// Create Zip file for upload
+	fmt.Println("Creating zip file...")
+	zipFileName := time.Now().Format("02-01-2006") + "-dataset.zip"
+	zipErr := zipSource("data", zipFileName)
+	if zipErr != nil {
+		fmt.Println("Error creating zip file: %s", zipErr)
+	}
+	fmt.Println("Created zip file")
+
 	// Create deposit (bucket) for the dataset
 	endpoint := ZENODO_API + "deposit/depositions?access_token=" + zenodoToken
 	bodyObject := ZenodoRequestBody{
@@ -74,7 +84,7 @@ func ReleaseDataset() {
 	fmt.Println("Generated Bucket on Zenodo")
 
 	// Upload dataset to bucket
-	uploadFileToBucket("sample.pdf", buckerURL, zenodoToken)
+	uploadFileToBucket(zipFileName, buckerURL, zenodoToken)
 
 	// Publish dataset
 	webURL := publishDataset(publishURL, zenodoToken)
@@ -89,13 +99,12 @@ func uploadFileToBucket(fileName string, buckerURL string, zenodoToken string) {
 	fmt.Println("Preparing file for upload...")
 	buf := bytes.NewBuffer(nil)
 	bodyWriter := multipart.NewWriter(buf)
-	filename := "data/" + fileName
-	fileWriter, err := bodyWriter.CreateFormFile("file", filepath.Base(filename))
+	fileWriter, err := bodyWriter.CreateFormFile("file", filepath.Base(fileName))
 	if err != nil {
 		fmt.Printf("Creating fileWriter: %s\n", err)
 	}
 
-	file, err := os.Open(filename)
+	file, err := os.Open(fileName)
 	if err != nil {
 		fmt.Printf("Opening file: %s\n", err)
 	}
@@ -111,7 +120,7 @@ func uploadFileToBucket(fileName string, buckerURL string, zenodoToken string) {
 	fmt.Println("Begin uploading dataset to Zenodo...")
 
 	// Upload file to bucket
-	uploadEndpoint := buckerURL + "/" + time.Now().Format("02-01-2006") + "-sample.zip?access_token=" + zenodoToken
+	uploadEndpoint := buckerURL + "/" + fileName + "?access_token=" + zenodoToken
 	res := httpRequest("PUT", uploadEndpoint, buf, contentType)
 	_, uploadErr := unmarshalResponse(res)
 	if uploadErr == nil {
@@ -162,6 +171,47 @@ func updateDatasetPage(datasetUrl string) {
 	if err != nil {
 		logrus.Error(err)
 	}
+
+}
+
+func zipSource(source, target string) error {
+	file, err := os.Create(target)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	w := zip.NewWriter(file)
+	defer w.Close()
+
+	walker := func(path string, info os.FileInfo, err error) error {
+		fmt.Printf("Crawling: %#v\n", path)
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		file, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+
+		f, err := w.Create(path)
+		if err != nil {
+			return err
+		}
+
+		_, err = io.Copy(f, file)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+	err = filepath.Walk(source, walker)
+	return err
 }
 
 func unmarshalResponse(data []byte) (ZENODOResponse, error) {

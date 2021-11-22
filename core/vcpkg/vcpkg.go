@@ -130,4 +130,5 @@ func Traverse() {
 	res, _ := unmarshalResponse(data)
 	createNameIdPackageMap(res.Packages)
 	formatAndExport(res.Packages)
+	fmt.Println("Vcpkg Package Data Exported")
 }

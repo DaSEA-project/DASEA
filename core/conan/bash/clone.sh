@@ -4,7 +4,7 @@ mkdir core/conan/assets/repo ; cd core/conan/assets/repo
 URL=https://github.com/conan-io/conan-center-index
 
 
-if [ -d src/recipes ]
+if [ -d core/conan/assets/repo/src/recipes ]
     then
         echo "Pulled git repository"
         git pull

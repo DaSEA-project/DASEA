@@ -23,7 +23,8 @@ const (
 )
 
 var (
-	PKGS_MAP = make(map[string]int)
+	PKGS_MAP  = make(map[string]int)
+	versionID = 0
 )
 
 func unmarshalResponse(data []byte) (response, error) {
@@ -102,7 +103,10 @@ func parsePackage(pkg map[string]interface{}) models.CSVInput {
 		if contains(versions, v["version"].(string)) {
 			continue
 		}
-		versions = append(versions, models.Version{ID: 99999, PackageID: model.ID, Version: v["version"].(string)})
+		version := models.Version{ID: int64(versionID), PackageID: model.ID, Version: v["version"].(string)}
+		versionID = versionID + 1
+		versions = append(versions, version)
+		helpers.WriteToCsv(version.GetKeys(), version.GetValues(), "core/fpm/out/versions.csv")
 		ds := v["dependencies"]
 		if ds != nil {
 			deps = ds.(map[string]interface{})
@@ -116,7 +120,7 @@ func parsePackage(pkg map[string]interface{}) models.CSVInput {
 	/////////////// DEPENDENCIES //////////////////
 	///////////////////////////////////////////////
 
-	helpers.WriteLineToCsv(model, "core/fpm/out/what.csv")
+	helpers.WriteToCsv(model.GetKeys(), model.GetValues(), "core/fpm/out/packages.csv")
 	full.Pkg = model
 	full.Versions = versions
 	full.Dependencies = append(getDependencies(deps), getDependencies(devDeps)...)
@@ -171,7 +175,6 @@ func Traverse() []models.CSVInput {
 	res, _ := unmarshalResponse(data)
 	keys := getKeys(res.Packages)
 	pkgs := make([]models.CSVInput, 0, len(keys))
-	fmt.Println(keys)
 	for i, key := range keys {
 		PKGS_MAP[key] = i
 		pkg := res.Packages[key]

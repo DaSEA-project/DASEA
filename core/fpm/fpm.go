@@ -39,7 +39,8 @@ func handleError(err error) {
 	}
 }
 
-func unknownToString(property interface{}) string {
+// normalizeToString is used when a property can either be string, or array of strings because of wrong use of json on FPM registry. Returns a string.
+func normalizeToString(property interface{}) string {
 	_type := reflect.TypeOf(property)
 	switch _type.Kind() {
 	case reflect.String:
@@ -60,13 +61,18 @@ func unknownToString(property interface{}) string {
 	}
 }
 
-func parsePackage(pkg map[string]interface{}) models.CSVInput {
+func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 	full := models.CSVInput{}
 	model := models.Package{}
 
 	latestPkg := pkg["latest"].(map[string]interface{})
 
-	model.ID = int64(PKGS_MAP[latestPkg["name"].(string)])
+	pkgID, exists := PKGS_MAP[latestPkg["name"].(string)]
+	if !exists {
+		pkgID = PKGS_MAP[key]
+	}
+
+	model.ID = int64(pkgID)
 	model.PackageManager = "FPM"
 	model.Platform = "Fortran"
 	if latestPkg["name"] != nil {
@@ -79,13 +85,13 @@ func parsePackage(pkg map[string]interface{}) models.CSVInput {
 		model.SourceCodeURL = latestPkg["git"].(string)
 	}
 	if latestPkg["maintainer"] != nil {
-		model.Maintainer = unknownToString(latestPkg["maintainer"])
+		model.Maintainer = normalizeToString(latestPkg["maintainer"])
 	}
 	if latestPkg["license"] != nil {
 		model.License = latestPkg["license"].(string)
 	}
 	if latestPkg["author"] != nil {
-		model.Author = unknownToString(latestPkg["author"])
+		model.Author = normalizeToString(latestPkg["author"])
 	}
 
 	//////////////// VERSIONS /////////////////////
@@ -125,8 +131,6 @@ func parsePackage(pkg map[string]interface{}) models.CSVInput {
 	full.Versions = versions
 	full.Dependencies = append(getDependencies(deps), getDependencies(devDeps)...)
 
-	// fmt.Println(full)
-
 	return full
 }
 
@@ -159,6 +163,7 @@ func contains(s []models.Version, e string) bool {
 func getKeys(m map[string]interface{}) []string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
+
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
@@ -176,9 +181,10 @@ func Traverse() []models.CSVInput {
 	keys := getKeys(res.Packages)
 	pkgs := make([]models.CSVInput, 0, len(keys))
 	for i, key := range keys {
+		// fmt.Println(i, key)
 		PKGS_MAP[key] = i
 		pkg := res.Packages[key]
-		pp := parsePackage(pkg.(map[string]interface{}))
+		pp := parsePackage(key, pkg.(map[string]interface{}))
 		pkgs = append(pkgs, pp)
 	}
 

@@ -168,7 +168,7 @@ func parseJSON(name string, version string, pkgId int) {
 				pkg.License = packages[i].License[0]
 				pkg.Author = "N/A"
 
-				helpers.WriteLineToCsv(pkg, CONAN_PACKAGE_DATA)
+				helpers.WriteToCsv(pkg.GetKeys(), pkg.GetValues(), CONAN_PACKAGE_DATA)
 				PKGS_VISITED[name] = true
 			} else {
 				log.Debugf("%s already visited", name, version)
@@ -177,7 +177,7 @@ func parseJSON(name string, version string, pkgId int) {
 			v.ID = int64(VERSIONS_MAP_IDX[name+version])
 			v.PackageID = int64(pkgId)
 			v.Version = name + "@" + version
-			helpers.WriteCsvVersion(v, CONAN_VERSION_DATA)
+			helpers.WriteToCsv(v.GetKeys(), v.GetValues(), CONAN_VERSION_DATA)
 
 			// Inside specific version
 
@@ -189,7 +189,7 @@ func parseJSON(name string, version string, pkgId int) {
 					d.SourceID = int64(VERSIONS_MAP_IDX[name+version])
 					d.TargetID = int64(PKGS_MAP_IDX[targetName[0]])
 					d.Constraints = "N/A"
-					helpers.WriteCsvDependency(d, CONAN_DEPENDENCY_DATA)
+					helpers.WriteToCsv(d.GetKeys(), d.GetValues(), CONAN_DEPENDENCY_DATA)
 					dependencyCnt++
 				}
 

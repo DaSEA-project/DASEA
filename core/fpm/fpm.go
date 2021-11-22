@@ -106,7 +106,7 @@ func parsePackage(pkg map[string]interface{}) models.CSVInput {
 		version := models.Version{ID: int64(versionID), PackageID: model.ID, Version: v["version"].(string)}
 		versionID = versionID + 1
 		versions = append(versions, version)
-		helpers.WriteCsvVersion(version, "core/fpm/out/versions.csv")
+		helpers.WriteToCsv(version.GetKeys(), version.GetValues(), "core/fpm/out/versions.csv")
 		ds := v["dependencies"]
 		if ds != nil {
 			deps = ds.(map[string]interface{})
@@ -120,7 +120,7 @@ func parsePackage(pkg map[string]interface{}) models.CSVInput {
 	/////////////// DEPENDENCIES //////////////////
 	///////////////////////////////////////////////
 
-	helpers.WriteLineToCsv(model, "core/fpm/out/packages.csv")
+	helpers.WriteToCsv(model.GetKeys(), model.GetValues(), "core/fpm/out/packages.csv")
 	full.Pkg = model
 	full.Versions = versions
 	full.Dependencies = append(getDependencies(deps), getDependencies(devDeps)...)

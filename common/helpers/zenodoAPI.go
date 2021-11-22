@@ -101,17 +101,17 @@ func uploadFileToBucket(fileName string, buckerURL string, zenodoToken string) {
 	bodyWriter := multipart.NewWriter(buf)
 	fileWriter, err := bodyWriter.CreateFormFile("file", filepath.Base(fileName))
 	if err != nil {
-		fmt.Println("Creating fileWriter: %s", err)
+		fmt.Printf("Creating fileWriter: %s\n", err)
 	}
 
 	file, err := os.Open(fileName)
 	if err != nil {
-		fmt.Println("Opening file: %s", err)
+		fmt.Printf("Opening file: %s\n", err)
 	}
 	defer file.Close()
 
 	if _, err := io.Copy(fileWriter, file); err != nil {
-		fmt.Println("Buffering file: %s", err)
+		fmt.Printf("Buffering file: %s\n", err)
 	}
 
 	contentType := bodyWriter.FormDataContentType()
@@ -152,6 +152,7 @@ func updateDatasetPage(datasetUrl string) {
 
 	data := DatasetStruct{}
 
+	// Here the magic happens!
 	json.Unmarshal(file, &data)
 	latestDataset := &DatasetInfo{
 		Date: time.Now().Format("02-01-2006"),
@@ -160,6 +161,7 @@ func updateDatasetPage(datasetUrl string) {
 
 	data.Datasets = append([]DatasetInfo{*latestDataset}, data.Datasets...)
 
+	// Preparing the data to be marshalled and written.
 	dataBytes, err := json.Marshal(data)
 	if err != nil {
 		logrus.Error(err)
@@ -169,6 +171,7 @@ func updateDatasetPage(datasetUrl string) {
 	if err != nil {
 		logrus.Error(err)
 	}
+
 }
 
 func zipSource(source, target string) error {

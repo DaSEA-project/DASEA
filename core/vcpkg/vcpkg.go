@@ -11,24 +11,24 @@ import (
 )
 
 type response struct {
-	GeneratedOn 		string 			 `json:"Generated On"`
-	Size        		int    			 `json:"Size"`
-	Packages    		[]pkg  			 `json:"Source"`
+	GeneratedOn string `json:"Generated On"`
+	Size        int    `json:"Size"`
+	Packages    []pkg  `json:"Source"`
 }
 
 type pkg struct {
-	Name         	  string        `json:"Name"`
-	Version         string        `json:"Version"`
-	PackageManager  string
-	Description     string        `json:"Description"`
-	Homepage 	      string 				`json:"Homepage"`
-	Maintainer      string 				`json:"Maintainers"`
-	License         string 				`json:"License"`
-	Dependencies    []interface{} `json:"Dependencies"`
+	Name           string `json:"Name"`
+	Version        string `json:"Version"`
+	PackageManager string
+	Description    string        `json:"Description"`
+	Homepage       string        `json:"Homepage"`
+	Maintainer     string        `json:"Maintainers"`
+	License        string        `json:"License"`
+	Dependencies   []interface{} `json:"Dependencies"`
 }
 
 type dependency struct {
-	Name     			 	string 				`json:"name",mapstructure:"name"`
+	Name string `json:"name",mapstructure:"name"`
 }
 
 const (
@@ -63,7 +63,7 @@ func formatPackagesForCSVExport(packages []pkg) []models.CSVInput {
 		pckg.License = p.License
 		pckg.Author = ""
 		csvInput.Pkg = pckg
-		csvInput.Versions = []models.Version{ { Version: p.Version } }
+		csvInput.Versions = []models.Version{{Version: p.Version}}
 		if len(p.Dependencies) > 0 {
 			csvInput.Dependencies = getDependencies(p.Dependencies)
 		}
@@ -82,7 +82,7 @@ func getDependencies(dependencies []interface{}) []models.Dependency {
 			formattedDep.TargetName = dep.(string)
 			formattedDep.Constraints = ""
 		} else {
-			var tempDep dependency;
+			var tempDep dependency
 			mapstructure.Decode(dep, &tempDep)
 			formattedDep.TargetName = tempDep.Name
 		}

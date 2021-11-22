@@ -5,3 +5,5 @@ type CSVInput struct {
 	Versions     []Version
 	Dependencies []Dependency
 }
+
+// []CSVInput --->  packages.csv, dependencies.csv, versions.csv

@@ -6,11 +6,6 @@ import (
 )
 
 //Dependency defining type from package to version
-type CsvDependency struct {
-	TargetName  string `json:"target_name"`
-	Constraints string `json:"constraints"`
-}
-
 type Dependency struct {
 	ID          int64  `json:"id"`
 	SourceID    int64  `json:"source_id"`

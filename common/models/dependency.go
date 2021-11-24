@@ -20,7 +20,7 @@ type CsvDependency struct {
 
 func (d *CsvDependency) GetKeys() []string {
 	keys := make([]string, 0)
-	t := reflect.TypeOf(Package{})
+	t := reflect.TypeOf(CsvDependency{})
 	for i := 0; i < t.NumField(); i++ {
 		keys = append(keys, t.Field(i).Name)
 	}

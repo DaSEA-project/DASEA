@@ -132,7 +132,7 @@ func parseYAML(path string) []string {
 func parseJSON(name string, version string, pkgId int) {
 	pkg := models.Package{}
 	v := models.Version{}
-	d := models.CsvDependency{}
+	d := models.Dependency{}
 
 	fname := fmt.Sprintf("core/conan/out/%s/%s.json", name, version)
 	file, err := os.Open(fname)

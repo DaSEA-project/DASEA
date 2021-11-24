@@ -3,11 +3,8 @@ package vcpkg
 import (
 	"encoding/json"
 	"io/ioutil"
-	"net/http"
-	"reflect"
 
 	"github.com/heyjoakim/DASEA/common/models"
-	"github.com/mitchellh/mapstructure"
 )
 
 type response struct {
@@ -47,59 +44,59 @@ func handleError(err error) {
 	}
 }
 
-func formatPackagesForCSVExport(packages []pkg) []models.CSVInput {
-	formattedPackages := make([]models.CSVInput, 0, len(packages))
+// func formatPackagesForCSVExport(packages []pkg) []models.CSVInput {
+// 	formattedPackages := make([]models.CSVInput, 0, len(packages))
 
-	for _, p := range packages {
-		var csvInput models.CSVInput
-		var pckg models.Package
-		pckg.Name = p.Name
-		pckg.PackageManager = "Vcpkg"
-		pckg.Platform = "C/C++"
-		pckg.Description = p.Description
-		pckg.HomepageURL = p.Homepage
-		pckg.SourceCodeURL = ""
-		pckg.Maintainer = p.Maintainer
-		pckg.License = p.License
-		pckg.Author = ""
-		csvInput.Pkg = pckg
-		csvInput.Versions = []models.Version{{Version: p.Version}}
-		if len(p.Dependencies) > 0 {
-			csvInput.Dependencies = getDependencies(p.Dependencies)
-		}
-		formattedPackages = append(formattedPackages, csvInput)
-	}
+// 	for _, p := range packages {
+// 		var csvInput models.CSVInput
+// 		var pckg models.Package
+// 		pckg.Name = p.Name
+// 		pckg.PackageManager = "Vcpkg"
+// 		pckg.Platform = "C/C++"
+// 		pckg.Description = p.Description
+// 		pckg.HomepageURL = p.Homepage
+// 		pckg.SourceCodeURL = ""
+// 		pckg.Maintainer = p.Maintainer
+// 		pckg.License = p.License
+// 		pckg.Author = ""
+// 		csvInput.Pkg = pckg
+// 		csvInput.Versions = []models.Version{{Version: p.Version}}
+// 		if len(p.Dependencies) > 0 {
+// 			csvInput.Dependencies = getDependencies(p.Dependencies)
+// 		}
+// 		formattedPackages = append(formattedPackages, csvInput)
+// 	}
 
-	return formattedPackages
-}
+// 	return formattedPackages
+// }
 
-func getDependencies(dependencies []interface{}) []models.Dependency {
-	formattedDependencies := make([]models.Dependency, 0, len(dependencies))
+// func getDependencies(dependencies []interface{}) []models.Dependency {
+// 	formattedDependencies := make([]models.Dependency, 0, len(dependencies))
 
-	for _, dep := range dependencies {
-		var formattedDep models.Dependency
-		if reflect.TypeOf(dep).Kind() == reflect.String {
-			formattedDep.TargetName = dep.(string)
-			formattedDep.Constraints = ""
-		} else {
-			var tempDep dependency
-			mapstructure.Decode(dep, &tempDep)
-			formattedDep.TargetName = tempDep.Name
-		}
-		formattedDependencies = append(formattedDependencies, formattedDep)
-	}
-	return formattedDependencies
-}
+// 	for _, dep := range dependencies {
+// 		var formattedDep models.Dependency
+// 		if reflect.TypeOf(dep).Kind() == reflect.String {
+// 			formattedDep.TargetName = dep.(string)
+// 			formattedDep.Constraints = ""
+// 		} else {
+// 			var tempDep dependency
+// 			mapstructure.Decode(dep, &tempDep)
+// 			formattedDep.TargetName = tempDep.Name
+// 		}
+// 		formattedDependencies = append(formattedDependencies, formattedDep)
+// 	}
+// 	return formattedDependencies
+// }
 
 func Traverse() {
-	response, err := http.Get(VCPKG_PACKAGES_OUTPUT)
-	handleError(err)
-	defer response.Body.Close()
-	data, err := ioutil.ReadAll(response.Body)
-	handleError(err)
-	res, _ := UnmarshalResponse(data)
-	deps := formatPackagesForCSVExport(res.Packages)
-	writeToFile(deps)
+	// response, err := http.Get(VCPKG_PACKAGES_OUTPUT)
+	// handleError(err)
+	// defer response.Body.Close()
+	// data, err := ioutil.ReadAll(response.Body)
+	// handleError(err)
+	// res, _ := UnmarshalResponse(data)
+	// deps := formatPackagesForCSVExport(res.Packages)
+	// writeToFile(deps)
 }
 
 func writeToFile(data []models.CSVInput) {

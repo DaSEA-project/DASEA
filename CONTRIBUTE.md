@@ -20,3 +20,16 @@ Go inside `main.go` and update the `main` function to support your package manag
 
 ## Releasing a new version of the dataset
 
+Generate a new version of the dataset by running the following command for each package manager:
+
+```bash
+  go run main.go packageManagerName
+```
+
+Add a ZENODO_API_KEY in your .env file to enable the release of the dataset.
+
+Publish the dataset by running:
+
+```bash
+  go run main.go release-dataset
+```

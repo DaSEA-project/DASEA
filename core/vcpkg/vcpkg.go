@@ -2,10 +2,13 @@ package vcpkg
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"reflect"
+	"time"
 
+	"github.com/heyjoakim/DASEA/common/helpers"
 	"github.com/heyjoakim/DASEA/common/models"
 	"github.com/mitchellh/mapstructure"
 )
@@ -35,7 +38,20 @@ const (
 	VCPKG_PACKAGES_OUTPUT = "https://vcpkg.io/output.json"
 )
 
-func UnmarshalResponse(data []byte) (response, error) {
+var (
+	PKGS_MAP              = make(map[string]int64)
+	PKG_ID                = int64(0)
+	VERSION_ID            = int64(0)
+	DEPENDENCY_ID         = int64(0)
+	date                  = time.Now().Format("01-02-2006")
+	VCPKG_PACKAGE_DATA    = fmt.Sprintf("data/vcpkg/vcpkg_packages-%s.csv", date)
+	VCPKG_VERSION_DATA    = fmt.Sprintf("data/vcpkg/vcpkg_versions-%s.csv", date)
+	VCPKG_DEPENDENCY_DATA = fmt.Sprintf("data/vcpkg/vcpkg_dependencies-%s.csv", date)
+)
+
+// Start Helper Functions
+
+func unmarshalResponse(data []byte) (response, error) {
 	var r response
 	err := json.Unmarshal(data, &r)
 	return r, err
@@ -47,12 +63,18 @@ func handleError(err error) {
 	}
 }
 
-func formatPackagesForCSVExport(packages []pkg) []models.CSVInput {
-	formattedPackages := make([]models.CSVInput, 0, len(packages))
-
+func createNameIdPackageMap(packages []pkg) {
 	for _, p := range packages {
-		var csvInput models.CSVInput
+		PKGS_MAP[p.Name] = PKG_ID
+		PKG_ID++
+	}
+}
+
+func formatAndExport(packages []pkg) {
+	for _, p := range packages {
+
 		var pckg models.Package
+		pckg.ID = PKGS_MAP[p.Name]
 		pckg.Name = p.Name
 		pckg.PackageManager = "Vcpkg"
 		pckg.Platform = "C/C++"
@@ -62,34 +84,42 @@ func formatPackagesForCSVExport(packages []pkg) []models.CSVInput {
 		pckg.Maintainer = p.Maintainer
 		pckg.License = p.License
 		pckg.Author = ""
-		csvInput.Pkg = pckg
-		csvInput.Versions = []models.Version{{Version: p.Version}}
-		if len(p.Dependencies) > 0 {
-			csvInput.Dependencies = getDependencies(p.Dependencies)
-		}
-		formattedPackages = append(formattedPackages, csvInput)
-	}
+		helpers.WriteToCsv(pckg.GetKeys(), pckg.GetValues(), VCPKG_PACKAGE_DATA)
 
-	return formattedPackages
+		var version models.Version
+
+		version.ID = VERSION_ID
+		version.PackageID = PKGS_MAP[p.Name]
+		version.Version = p.Version
+		helpers.WriteToCsv(version.GetKeys(), version.GetValues(), VCPKG_VERSION_DATA)
+
+		if len(p.Dependencies) > 0 {
+			writeDependencies(p.Dependencies, version.ID)
+		}
+		VERSION_ID++
+	}
 }
 
-func getDependencies(dependencies []interface{}) []models.Dependency {
-	formattedDependencies := make([]models.Dependency, 0, len(dependencies))
-
+func writeDependencies(dependencies []interface{}, VERSION_ID int64) {
 	for _, dep := range dependencies {
 		var formattedDep models.Dependency
+		formattedDep.ID = DEPENDENCY_ID
+		formattedDep.SourceID = VERSION_ID
+		formattedDep.Constraints = ""
+
 		if reflect.TypeOf(dep).Kind() == reflect.String {
-			formattedDep.TargetName = dep.(string)
-			formattedDep.Constraints = ""
+			formattedDep.TargetID = PKGS_MAP[dep.(string)]
 		} else {
 			var tempDep dependency
 			mapstructure.Decode(dep, &tempDep)
-			formattedDep.TargetName = tempDep.Name
+			formattedDep.TargetID = PKGS_MAP[tempDep.Name]
 		}
-		formattedDependencies = append(formattedDependencies, formattedDep)
+		helpers.WriteToCsv(formattedDep.GetKeys(), formattedDep.GetValues(), VCPKG_DEPENDENCY_DATA)
+		DEPENDENCY_ID++
 	}
-	return formattedDependencies
 }
+
+// End Helper Functions
 
 func Traverse() {
 	response, err := http.Get(VCPKG_PACKAGES_OUTPUT)
@@ -97,12 +127,8 @@ func Traverse() {
 	defer response.Body.Close()
 	data, err := ioutil.ReadAll(response.Body)
 	handleError(err)
-	res, _ := UnmarshalResponse(data)
-	deps := formatPackagesForCSVExport(res.Packages)
-	writeToFile(deps)
-}
-
-func writeToFile(data []models.CSVInput) {
-	file, _ := json.MarshalIndent(data, "", " ")
-	_ = ioutil.WriteFile("./core/vcpkg/dependencies.json", file, 0644)
+	res, _ := unmarshalResponse(data)
+	createNameIdPackageMap(res.Packages)
+	formatAndExport(res.Packages)
+	fmt.Println("Vcpkg Package Data Exported")
 }

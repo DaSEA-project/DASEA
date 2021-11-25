@@ -45,7 +45,7 @@ See [CONTRIBUTE.md](https://github.com/heyjoakim/DASEA/blob/main/CONTRIBUTE.md) 
 
 # License
 
-Licensed by the [MIT License](https://github.com/heyjoakim/DASEA/blob/main/LICENSE)
+Licensed by the [GNU Affero General Public License v3.0](https://github.com/heyjoakim/DASEA/blob/main/LICENSE)
 
 # Jekyll Homepage
 

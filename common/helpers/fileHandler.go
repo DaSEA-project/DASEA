@@ -12,7 +12,6 @@ func WriteToCsv(keys []string, values []string, fpath string) {
 
 	tokens := strings.Split(fpath, "/")
 	path := strings.Join(tokens[:len(tokens)-1], "/")
-
 	err := os.MkdirAll(path, 0777)
 	if err != nil {
 		panic(err)
@@ -31,7 +30,6 @@ func WriteToCsv(keys []string, values []string, fpath string) {
 	}
 
 	file, err := os.OpenFile(fpath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
-
 	if err != nil {
 		panic(err)
 	}

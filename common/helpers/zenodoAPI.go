@@ -61,7 +61,7 @@ func ReleaseDataset() {
 	zipFileName := time.Now().Format("02-01-2006") + "-dataset.zip"
 	zipErr := zipSource("data", zipFileName)
 	if zipErr != nil {
-		fmt.Println("Error creating zip file: %s", zipErr)
+		fmt.Printf("Error creating zip file: %s", zipErr)
 	}
 	fmt.Println("Created zip file")
 

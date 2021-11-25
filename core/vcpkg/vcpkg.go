@@ -102,7 +102,7 @@ func formatAndExport(packages []pkg) {
 
 func writeDependencies(dependencies []interface{}, VERSION_ID int64) {
 	for _, dep := range dependencies {
-		var formattedDep models.CsvDependency
+		var formattedDep models.Dependency
 		formattedDep.ID = DEPENDENCY_ID
 		formattedDep.SourceID = VERSION_ID
 		formattedDep.Constraints = ""

@@ -21,3 +21,6 @@ data/
 
 # OS files
 .DS_Store
+
+# VS Code configuration
+.vscode/

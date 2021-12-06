@@ -24,3 +24,5 @@ data/
 
 # VS Code configuration
 .vscode/
+__pycache__/
+*.pyc

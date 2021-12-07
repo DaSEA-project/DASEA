@@ -24,3 +24,6 @@ data/
 
 # VS Code configuration
 .vscode/
+
+# IDEA configuration
+.idea/

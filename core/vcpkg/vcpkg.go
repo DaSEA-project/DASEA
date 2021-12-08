@@ -104,7 +104,7 @@ func writeDependencies(dependencies []interface{}, VERSION_ID int64) {
 		var formattedDep models.Dependency
 		formattedDep.ID = DEPENDENCY_ID
 		formattedDep.SourceID = VERSION_ID
-		formattedDep.Constraints = ""
+		// formattedDep.Constraints = ""
 
 		if reflect.TypeOf(dep).Kind() == reflect.String {
 			formattedDep.TargetID = PKGS_MAP[dep.(string)]

@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS package (
 );
 
 
+
 /* COPY packages FROM '/path/to/csv/packages.csv' DELIMITER ',' CSV HEADER;  */
 
 COPY package
@@ -42,3 +43,11 @@ CREATE TABLE IF NOT EXISTS dependency (
 /* COPY packages FROM '/path/to/csv/dependencies.csv' DELIMITER ',' CSV HEADER; */
 
 COPY dependency FROM '/Users/petya/Desktop/uni/Research Project/DASEA/data/vcpkg/vcpkg_dependencies-12-08-2021.csv' DELIMITER ',' CSV HEADER;
+
+/* Find the package most packages depend on */
+
+SELECT package.name,
+COUNT(target_id) AS dependencies_count
+FROM dependency
+INNER JOIN package ON package.id=dependency.target_id
+GROUP BY package.name ORDER BY dependencies_count DESC;

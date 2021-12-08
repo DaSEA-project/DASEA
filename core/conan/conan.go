@@ -188,7 +188,7 @@ func parseJSON(name string, version string, pkgId int) {
 					d.ID = dependencyCnt
 					d.SourceID = int64(VERSIONS_MAP_IDX[name+version])
 					d.TargetID = int64(PKGS_MAP_IDX[targetName[0]])
-					d.Constraints = "N/A"
+					// d.Constraints = "N/A"
 					helpers.WriteToCsv(d.GetKeys(), d.GetValues(), CONAN_DEPENDENCY_DATA)
 					dependencyCnt++
 				}

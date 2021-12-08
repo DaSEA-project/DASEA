@@ -10,6 +10,13 @@ type Version struct {
 	ID        int64  `json:"id"`
 	PackageID int64  `json:"package_name"`
 	Version   string `json:"version"`
+	PackageManager string `json:"package_manager"`
+	Description    string `json:"description"`
+	HomepageURL    string `json:"homepageUrl"`
+	SourceCodeURL  string `json:"sourceCodeUrl"`
+	Maintainer     string `json:"maintainer"`
+	License        string `json:"license"`
+	Author         string `json:"author"`
 }
 
 func (v *Version) GetKeys() []string {
@@ -26,6 +33,12 @@ func (v *Version) GetValues() []string {
 	values = append(values, strconv.Itoa(int(v.ID)))
 	values = append(values, strconv.Itoa(int(v.PackageID)))
 	values = append(values, v.Version)
-
+	values = append(values, v.PackageManager)
+	values = append(values, v.Description)
+	values = append(values, v.HomepageURL)
+	values = append(values, v.SourceCodeURL)
+	values = append(values, v.Maintainer)
+	values = append(values, v.License)
+	values = append(values, v.Author)
 	return values
 }

@@ -11,7 +11,7 @@ from dasea.utils import _serialize_data
 
 
 CONAN_INDEX_URL = "https://github.com/conan-io/conan-center-index"
-CONAN_INDEX_LOCAL = "data/tmp/conan-center-index"
+CONAN_INDEX_LOCAL = "data/tmp/conan/conan-center-index"
 CONAN_METADATA = "data/tmp/conan/metadata"
 PKGS_FILE = "data/out/conan/packages.csv"
 VERSIONS_FILE = "data/out/conan/versions.csv"

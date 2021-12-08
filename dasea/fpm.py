@@ -32,7 +32,6 @@ def _collect_packages(metadata_dict):
 def _collect_versions(metadata_dict, pkg_idx_map):
     # TODO: Kasper does some cleaning of the metadata_dict. Understand what and why!
     versions = []
-    version_idx_map = {}
     version_idx = 0
     for pkg_name, data in metadata_dict.items():
         for version, version_info in data.items():
@@ -50,20 +49,29 @@ def _collect_versions(metadata_dict, pkg_idx_map):
                 maintainer=version_info["maintainer"],
             )
             versions.append(v)
-            version_idx_map[version_info["name"]] = version_idx
             version_idx += 1
-    return version_idx_map, versions
+    return versions
 
 
-def _collect_dependencies(metadata_dict, pkg_idx_map, versions_idx_map):
+def _collect_dependencies(metadata_dict, pkg_idx_map):
     deps = []
+    version_idx = 0
     for idx, (pkg_name, data) in enumerate(metadata_dict.items()):
         for version, version_info in data.items():
             source_pkg_idx = pkg_idx_map.get(pkg_name, None)
-            for dep_name, dep_info in version_info.get("dependencies", {}).items():
+
+            deps_decl = version_info.get("dependencies", {})
+            dev_deps_decl = version_info.get("dev-dependencies", {})
+            if deps_decl == None:
+                # sometimes there is an explicit None value stored
+                deps_decl = {}
+            if dev_deps_decl == None:
+                dev_deps_decl = {}
+
+            for dep_name, dep_info in deps_decl.items():
                 d = Dependency(
                     pkg_idx=source_pkg_idx,
-                    source_idx=versions_idx_map[version_info["name"]],
+                    source_idx=version_idx,
                     target_idx=pkg_idx_map.get(
                         dep_name, ""
                     ),  # There are packages provided as dependencies, which do not exist on the registry, but which are referred to and downloaded from, e.g., Github
@@ -74,10 +82,10 @@ def _collect_dependencies(metadata_dict, pkg_idx_map, versions_idx_map):
                     kind=Kind.BUILD.name,
                 )
                 deps.append(d)
-            for dep_name, dep_info in version_info.get("dev-dependencies", {}).items():
+            for dep_name, dep_info in dev_deps_decl.items():
                 d = Dependency(
                     pkg_idx=source_pkg_idx,
-                    source_idx=versions_idx_map[version_info["name"]],
+                    source_idx=version_idx,
                     target_idx=pkg_idx_map.get(dep_name, ""),
                     source_name=version_info["name"],
                     target_name=dep_name,
@@ -86,6 +94,8 @@ def _collect_dependencies(metadata_dict, pkg_idx_map, versions_idx_map):
                     kind=Kind.DEV.name,
                 )
                 deps.append(d)
+            version_idx += 1
+
     return deps
 
 
@@ -98,8 +108,8 @@ def mine():
     pkg_names = list(metadata_dict.keys())
 
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
-    version_idx_map, versions_lst = _collect_versions(metadata_dict, pkg_idx_map)
-    deps_lst = _collect_dependencies(metadata_dict, pkg_idx_map, version_idx_map)
+    versions_lst = _collect_versions(metadata_dict, pkg_idx_map)
+    deps_lst = _collect_dependencies(metadata_dict, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)

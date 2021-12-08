@@ -36,8 +36,6 @@ def _collect_packages(metadata_lst):
 
 def _collect_versions(metadata_lst, pkg_idx_map):
     versions = []
-    version_idx_map = {}
-    version_idx = 0
     for version_idx, data in enumerate(metadata_lst):
         pkg_name = data["Name"]
         pkg_idx = pkg_idx_map.get(pkg_name, None)
@@ -54,14 +52,12 @@ def _collect_versions(metadata_lst, pkg_idx_map):
             maintainer=data.get("Maintainers", ""),
         )
         versions.append(v)
-        version_idx_map[data["Name"]] = version_idx
-        version_idx += 1
-    return version_idx_map, versions
+    return versions
 
 
-def _collect_dependencies(metadata_lst, pkg_idx_map, versions_idx_map):
+def _collect_dependencies(metadata_lst, pkg_idx_map):
     deps = []
-    for idx, data in enumerate(metadata_lst):
+    for version_idx, data in enumerate(metadata_lst):
         pkg_name = data["Name"]
         source_pkg_idx = pkg_idx_map.get(pkg_name, None)
         for dep_info in data.get("Dependencies", []):
@@ -75,7 +71,7 @@ def _collect_dependencies(metadata_lst, pkg_idx_map, versions_idx_map):
             d = VCPKGDependency(
                 pkg_idx=source_pkg_idx,
                 # TODO: double check if the following lookup yields the desired result!
-                source_idx=versions_idx_map[data["Name"]],
+                source_idx=version_idx,
                 target_idx=pkg_idx_map[dep_name],
                 source_name=data["Name"],
                 target_name=dep_name,
@@ -97,8 +93,8 @@ def mine():
     pkg_names = [d["Name"] for d in metadata_lst]
 
     pkg_idx_map, packages_lst = _collect_packages(metadata_lst)
-    version_idx_map, versions_lst = _collect_versions(metadata_lst, pkg_idx_map)
-    deps_lst = _collect_dependencies(metadata_lst, pkg_idx_map, version_idx_map)
+    versions_lst = _collect_versions(metadata_lst, pkg_idx_map)
+    deps_lst = _collect_dependencies(metadata_lst, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)

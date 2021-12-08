@@ -160,7 +160,6 @@ func parseJSON(name string, version string, pkgId int) {
 				pkg.ID = int64(pkgId)
 				pkg.Name = name
 				pkg.PackageManager = "Conan"
-				pkg.Platform = "C/C++"
 				pkg.Description = packages[i].Description
 				pkg.HomepageURL = packages[i].URL
 				// pkg.SourceCodeURL = "N/A"

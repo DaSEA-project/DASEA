@@ -81,7 +81,6 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 
 	model.ID = int64(pkgID)
 	model.PackageManager = "FPM"
-	model.Platform = "Fortran"
 	if latestPkg["name"] != nil {
 		model.Name = latestPkg["name"].(string)
 	}

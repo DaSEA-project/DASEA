@@ -6,12 +6,7 @@ CREATE TABLE IF NOT EXISTS package (
 	name VARCHAR(50) UNIQUE NOT NULL
 );
 
-
-
-/* COPY packages FROM '/path/to/csv/packages.csv' DELIMITER ',' CSV HEADER;  */
-
-COPY package
-FROM '/Users/petya/Desktop/uni/Research Project/DASEA/data/vcpkg/vcpkg_packages-12-08-2021.csv' DELIMITER ',' CSV HEADER;
+COPY packages FROM '/path/to/csv/packages.csv' DELIMITER ',' CSV HEADER;
 
 CREATE TABLE IF NOT EXISTS version (
 	id serial PRIMARY KEY,
@@ -27,9 +22,7 @@ CREATE TABLE IF NOT EXISTS version (
 	FOREIGN KEY (package_id) REFERENCES package (id)
 );
 
-/* COPY packages FROM '/path/to/csv/versions.csv' DELIMITER ',' CSV HEADER; */
-
-COPY version FROM '/Users/petya/Desktop/uni/Research Project/DASEA/data/vcpkg/vcpkg_versions-12-08-2021.csv' DELIMITER ',' CSV HEADER;
+COPY packages FROM '/path/to/csv/versions.csv' DELIMITER ',' CSV HEADER;
 
 CREATE TABLE IF NOT EXISTS dependency (
 	id serial PRIMARY KEY,
@@ -40,9 +33,8 @@ CREATE TABLE IF NOT EXISTS dependency (
 	FOREIGN KEY (target_id) REFERENCES package (id)
 );
 
-/* COPY packages FROM '/path/to/csv/dependencies.csv' DELIMITER ',' CSV HEADER; */
+COPY packages FROM '/path/to/csv/dependencies.csv' DELIMITER ',' CSV HEADER;
 
-COPY dependency FROM '/Users/petya/Desktop/uni/Research Project/DASEA/data/vcpkg/vcpkg_dependencies-12-08-2021.csv' DELIMITER ',' CSV HEADER;
 
 /* Find the package most packages depend on */
 

@@ -77,12 +77,8 @@ func formatAndExport(packages []pkg) {
 		pckg.ID = PKGS_MAP[p.Name]
 		pckg.Name = p.Name
 		pckg.PackageManager = "Vcpkg"
-		pckg.Description = p.Description
-		pckg.HomepageURL = p.Homepage
-		// pckg.SourceCodeURL = ""
-		pckg.Maintainer = p.Maintainer
-		pckg.License = p.License
-		// pckg.Author = ""
+
+		// Write package data to CSV
 		helpers.WriteToCsv(pckg.GetKeys(), pckg.GetValues(), VCPKG_PACKAGE_DATA)
 
 		var version models.Version
@@ -90,6 +86,12 @@ func formatAndExport(packages []pkg) {
 		version.ID = VERSION_ID
 		version.PackageID = PKGS_MAP[p.Name]
 		version.Version = p.Version
+		version.Description = p.Description
+		version.HomepageURL = p.Homepage
+		version.Maintainer = p.Maintainer
+		version.License = p.License
+
+		// write version data to CSV
 		helpers.WriteToCsv(version.GetKeys(), version.GetValues(), VCPKG_VERSION_DATA)
 
 		if len(p.Dependencies) > 0 {
@@ -104,7 +106,7 @@ func writeDependencies(dependencies []interface{}, VERSION_ID int64) {
 		var formattedDep models.Dependency
 		formattedDep.ID = DEPENDENCY_ID
 		formattedDep.SourceID = VERSION_ID
-		// formattedDep.Constraints = ""
+		formattedDep.Constraints = ""
 
 		if reflect.TypeOf(dep).Kind() == reflect.String {
 			formattedDep.TargetID = PKGS_MAP[dep.(string)]

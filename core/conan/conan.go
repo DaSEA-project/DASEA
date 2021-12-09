@@ -160,14 +160,8 @@ func parseJSON(name string, version string, pkgId int) {
 				pkg.ID = int64(pkgId)
 				pkg.Name = name
 				pkg.PackageManager = "Conan"
-				pkg.Description = packages[i].Description
-				pkg.HomepageURL = packages[i].URL
-				// pkg.SourceCodeURL = "N/A"
-				// pkg.Maintainer = "N/A"
-				pkg.License = packages[i].License[0]
-				// pkg.Author = "N/A"
-
 				helpers.WriteToCsv(pkg.GetKeys(), pkg.GetValues(), CONAN_PACKAGE_DATA)
+
 				PKGS_VISITED[name] = true
 			} else {
 				log.Debugf("%s already visited", name, version)
@@ -176,6 +170,10 @@ func parseJSON(name string, version string, pkgId int) {
 			v.ID = int64(VERSIONS_MAP_IDX[name+version])
 			v.PackageID = int64(pkgId)
 			v.Version = name + "@" + version
+			v.Description = packages[i].Description
+			v.HomepageURL = packages[i].URL
+			v.License = packages[i].License[0]
+
 			helpers.WriteToCsv(v.GetKeys(), v.GetValues(), CONAN_VERSION_DATA)
 
 			// Inside specific version
@@ -319,7 +317,7 @@ func Traverse() {
 		}
 	}
 
-	//generatePackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
+	getPackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
 	geteMaps()
 	traverse()
 }

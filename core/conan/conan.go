@@ -1,4 +1,4 @@
-// package conan
+package conan
 
 // import (
 // 	"encoding/json"

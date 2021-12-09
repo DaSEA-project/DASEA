@@ -9,6 +9,7 @@ import (
 type Package struct {
 	ID             int64  `json:"id"`
 	Name           string `json:"name"`
+	PackageManager string `json:"package_manager"`
 }
 
 func (p *Package) GetKeys() []string {
@@ -24,5 +25,6 @@ func (p *Package) GetValues() []string {
 	values := make([]string, 0)
 	values = append(values, strconv.Itoa(int(p.ID)))
 	values = append(values, p.Name)
+	values = append(values, p.PackageManager)
 	return values
 }

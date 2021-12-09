@@ -76,6 +76,7 @@ func formatAndExport(packages []pkg) {
 		var pckg models.Package
 		pckg.ID = PKGS_MAP[p.Name]
 		pckg.Name = p.Name
+		pckg.PackageManager = "Vcpkg"
 
 		// Write package data to CSV
 		helpers.WriteToCsv(pckg.GetKeys(), pckg.GetValues(), VCPKG_PACKAGE_DATA)
@@ -85,7 +86,6 @@ func formatAndExport(packages []pkg) {
 		version.ID = VERSION_ID
 		version.PackageID = PKGS_MAP[p.Name]
 		version.Version = p.Version
-		version.PackageManager = "Vcpkg"
 		version.Description = p.Description
 		version.HomepageURL = p.Homepage
 		version.Maintainer = p.Maintainer

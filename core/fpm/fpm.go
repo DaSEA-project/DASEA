@@ -84,21 +84,6 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 	if latestPkg["name"] != nil {
 		model.Name = latestPkg["name"].(string)
 	}
-	if latestPkg["description"] != nil {
-		model.Description = latestPkg["description"].(string)
-	}
-	if latestPkg["git"] != nil {
-		model.SourceCodeURL = latestPkg["git"].(string)
-	}
-	if latestPkg["maintainer"] != nil {
-		model.Maintainer = normalizeToString(latestPkg["maintainer"])
-	}
-	if latestPkg["license"] != nil {
-		model.License = latestPkg["license"].(string)
-	}
-	if latestPkg["author"] != nil {
-		model.Author = normalizeToString(latestPkg["author"])
-	}
 
 	//////////////// VERSIONS /////////////////////
 	///////////////////////////////////////////////
@@ -116,6 +101,21 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 			continue
 		}
 		version := models.Version{ID: int64(versionID), PackageID: model.ID, Version: v["version"].(string)}
+		if latestPkg["description"] != nil {
+			version.Description = latestPkg["description"].(string)
+		}
+		if latestPkg["git"] != nil {
+			version.SourceCodeURL = latestPkg["git"].(string)
+		}
+		if latestPkg["maintainer"] != nil {
+			version.Maintainer = normalizeToString(latestPkg["maintainer"])
+		}
+		if latestPkg["license"] != nil {
+			version.License = latestPkg["license"].(string)
+		}
+		if latestPkg["author"] != nil {
+			version.Author = normalizeToString(latestPkg["author"])
+		}
 		versionID = versionID + 1
 		versions = append(versions, version)
 		helpers.WriteToCsv(version.GetKeys(), version.GetValues(), FPM_VERSION_DATA)

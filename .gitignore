@@ -25,5 +25,5 @@ data/
 # VS Code configuration
 .vscode/
 
-# IDEA configuration
+# JetBrains IDEs
 .idea/

@@ -3,16 +3,17 @@ CREATE DATABASE DASEA;
 
 CREATE TABLE IF NOT EXISTS package (
 	id serial PRIMARY KEY,
-	name VARCHAR(50) UNIQUE NOT NULL
+	name VARCHAR(50) UNIQUE NOT NULL,
+	package_manager VARCHAR
 );
 
-COPY packages FROM '/path/to/csv/packages.csv' DELIMITER ',' CSV HEADER;
+COPY package
+FROM '/path/to/data/packageManger/packages.csv' DELIMITER ',' CSV HEADER;
 
 CREATE TABLE IF NOT EXISTS version (
 	id serial PRIMARY KEY,
 	package_id INT,
 	version VARCHAR,
-	package_manager VARCHAR,
 	description VARCHAR,
 	homepage_url VARCHAR,
 	source_code_url VARCHAR,
@@ -22,7 +23,7 @@ CREATE TABLE IF NOT EXISTS version (
 	FOREIGN KEY (package_id) REFERENCES package (id)
 );
 
-COPY packages FROM '/path/to/csv/versions.csv' DELIMITER ',' CSV HEADER;
+COPY version FROM '/path/to/data/packageManger/versions.csv' DELIMITER ',' CSV HEADER;
 
 CREATE TABLE IF NOT EXISTS dependency (
 	id serial PRIMARY KEY,
@@ -33,11 +34,9 @@ CREATE TABLE IF NOT EXISTS dependency (
 	FOREIGN KEY (target_id) REFERENCES package (id)
 );
 
-COPY packages FROM '/path/to/csv/dependencies.csv' DELIMITER ',' CSV HEADER;
-
+COPY dependency FROM '/path/to/data/packageManger/dependencies.csv' DELIMITER ',' CSV HEADER;
 
 /* Find the package most packages depend on */
-
 SELECT package.name,
 COUNT(target_id) AS dependencies_count
 FROM dependency

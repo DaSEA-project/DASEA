@@ -317,7 +317,7 @@ func Traverse() {
 		}
 	}
 
-	//generatePackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
+	getPackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
 	geteMaps()
 	traverse()
 }

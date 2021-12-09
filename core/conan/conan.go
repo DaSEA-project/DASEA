@@ -1,325 +1,323 @@
 package conan
 
-// import (
-// 	"encoding/json"
-// 	"fmt"
-// 	"io"
-// 	"io/ioutil"
-// 	"os"
-// 	"os/exec"
-// 	"path/filepath"
-// 	"runtime"
-// 	"sort"
-// 	"strings"
-// 	"time"
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
+	"sort"
+	"strings"
+	"time"
 
-// 	"github.com/heyjoakim/DASEA/common/helpers"
-// 	"github.com/heyjoakim/DASEA/common/models"
-// 	log "github.com/sirupsen/logrus"
-// 	yaml "gopkg.in/yaml.v2"
-// )
+	"github.com/heyjoakim/DASEA/common/helpers"
+	"github.com/heyjoakim/DASEA/common/models"
+	log "github.com/sirupsen/logrus"
+	yaml "gopkg.in/yaml.v2"
+)
 
-// type packageJSON []struct {
-// 	Revision        string      `json:"revision"`
-// 	Reference       string      `json:"reference"`
-// 	IsRef           bool        `json:"is_ref"`
-// 	DisplayName     string      `json:"display_name"`
-// 	ID              string      `json:"id"`
-// 	BuildID         interface{} `json:"build_id"`
-// 	Context         string      `json:"context"`
-// 	Remote          remote      `json:"remote"`
-// 	URL             string      `json:"url"`
-// 	Homepage        string      `json:"homepage"`
-// 	License         []string    `json:"license"`
-// 	Description     string      `json:"description"`
-// 	Topics          []string    `json:"topics"`
-// 	Provides        []string    `json:"provides"`
-// 	Recipe          string      `json:"recipe"`
-// 	PackageRevision string      `json:"package_revision"`
-// 	Binary          string      `json:"binary"`
-// 	BinaryRemote    string      `json:"binary_remote"`
-// 	CreationDate    string      `json:"creation_date"`
-// 	RequiredBy      []string    `json:"required_by,omitempty"`
-// 	Requires        []string    `json:"requires,omitempty"`
-// }
-// type remote struct {
-// 	Name string `json:"name"`
-// 	URL  string `json:"url"`
-// }
+type packageJSON []struct {
+	Revision        string      `json:"revision"`
+	Reference       string      `json:"reference"`
+	IsRef           bool        `json:"is_ref"`
+	DisplayName     string      `json:"display_name"`
+	ID              string      `json:"id"`
+	BuildID         interface{} `json:"build_id"`
+	Context         string      `json:"context"`
+	Remote          remote      `json:"remote"`
+	URL             string      `json:"url"`
+	Homepage        string      `json:"homepage"`
+	License         []string    `json:"license"`
+	Description     string      `json:"description"`
+	Topics          []string    `json:"topics"`
+	Provides        []string    `json:"provides"`
+	Recipe          string      `json:"recipe"`
+	PackageRevision string      `json:"package_revision"`
+	Binary          string      `json:"binary"`
+	BinaryRemote    string      `json:"binary_remote"`
+	CreationDate    string      `json:"creation_date"`
+	RequiredBy      []string    `json:"required_by,omitempty"`
+	Requires        []string    `json:"requires,omitempty"`
+}
+type remote struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
 
-// type item struct {
-// 	Folder string `yaml:"folder"`
-// }
+type item struct {
+	Folder string `yaml:"folder"`
+}
 
-// var (
-// 	currentTime           = time.Now()
-// 	date                  = currentTime.Format("01-02-2006")
-// 	dependencyCnt         = int64(1)
-// 	PKGS_MAP_IDX          = make(map[string]int)
-// 	PKGS_VISITED          = make(map[string]bool)
-// 	VERSIONS_MAP          = make(map[string][]string)
-// 	VERSIONS_MAP_IDX      = make(map[string]int)
-// 	CONAN_PACKAGE_DATA    = fmt.Sprintf("data/conan/conan_packages-%s.csv", date)
-// 	CONAN_VERSION_DATA    = fmt.Sprintf("data/conan/conan_versions-%s.csv", date)
-// 	CONAN_DEPENDENCY_DATA = fmt.Sprintf("data/conan/conan_dependencies-%s.csv", date)
-// )
+var (
+	currentTime           = time.Now()
+	date                  = currentTime.Format("01-02-2006")
+	dependencyCnt         = int64(1)
+	PKGS_MAP_IDX          = make(map[string]int)
+	PKGS_VISITED          = make(map[string]bool)
+	VERSIONS_MAP          = make(map[string][]string)
+	VERSIONS_MAP_IDX      = make(map[string]int)
+	CONAN_PACKAGE_DATA    = fmt.Sprintf("data/conan/conan_packages-%s.csv", date)
+	CONAN_VERSION_DATA    = fmt.Sprintf("data/conan/conan_versions-%s.csv", date)
+	CONAN_DEPENDENCY_DATA = fmt.Sprintf("data/conan/conan_dependencies-%s.csv", date)
+)
 
-// func externalCommand(name string, args ...string) {
-// 	cmd := exec.Command(name, args...)
-// 	stdout, err := cmd.CombinedOutput()
+func externalCommand(name string, args ...string) {
+	cmd := exec.Command(name, args...)
+	stdout, err := cmd.CombinedOutput()
 
-// 	if err != nil {
-// 		log.Errorf(string(stdout))
-// 	}
-// }
+	if err != nil {
+		log.Errorf(string(stdout))
+	}
+}
 
-// func loggerInit() {
-// 	var filename string = fmt.Sprintf("core/conan/logs/%s.log", date)
+func loggerInit() {
+	var filename string = fmt.Sprintf("core/conan/logs/%s.log", date)
 
-// 	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
-// 	formatter := new(log.TextFormatter)
-// 	formatter.TimestampFormat = "02-01-2006 15:04:05"
-// 	formatter.FullTimestamp = true
-// 	log.SetFormatter(formatter)
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	formatter := new(log.TextFormatter)
+	formatter.TimestampFormat = "02-01-2006 15:04:05"
+	formatter.FullTimestamp = true
+	log.SetFormatter(formatter)
 
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	} else {
-// 		mw := io.MultiWriter(f, os.Stdout)
-// 		log.SetOutput(mw)
-// 	}
-// }
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		mw := io.MultiWriter(f, os.Stdout)
+		log.SetOutput(mw)
+	}
+}
 
-// func conanInfo(name string, version string) {
+func conanInfo(name string, version string) {
 
-// 	arg0 := "conan"
-// 	arg1 := "info" // TODO: Test if --update flag reduces time !if find other mechanism to not load cached packages
-// 	arg2 := "-n"
-// 	arg3 := "requires"
-// 	arg4 := fmt.Sprintf("%s/%s@", name, version)
-// 	arg5 := "--json"
-// 	out := fmt.Sprintf("out/%s/%s.json", name, version)
+	arg0 := "conan"
+	arg1 := "info" // TODO: Test if --update flag reduces time !if find other mechanism to not load cached packages
+	arg2 := "-n"
+	arg3 := "requires"
+	arg4 := fmt.Sprintf("%s/%s@", name, version)
+	arg5 := "--json"
+	out := fmt.Sprintf("out/%s/%s.json", name, version)
 
-// 	log.Infof("Getting info from %s/%s", name, version)
-// 	externalCommand(arg0, arg1, arg2, arg3, arg4, arg5, out)
-// }
+	log.Infof("Getting info from %s/%s", name, version)
+	externalCommand(arg0, arg1, arg2, arg3, arg4, arg5, out)
+}
 
-// func parseYAML(path string) []string {
-// 	var res []string
-// 	m := make(map[string]map[string]item)
+func parseYAML(path string) []string {
+	var res []string
+	m := make(map[string]map[string]item)
 
-// 	file, err := ioutil.ReadFile(path)
+	file, err := ioutil.ReadFile(path)
 
-// 	if err != nil {
-// 		log.Errorf("Error reading yaml file %s, err")
-// 	}
+	if err != nil {
+		log.Errorf("Error reading yaml file %s, err")
+	}
 
-// 	err2 := yaml.Unmarshal([]byte(file), &m)
+	err2 := yaml.Unmarshal([]byte(file), &m)
 
-// 	if err != nil {
-// 		log.Fatalf("error: %v", err2)
-// 	}
+	if err != nil {
+		log.Fatalf("error: %v", err2)
+	}
 
-// 	for _, value := range m {
+	for _, value := range m {
 
-// 		for key := range value {
-// 			res = append(res, key)
-// 		}
-// 	}
-// 	return res
-// }
+		for key := range value {
+			res = append(res, key)
+		}
+	}
+	return res
+}
 
-// func parseJSON(name string, version string, pkgId int) {
-// 	pkg := models.Package{}
-// 	v := models.Version{}
-// 	d := models.Dependency{}
+func parseJSON(name string, version string, pkgId int) {
+	pkg := models.Package{}
+	v := models.Version{}
+	d := models.Dependency{}
 
-// 	fname := fmt.Sprintf("core/conan/out/%s/%s.json", name, version)
-// 	file, err := os.Open(fname)
+	fname := fmt.Sprintf("core/conan/out/%s/%s.json", name, version)
+	file, err := os.Open(fname)
 
-// 	log.Infof("Writing %s", fname)
+	log.Infof("Writing %s", fname)
 
-// 	if err != nil {
-// 		log.Info(err)
-// 	}
-// 	defer file.Close()
+	if err != nil {
+		log.Info(err)
+	}
+	defer file.Close()
 
-// 	byte_val, _ := ioutil.ReadAll(file)
+	byte_val, _ := ioutil.ReadAll(file)
 
-// 	var packages packageJSON
+	var packages packageJSON
 
-// 	json.Unmarshal(byte_val, &packages)
+	json.Unmarshal(byte_val, &packages)
 
-// 	for i := 0; i < len(packages); i++ {
+	for i := 0; i < len(packages); i++ {
 
-// 		// We only want to get info about the current and not all are at index 0
-// 		if packages[i].DisplayName == name+"/"+version {
+		// We only want to get info about the current and not all are at index 0
+		if packages[i].DisplayName == name+"/"+version {
 
-// 			if PKGS_VISITED[name] == false {
+			if PKGS_VISITED[name] == false {
 
-// 				pkg.ID = int64(pkgId)
-// 				pkg.Name = name
-// 				pkg.PackageManager = "Conan"
-// 				pkg.Description = packages[i].Description
-// 				pkg.HomepageURL = packages[i].URL
-// 				// pkg.SourceCodeURL = "N/A"
-// 				// pkg.Maintainer = "N/A"
-// 				pkg.License = packages[i].License[0]
-// 				// pkg.Author = "N/A"
+				pkg.ID = int64(pkgId)
+				pkg.Name = name
+				pkg.PackageManager = "Conan"
+				helpers.WriteToCsv(pkg.GetKeys(), pkg.GetValues(), CONAN_PACKAGE_DATA)
 
-// 				helpers.WriteToCsv(pkg.GetKeys(), pkg.GetValues(), CONAN_PACKAGE_DATA)
-// 				PKGS_VISITED[name] = true
-// 			} else {
-// 				log.Debugf("%s already visited", name, version)
+				PKGS_VISITED[name] = true
+			} else {
+				log.Debugf("%s already visited", name, version)
 
-// 			}
-// 			v.ID = int64(VERSIONS_MAP_IDX[name+version])
-// 			v.PackageID = int64(pkgId)
-// 			v.Version = name + "@" + version
-// 			helpers.WriteToCsv(v.GetKeys(), v.GetValues(), CONAN_VERSION_DATA)
+			}
+			v.ID = int64(VERSIONS_MAP_IDX[name+version])
+			v.PackageID = int64(pkgId)
+			v.Version = name + "@" + version
+			v.Description = packages[i].Description
+			v.HomepageURL = packages[i].URL
+			v.License = packages[i].License[0]
 
-// 			// Inside specific version
+			helpers.WriteToCsv(v.GetKeys(), v.GetValues(), CONAN_VERSION_DATA)
 
-// 			if packages[i].Requires != nil {
-// 				// Looping thre requires slice
-// 				for _, dependency := range packages[i].Requires {
-// 					targetName := strings.Split(dependency, "/")
-// 					d.ID = dependencyCnt
-// 					d.SourceID = int64(VERSIONS_MAP_IDX[name+version])
-// 					d.TargetID = int64(PKGS_MAP_IDX[targetName[0]])
-// 					// d.Constraints = "N/A"
-// 					helpers.WriteToCsv(d.GetKeys(), d.GetValues(), CONAN_DEPENDENCY_DATA)
-// 					dependencyCnt++
-// 				}
+			// Inside specific version
 
-// 			} else {
-// 				log.Debugf("%s %s has no dependencies", name, version)
-// 			}
+			if packages[i].Requires != nil {
+				// Looping thre requires slice
+				for _, dependency := range packages[i].Requires {
+					targetName := strings.Split(dependency, "/")
+					d.ID = dependencyCnt
+					d.SourceID = int64(VERSIONS_MAP_IDX[name+version])
+					d.TargetID = int64(PKGS_MAP_IDX[targetName[0]])
+					// d.Constraints = "N/A"
+					helpers.WriteToCsv(d.GetKeys(), d.GetValues(), CONAN_DEPENDENCY_DATA)
+					dependencyCnt++
+				}
 
-// 		} else {
-// 			// log.Errorf("Package %s does not exist in conan info", name+version)
-// 		}
-// 	}
-// }
+			} else {
+				log.Debugf("%s %s has no dependencies", name, version)
+			}
 
-// func getPackageInfo() {
-// 	err := filepath.Walk("core/conan/assets/repo/src/recipes", func(path string, info os.FileInfo, err error) error {
+		} else {
+			// log.Errorf("Package %s does not exist in conan info", name+version)
+		}
+	}
+}
 
-// 		if err != nil {
-// 			// log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
-// 			return err
-// 		}
+func getPackageInfo() {
+	err := filepath.Walk("core/conan/assets/repo/src/recipes", func(path string, info os.FileInfo, err error) error {
 
-// 		dir, file := filepath.Split(path)
+		if err != nil {
+			// log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
+			return err
+		}
 
-// 		if file == "config.yml" {
-// 			tmp := strings.Split(dir, "/")
-// 			name := tmp[len(tmp)-2]
-// 			versions := parseYAML(path)
+		dir, file := filepath.Split(path)
 
-// 			for _, version := range versions {
-// 				conanInfo(name, version)
-// 			}
-// 		}
+		if file == "config.yml" {
+			tmp := strings.Split(dir, "/")
+			name := tmp[len(tmp)-2]
+			versions := parseYAML(path)
 
-// 		return nil
-// 	})
+			for _, version := range versions {
+				conanInfo(name, version)
+			}
+		}
 
-// 	if err != nil {
-// 		log.Fatalf("Error when walking directories: %v\n", err)
-// 	}
-// }
+		return nil
+	})
 
-// func geteMaps() {
-// 	var tmpVersions []string
-// 	i := 1
-// 	err := filepath.Walk("core/conan/out", func(path string, info os.FileInfo, err error) error {
-// 		if err != nil {
-// 			log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
-// 			return err
-// 		}
-// 		dir, file := filepath.Split(path)
-// 		test := filepath.Ext(path)
+	if err != nil {
+		log.Fatalf("Error when walking directories: %v\n", err)
+	}
+}
 
-// 		if info.IsDir() && file != "out" { // Fore some reason Walk includes out dir
-// 			tmpVersions = nil
-// 		}
+func geteMaps() {
+	var tmpVersions []string
+	i := 1
+	err := filepath.Walk("core/conan/out", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
+			return err
+		}
+		dir, file := filepath.Split(path)
+		test := filepath.Ext(path)
 
-// 		if test == ".json" {
-// 			// Get current package
-// 			t := strings.Split(dir, "/")
-// 			pkgName := t[len(t)-2]
-// 			if _, exists := PKGS_MAP_IDX[pkgName]; !exists {
-// 				PKGS_MAP_IDX[pkgName] = i //TODO: Save this to CSV INSTEAD
-// 				i++
-// 			}
+		if info.IsDir() && file != "out" { // Fore some reason Walk includes out dir
+			tmpVersions = nil
+		}
 
-// 			// Get current version (While walking)
-// 			tt := strings.Split(file, ".json")
-// 			versionName := tt[0]
-// 			tmpVersions = append(tmpVersions, versionName)
-// 			VERSIONS_MAP[pkgName] = tmpVersions
-// 		}
+		if test == ".json" {
+			// Get current package
+			t := strings.Split(dir, "/")
+			pkgName := t[len(t)-2]
+			if _, exists := PKGS_MAP_IDX[pkgName]; !exists {
+				PKGS_MAP_IDX[pkgName] = i //TODO: Save this to CSV INSTEAD
+				i++
+			}
 
-// 		return nil
-// 	})
-// 	if err != nil {
-// 		log.Fatalf("Error when walking out directories: %v\n", err)
-// 	}
-// }
+			// Get current version (While walking)
+			tt := strings.Split(file, ".json")
+			versionName := tt[0]
+			tmpVersions = append(tmpVersions, versionName)
+			VERSIONS_MAP[pkgName] = tmpVersions
+		}
 
-// func traverse() {
-// 	versionCnt := 1
+		return nil
+	})
+	if err != nil {
+		log.Fatalf("Error when walking out directories: %v\n", err)
+	}
+}
 
-// 	pkg_keys := make([]string, 1, len(PKGS_MAP_IDX)) //TODO: SMARTER
-// 	for k := range PKGS_MAP_IDX {
-// 		pkg_keys = append(pkg_keys, k)
-// 	}
-// 	sort.Strings(pkg_keys)
+func traverse() {
+	versionCnt := 1
 
-// 	for pkgId, name := range pkg_keys {
-// 		pkgVersions := VERSIONS_MAP[name]
+	pkg_keys := make([]string, 1, len(PKGS_MAP_IDX)) //TODO: SMARTER
+	for k := range PKGS_MAP_IDX {
+		pkg_keys = append(pkg_keys, k)
+	}
+	sort.Strings(pkg_keys)
 
-// 		for _, version := range pkgVersions {
-// 			// fmt.Println(VERSIONS_MAP_IDX)
-// 			VERSIONS_MAP_IDX[name+version] = versionCnt
-// 			parseJSON(name, version, pkgId)
-// 			versionCnt++
-// 		}
-// 	}
-// }
+	for pkgId, name := range pkg_keys {
+		pkgVersions := VERSIONS_MAP[name]
 
-// // Traverses the conan package mange recipes
-// func Traverse() {
+		for _, version := range pkgVersions {
+			// fmt.Println(VERSIONS_MAP_IDX)
+			VERSIONS_MAP_IDX[name+version] = versionCnt
+			parseJSON(name, version, pkgId)
+			versionCnt++
+		}
+	}
+}
 
-// 	loggerInit()
+// Traverses the conan package mange recipes
+func Traverse() {
 
-// 	if runtime.GOOS == "windows" {
-// 		path := "core\\conan\\ps\\clone.ps1"
-// 		cmd := "powershell"
+	loggerInit()
 
-// 		externalCommand(cmd, path)
+	if runtime.GOOS == "windows" {
+		path := "core\\conan\\ps\\clone.ps1"
+		cmd := "powershell"
 
-// 	} else {
-// 		cmd := "/bin/sh"
-// 		path := "core/conan/bash/clone.sh"
+		externalCommand(cmd, path)
 
-// 		externalCommand(cmd, path)
-// 	}
+	} else {
+		cmd := "/bin/sh"
+		path := "core/conan/bash/clone.sh"
 
-// 	DATA_FILES := []string{CONAN_PACKAGE_DATA, CONAN_DEPENDENCY_DATA, CONAN_VERSION_DATA}
+		externalCommand(cmd, path)
+	}
 
-// 	// Delete todays data file if already existing
-// 	for _, file := range DATA_FILES {
-// 		if _, err := os.Stat(file); err == nil {
-// 			e := os.Remove(file)
-// 			if e != nil {
-// 				log.Fatal(e)
-// 			}
-// 		}
-// 	}
+	DATA_FILES := []string{CONAN_PACKAGE_DATA, CONAN_DEPENDENCY_DATA, CONAN_VERSION_DATA}
 
-// 	//generatePackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
-// 	geteMaps()
-// 	traverse()
-// }
+	// Delete todays data file if already existing
+	for _, file := range DATA_FILES {
+		if _, err := os.Stat(file); err == nil {
+			e := os.Remove(file)
+			if e != nil {
+				log.Fatal(e)
+			}
+		}
+	}
+
+	//generatePackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
+	geteMaps()
+	traverse()
+}

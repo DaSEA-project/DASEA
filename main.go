@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/heyjoakim/DASEA/common/helpers"
-	// "github.com/heyjoakim/DASEA/core/conan"
 	// "github.com/heyjoakim/DASEA/core/fpm"
+	"github.com/heyjoakim/DASEA/core/conan"
 	"github.com/heyjoakim/DASEA/core/vcpkg"
 )
 
@@ -20,7 +20,7 @@ func main() {
 		case "vcpkg":
 			vcpkg.Traverse()
 		case "conan":
-			// conan.Traverse()
+			conan.Traverse()
 		case "release-dataset":
 			helpers.ReleaseDataset()
 		default:

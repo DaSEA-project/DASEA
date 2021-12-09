@@ -7,15 +7,15 @@ import (
 
 // Version defining type version
 type Version struct {
-	ID        int64  `json:"id"`
-	PackageID int64  `json:"package_name"`
-	Version   string `json:"version"`
-	Description    string `json:"description"`
-	HomepageURL    string `json:"homepageUrl"`
-	SourceCodeURL  string `json:"sourceCodeUrl"`
-	Maintainer     string `json:"maintainer"`
-	License        string `json:"license"`
-	Author         string `json:"author"`
+	ID            int64  `json:"id"`
+	PackageID     int64  `json:"package_name"`
+	Version       string `json:"version"`
+	Description   string `json:"description"`
+	HomepageURL   string `json:"homepageUrl"`
+	SourceCodeURL string `json:"sourceCodeUrl"`
+	Maintainer    string `json:"maintainer"`
+	License       string `json:"license"`
+	Author        string `json:"author"`
 }
 
 func (v *Version) GetKeys() []string {

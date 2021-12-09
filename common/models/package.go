@@ -10,7 +10,6 @@ type Package struct {
 	ID             int64  `json:"id"`
 	Name           string `json:"name"`
 	PackageManager string `json:"package_manager"`
-	Platform       string `json:"platform"`
 	Description    string `json:"description"`
 	HomepageURL    string `json:"homepageUrl"`
 	SourceCodeURL  string `json:"sourceCodeUrl"`
@@ -33,7 +32,6 @@ func (p *Package) GetValues() []string {
 	values = append(values, strconv.Itoa(int(p.ID)))
 	values = append(values, p.Name)
 	values = append(values, p.PackageManager)
-	values = append(values, p.Platform)
 	values = append(values, p.Description)
 	values = append(values, p.HomepageURL)
 	values = append(values, p.SourceCodeURL)

@@ -54,7 +54,7 @@ type item struct {
 var (
 	currentTime           = time.Now()
 	date                  = currentTime.Format("01-02-2006")
-	dependencyCnt         int
+	dependencyCnt         = int64(1)
 	PKGS_MAP_IDX          = make(map[string]int)
 	PKGS_VISITED          = make(map[string]bool)
 	VERSIONS_MAP          = make(map[string][]string)
@@ -160,13 +160,12 @@ func parseJSON(name string, version string, pkgId int) {
 				pkg.ID = int64(pkgId)
 				pkg.Name = name
 				pkg.PackageManager = "Conan"
-				pkg.Platform = "C/C++"
 				pkg.Description = packages[i].Description
 				pkg.HomepageURL = packages[i].URL
-				pkg.SourceCodeURL = "N/A"
-				pkg.Maintainer = "N/A"
+				// pkg.SourceCodeURL = "N/A"
+				// pkg.Maintainer = "N/A"
 				pkg.License = packages[i].License[0]
-				pkg.Author = "N/A"
+				// pkg.Author = "N/A"
 
 				helpers.WriteToCsv(pkg.GetKeys(), pkg.GetValues(), CONAN_PACKAGE_DATA)
 				PKGS_VISITED[name] = true
@@ -185,10 +184,10 @@ func parseJSON(name string, version string, pkgId int) {
 				// Looping thre requires slice
 				for _, dependency := range packages[i].Requires {
 					targetName := strings.Split(dependency, "/")
-					d.ID = int64(dependencyCnt)
+					d.ID = dependencyCnt
 					d.SourceID = int64(VERSIONS_MAP_IDX[name+version])
 					d.TargetID = int64(PKGS_MAP_IDX[targetName[0]])
-					d.Constraints = "N/A"
+					// d.Constraints = "N/A"
 					helpers.WriteToCsv(d.GetKeys(), d.GetValues(), CONAN_DEPENDENCY_DATA)
 					dependencyCnt++
 				}
@@ -233,7 +232,7 @@ func getPackageInfo() {
 
 func geteMaps() {
 	var tmpVersions []string
-	i := 0
+	i := 1
 	err := filepath.Walk("core/conan/out", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
@@ -270,9 +269,9 @@ func geteMaps() {
 }
 
 func traverse() {
-	versionCnt := 0
+	versionCnt := 1
 
-	pkg_keys := make([]string, 0, len(PKGS_MAP_IDX)) //TODO: SMARTER
+	pkg_keys := make([]string, 1, len(PKGS_MAP_IDX)) //TODO: SMARTER
 	for k := range PKGS_MAP_IDX {
 		pkg_keys = append(pkg_keys, k)
 	}

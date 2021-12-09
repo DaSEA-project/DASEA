@@ -25,8 +25,8 @@ const (
 
 var (
 	PKGS_MAP            = make(map[string]int)
-	versionID           = 0
-	dependencyID        = 0
+	versionID           = 1
+	dependencyID        = 1
 	currentTime         = time.Now()
 	date                = currentTime.Format("01-02-2006")
 	FPM_PACKAGE_DATA    = fmt.Sprintf("data/fpm/fpm_packages-%s.csv", date)
@@ -137,8 +137,6 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 	full.Pkg = model
 	full.Versions = versions
 	full.Dependencies = append(getDependencies(deps, pkgID), getDependencies(devDeps, pkgID)...)
-	fmt.Println(full.Dependencies)
-
 	return full
 }
 
@@ -155,7 +153,7 @@ func getDependencies(deps map[string]interface{}, pkgId int) []models.Dependency
 		var targetID int
 		v, exists := PKGS_MAP[dependency]
 		if !exists {
-			targetID = -1
+			targetID = 0
 		} else {
 			targetID = v
 		}
@@ -196,19 +194,17 @@ func Traverse() []models.CSVInput {
 	handleError(err)
 	res, _ := unmarshalResponse(data)
 	keys := getKeys(res.Packages)
-	pkgs := make([]models.CSVInput, 0, len(keys))
+	pkgs := make([]models.CSVInput, 1, len(keys))
 	for i, key := range keys {
-		PKGS_MAP[key] = i
+		// we map ids from 1 to n
+		PKGS_MAP[key] = i + 1
 	}
 
 	for _, key := range keys {
-		// fmt.Println(i, key)
 		pkg := res.Packages[key]
 		pp := parsePackage(key, pkg.(map[string]interface{}))
 		pkgs = append(pkgs, pp)
 	}
 
-	fmt.Println(PKGS_MAP)
-	// fmt.Println(pkgs)
 	return pkgs
 }

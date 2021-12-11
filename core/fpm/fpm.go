@@ -25,8 +25,8 @@ const (
 
 var (
 	PKGS_MAP            = make(map[string]int)
-	versionID           = 0
-	dependencyID        = 0
+	versionID           = 1
+	dependencyID        = 1
 	currentTime         = time.Now()
 	date                = currentTime.Format("01-02-2006")
 	FPM_PACKAGE_DATA    = fmt.Sprintf("data/fpm/fpm_packages-%s.csv", date)
@@ -81,24 +81,8 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 
 	model.ID = int64(pkgID)
 	model.PackageManager = "FPM"
-	model.Platform = "Fortran"
 	if latestPkg["name"] != nil {
 		model.Name = latestPkg["name"].(string)
-	}
-	if latestPkg["description"] != nil {
-		model.Description = latestPkg["description"].(string)
-	}
-	if latestPkg["git"] != nil {
-		model.SourceCodeURL = latestPkg["git"].(string)
-	}
-	if latestPkg["maintainer"] != nil {
-		model.Maintainer = normalizeToString(latestPkg["maintainer"])
-	}
-	if latestPkg["license"] != nil {
-		model.License = latestPkg["license"].(string)
-	}
-	if latestPkg["author"] != nil {
-		model.Author = normalizeToString(latestPkg["author"])
 	}
 
 	//////////////// VERSIONS /////////////////////
@@ -117,6 +101,21 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 			continue
 		}
 		version := models.Version{ID: int64(versionID), PackageID: model.ID, Version: v["version"].(string)}
+		if latestPkg["description"] != nil {
+			version.Description = latestPkg["description"].(string)
+		}
+		if latestPkg["git"] != nil {
+			version.SourceCodeURL = latestPkg["git"].(string)
+		}
+		if latestPkg["maintainer"] != nil {
+			version.Maintainer = normalizeToString(latestPkg["maintainer"])
+		}
+		if latestPkg["license"] != nil {
+			version.License = latestPkg["license"].(string)
+		}
+		if latestPkg["author"] != nil {
+			version.Author = normalizeToString(latestPkg["author"])
+		}
 		versionID = versionID + 1
 		versions = append(versions, version)
 		helpers.WriteToCsv(version.GetKeys(), version.GetValues(), FPM_VERSION_DATA)
@@ -137,8 +136,6 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 	full.Pkg = model
 	full.Versions = versions
 	full.Dependencies = append(getDependencies(deps, pkgID), getDependencies(devDeps, pkgID)...)
-	fmt.Println(full.Dependencies)
-
 	return full
 }
 
@@ -155,7 +152,7 @@ func getDependencies(deps map[string]interface{}, pkgId int) []models.Dependency
 		var targetID int
 		v, exists := PKGS_MAP[dependency]
 		if !exists {
-			targetID = -1
+			targetID = 0
 		} else {
 			targetID = v
 		}
@@ -196,19 +193,17 @@ func Traverse() []models.CSVInput {
 	handleError(err)
 	res, _ := unmarshalResponse(data)
 	keys := getKeys(res.Packages)
-	pkgs := make([]models.CSVInput, 0, len(keys))
+	pkgs := make([]models.CSVInput, 1, len(keys))
 	for i, key := range keys {
-		PKGS_MAP[key] = i
+		// we map ids from 1 to n
+		PKGS_MAP[key] = i + 1
 	}
 
 	for _, key := range keys {
-		// fmt.Println(i, key)
 		pkg := res.Packages[key]
 		pp := parsePackage(key, pkg.(map[string]interface{}))
 		pkgs = append(pkgs, pp)
 	}
 
-	fmt.Println(PKGS_MAP)
-	// fmt.Println(pkgs)
 	return pkgs
 }

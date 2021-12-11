@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS dependency (
 	source_id INT,
 	target_id INT,
 	constraints VARCHAR,
+	type VARCHAR,
 	FOREIGN KEY (source_id) REFERENCES version (id),
 	FOREIGN KEY (target_id) REFERENCES package (id)
 );

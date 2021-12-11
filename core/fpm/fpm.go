@@ -12,6 +12,7 @@ import (
 
 	"github.com/heyjoakim/DASEA/common/helpers"
 	"github.com/heyjoakim/DASEA/common/models"
+	"github.com/heyjoakim/DASEA/common/models/depTypes"
 )
 
 type response struct {
@@ -122,6 +123,7 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 		ds := v["dependencies"]
 		if ds != nil {
 			deps = ds.(map[string]interface{})
+
 		}
 		dds := v["dev-dependencies"]
 		if dds != nil {
@@ -135,11 +137,11 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 	helpers.WriteToCsv(model.GetKeys(), model.GetValues(), FPM_PACKAGE_DATA)
 	full.Pkg = model
 	full.Versions = versions
-	full.Dependencies = append(getDependencies(deps, pkgID), getDependencies(devDeps, pkgID)...)
+	full.Dependencies = append(getDependencies(deps, pkgID, depTypes.Dependency), getDependencies(devDeps, pkgID, depTypes.DevDependency)...)
 	return full
 }
 
-func getDependencies(deps map[string]interface{}, pkgId int) []models.Dependency {
+func getDependencies(deps map[string]interface{}, pkgId int, _type depTypes.DepType) []models.Dependency {
 	dependencies := make([]models.Dependency, 0)
 	depNames := getKeys(deps)
 	for _, dependency := range depNames {
@@ -156,7 +158,7 @@ func getDependencies(deps map[string]interface{}, pkgId int) []models.Dependency
 		} else {
 			targetID = v
 		}
-		dep := models.Dependency{ID: int64(dependencyID), SourceID: int64(pkgId), TargetID: int64(targetID), Constraints: constraintString}
+		dep := models.Dependency{ID: int64(dependencyID), SourceID: int64(pkgId), TargetID: int64(targetID), Constraints: constraintString, Type: _type}
 		dependencyID = dependencyID + 1
 		helpers.WriteToCsv(dep.GetKeys(), dep.GetValues(), FPM_DEPENDENCY_DATA)
 		dependencies = append(dependencies, dep)

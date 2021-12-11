@@ -123,7 +123,6 @@ func parsePackage(key string, pkg map[string]interface{}) models.CSVInput {
 		ds := v["dependencies"]
 		if ds != nil {
 			deps = ds.(map[string]interface{})
-
 		}
 		dds := v["dev-dependencies"]
 		if dds != nil {
@@ -179,7 +178,6 @@ func contains(s []models.Version, e string) bool {
 func getKeys(m map[string]interface{}) []string {
 	keys := make([]string, 0, len(m))
 	for k := range m {
-
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)

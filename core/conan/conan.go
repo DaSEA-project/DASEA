@@ -98,7 +98,7 @@ func conanInfo(name string, version string) {
 	arg3 := "requires"
 	arg4 := fmt.Sprintf("%s/%s@", name, version)
 	arg5 := "--json"
-	out := fmt.Sprintf("out/%s/%s.json", name, version)
+	out := fmt.Sprintf("core/conan/out/%s/%s.json", name, version)
 
 	log.Infof("Getting info from %s/%s", name, version)
 	externalCommand(arg0, arg1, arg2, arg3, arg4, arg5, out)
@@ -185,7 +185,6 @@ func parseJSON(name string, version string, pkgId int) {
 					d.ID = dependencyCnt
 					d.SourceID = int64(VERSIONS_MAP_IDX[name+version])
 					d.TargetID = int64(PKGS_MAP_IDX[targetName[0]])
-					// d.Constraints = "N/A"
 					helpers.WriteToCsv(d.GetKeys(), d.GetValues(), CONAN_DEPENDENCY_DATA)
 					dependencyCnt++
 				}
@@ -195,7 +194,7 @@ func parseJSON(name string, version string, pkgId int) {
 			}
 
 		} else {
-			// log.Errorf("Package %s does not exist in conan info", name+version)
+			log.Errorf("Package %s does not exist in conan info", name+version)
 		}
 	}
 }
@@ -204,7 +203,7 @@ func getPackageInfo() {
 	err := filepath.Walk("core/conan/assets/repo/src/recipes", func(path string, info os.FileInfo, err error) error {
 
 		if err != nil {
-			// log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
+			log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
 			return err
 		}
 
@@ -248,7 +247,7 @@ func geteMaps() {
 			t := strings.Split(dir, "/")
 			pkgName := t[len(t)-2]
 			if _, exists := PKGS_MAP_IDX[pkgName]; !exists {
-				PKGS_MAP_IDX[pkgName] = i //TODO: Save this to CSV INSTEAD
+				PKGS_MAP_IDX[pkgName] = i
 				i++
 			}
 
@@ -269,7 +268,7 @@ func geteMaps() {
 func traverse() {
 	versionCnt := 1
 
-	pkg_keys := make([]string, 1, len(PKGS_MAP_IDX)) //TODO: SMARTER
+	pkg_keys := make([]string, 1, len(PKGS_MAP_IDX))
 	for k := range PKGS_MAP_IDX {
 		pkg_keys = append(pkg_keys, k)
 	}
@@ -279,7 +278,6 @@ func traverse() {
 		pkgVersions := VERSIONS_MAP[name]
 
 		for _, version := range pkgVersions {
-			// fmt.Println(VERSIONS_MAP_IDX)
 			VERSIONS_MAP_IDX[name+version] = versionCnt
 			parseJSON(name, version, pkgId)
 			versionCnt++

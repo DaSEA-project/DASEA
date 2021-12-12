@@ -244,7 +244,7 @@ func geteMaps() {
 
 		if test == ".json" {
 			// Get current package
-			t := strings.Split(dir, "/")
+			t := strings.Split(dir, string(os.PathSeparator))
 			pkgName := t[len(t)-2]
 			if _, exists := PKGS_MAP_IDX[pkgName]; !exists {
 				PKGS_MAP_IDX[pkgName] = i
@@ -315,7 +315,7 @@ func Traverse() {
 		}
 	}
 
-	getPackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
+	// getPackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
 	geteMaps()
 	traverse()
 }

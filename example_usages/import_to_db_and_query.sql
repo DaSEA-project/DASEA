@@ -1,45 +1,45 @@
 DROP DATABASE IF EXISTS DASEA;
 CREATE DATABASE DASEA;
 
-CREATE TABLE IF NOT EXISTS package (
-	id serial PRIMARY KEY,
-	name VARCHAR UNIQUE NOT NULL,
-	package_manager VARCHAR
+CREATE TABLE IF NOT EXISTS Package (
+	ID serial PRIMARY KEY,
+	Name VARCHAR UNIQUE NOT NULL,
+	PackageManager VARCHAR
 );
 
-COPY package
+COPY Package
 FROM '/path/to/data/packageManger/packages.csv' DELIMITER ',' CSV HEADER;
 
-CREATE TABLE IF NOT EXISTS version (
-	id serial PRIMARY KEY,
-	package_id INT,
-	version VARCHAR,
-	description VARCHAR,
-	homepage_url VARCHAR,
-	source_code_url VARCHAR,
-	maintainer VARCHAR,
-	license VARCHAR,
-	author VARCHAR,
-	FOREIGN KEY (package_id) REFERENCES package (id)
+CREATE TABLE IF NOT EXISTS Version (
+	ID serial PRIMARY KEY,
+	PackageID INT,
+	Version VARCHAR,
+	Description VARCHAR,
+	HomepageURL VARCHAR,
+	SourcecodeURL VARCHAR,
+	Maintainer VARCHAR,
+	License VARCHAR,
+	Author VARCHAR,
+	FOREIGN KEY (PackageID) REFERENCES package (ID)
 );
 
-COPY version FROM '/path/to/data/packageManger/versions.csv' DELIMITER ',' CSV HEADER;
+COPY Version FROM '/path/to/data/packageManger/versions.csv' DELIMITER ',' CSV HEADER;
 
-CREATE TABLE IF NOT EXISTS dependency (
-	id serial PRIMARY KEY,
-	source_id INT,
-	target_id INT,
-	constraints VARCHAR,
+CREATE TABLE IF NOT EXISTS Dependency (
+	ID serial PRIMARY KEY,
+	SourceID INT,
+	TargetID INT,
+	Constraints VARCHAR,
 	type VARCHAR,
-	FOREIGN KEY (source_id) REFERENCES version (id),
-	FOREIGN KEY (target_id) REFERENCES package (id)
+	FOREIGN KEY (SourceID) REFERENCES Version (ID),
+	FOREIGN KEY (TargetID) REFERENCES Package (ID)
 );
 
-COPY dependency FROM '/path/to/data/packageManger/dependencies.csv' DELIMITER ',' CSV HEADER;
+COPY Dependency FROM '/path/to/data/packageManger/dependencies.csv' DELIMITER ',' CSV HEADER;
 
 /* Find the package most packages depend on */
-SELECT package.name,
-COUNT(target_id) AS dependencies_count
-FROM dependency
-INNER JOIN package ON package.id=dependency.target_id
-GROUP BY package.name ORDER BY dependencies_count DESC;
+SELECT Package.Name,
+COUNT(TargetID) AS dependenciesCount
+FROM Dependency
+INNER JOIN Package ON Package.ID=Dependency.TargetID
+GROUP BY Package.Name ORDER BY dependenciesCount DESC;

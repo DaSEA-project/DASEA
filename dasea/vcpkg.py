@@ -1,4 +1,3 @@
-import csv
 import requests
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind

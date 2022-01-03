@@ -31,30 +31,30 @@ class Package(Persistent):
     idx: int
     name: str
     pkgman: str
-    platform: str
+    # platform: str
 
 
 @dataclass
 class Version(Persistent):
     idx: int
     pkg_idx: int
-    name: str
+    name: str  # Added compared to RP paper
     version: str
     license: str
     description: str
-    homepage: str
-    repository: str
+    homepage: str  # Called HomepageURL in RP paper
+    repository: str  # Called SourceCodeURL in RP paper
     author: str
     maintainer: str
 
 
 @dataclass
 class Dependency(Persistent):
-    pkg_idx: int
+    pkg_idx: int  # Called ID in RP paper
     source_idx: int
     target_idx: int
-    source_name: str
-    target_name: str
-    source_version: str
-    target_version: str
-    kind: Kind
+    source_name: str  # Added compared to RP paper
+    target_name: str  # Added compared to RP paper
+    source_version: str  # Added compared to RP paper
+    target_version: str  # Added compared to RP paper
+    kind: Kind  # Called Type in RP paper

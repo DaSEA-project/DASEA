@@ -1,7 +1,7 @@
 """Naval Fate.
 
 Usage:
-  dasea mine <pkgmanager> [<platform>]
+  dasea mine <pkgmanager>
   dasea release <zenodo_api_key>
 
 Options:
@@ -47,10 +47,9 @@ def main():
 
                 apt_mine(arguments["<platform>"])
         elif arguments["<pkgmanager>"] == "ports":
-            if arguments["<platform>"] == "freebsd11":
-                from dasea.ports import mine as ports_mine
+            from dasea.ports import mine as ports_mine
 
-                ports_mine(arguments["<platform>"])
+            ports_mine()
     elif arguments["release"]:
         from dasea.release_dataset import main as release_dataset
 

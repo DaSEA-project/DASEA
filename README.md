@@ -13,6 +13,9 @@ Current:
 - Vcpkg
 - Chromebrew (ChromeOS)
 
+Coming soon:
+- NixOS
+
 Access datasets at [DASEA](https://heyjoakim.github.io/DASEA/)
 
 ## Executables

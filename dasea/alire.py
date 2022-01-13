@@ -51,7 +51,7 @@ def _collect_packages(pkg_name_lst):
     pkg_idx_map = {n: idx for idx, n in enumerate(pkg_name_lst)}
     packages = []
     for pkg_name, idx in pkg_idx_map.items():
-        p = Package(idx, pkg_name, "Alire", "ADA")
+        p = Package(idx, pkg_name, "Alire")
         packages.append(p)
 
     return pkg_idx_map, packages

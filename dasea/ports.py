@@ -13,9 +13,6 @@ logging.basicConfig(
 LOGGER = logging.getLogger(__name__)
 
 
-# TODO: make this configurable? E.g., with quarterly ports tree.
-PORTS_DIR = "/usr/ports/"  # This assumes the default location on FreeBSD
-
 @dataclass
 class PortsPackage(Package):
     platform: str
@@ -26,14 +23,18 @@ class PortsVersion(Version):
     distname: str
 
 
-
 def _get_platform_str():
     cmd = "uname -n"
     r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-    return r.stdout.strip()
+    platform_str = r.stdout.strip()
+    if platform_str.endswith(".localdomain"):
+        platform_str = platform_str.replace(".localdomain", "")
+
+    return platform_str
 
 
 PLATFORM_STR = _get_platform_str()
+
 
 # The variables are listed in the man page of port files:
 # https://man.openbsd.org/bsd.port.mk.5
@@ -72,7 +73,10 @@ if PLATFORM_STR.startswith("freebsd"):
         "PATCH_DEPENDS",
         "USES",
     ]
+    # TODO: make this configurable? E.g., with quarterly ports tree.
+    PORTS_DIR = "/usr/ports/"  # This assumes the default location on FreeBSD
 elif PLATFORM_STR.startswith("openbsd"):
+    # OpenBSD Port Makefiles do not have a LICENSE field, see find /usr/ports/ -name 'Makefile' -type f -exec grep LICENSE {} \;
     MK_VARS = [
         "PKGNAME",
         "FULLPKGNAME",
@@ -89,6 +93,26 @@ elif PLATFORM_STR.startswith("openbsd"):
         "RUN_DEPENDS",
         "TEST_DEPENDS",
     ]
+    PORTS_DIR = "/usr/ports/"
+elif PLATFORM_STR.startswith("netbsd"):
+    # https://netbsd.org/docs/pkgsrc/pkgsrc.html#components.Makefile
+    MK_VARS = [
+        "PKGNAME",
+        "DISTNAME",
+        "CATEGORIES",
+        "MAINTAINER",
+        "OWNER",
+        "HOMEPAGE",
+        "COMMENT",
+        "LICENSE",
+        "DEPENDS",
+        "BUILD_DEPENDS",
+        "TOOL_DEPENDS",
+        "TEST_DEPENDS",
+        "USE_TOOLS",
+    ]
+    PORTS_DIR = "/usr/pkgsrc/"
+
 
 PKGS_FILE = f"data/out/ports/{PLATFORM_STR}/packages.csv"
 VERSIONS_FILE = f"data/out/ports/{PLATFORM_STR}/versions.csv"
@@ -110,7 +134,12 @@ def _collect_mk_files():
 
 
 def _parse_metadata(mk_file):
-    mk_vars_lst = [f"-V {m}" for m in MK_VARS]
+
+    if PLATFORM_STR.startswith("freebsd") or PLATFORM_STR.startswith("netbsd"):
+        var_switch = "-v"
+    elif PLATFORM_STR.startswith("openbsd"):
+        var_switch = "-V"  # OpenBSD does not support variable expansion when printing variables
+    mk_vars_lst = [f"{var_switch} {m}" for m in MK_VARS]
     mk_vars_str = " ".join(mk_vars_lst)
 
     cmd = f"make {mk_vars_str} -f {mk_file}"
@@ -118,18 +147,16 @@ def _parse_metadata(mk_file):
 
     if result.returncode != 0:
         # TODO: What to return then? A dict with only keys?
-        # Is this case needed at all? On 11.4, it does not seem to happen.
+        # Is this case needed at all? On FreeBSD 11.4, it does not seem to happen.
         return None
     else:
         return dict(zip(MK_VARS, result.stdout.splitlines()))
 
 
-# OpenBSD Port Makefiles do not have a LICENSE field, see find /usr/ports/ -name 'Makefile' -type f -exec grep LICENSE {} \;
 def _process_metadata(mk_info, port_mk_file):
     for mk_var, vals in mk_info.items():
         if mk_var in [
             "CATEGORIES",
-            "LICENSE",
             "LIB_DEPENDS",
             "MY_DEPENDS",
             "BUILD_DEPENDS",
@@ -137,8 +164,12 @@ def _process_metadata(mk_info, port_mk_file):
             "FETCH_DEPENDS",
             "EXTRACT_DEPENDS",
             "PATCH_DEPENDS",
-            "TEST_DEPENDS",  #OpenBSD  
+            "TEST_DEPENDS",  # OpenBSD and NetBSD  
             "USES",
+            # NetBSD values:
+            "DEPENDS",
+            "TOOL_DEPENDS",
+            "USE_TOOLS"
         ]:
             if vals:
                 if " " in vals:
@@ -157,11 +188,14 @@ def _process_metadata(mk_info, port_mk_file):
         mk_info[
             "PKGNAME"
         ] = f'{mk_info.get("PKGNAMEPREFIX", "")}{mk_info["PORTNAME"]}{mk_info.get("PKGNAMESUFFIX", "")}-{mk_info.get("PORTVERSION", "")}'
+        # In FreeBSD licenses are space-separated lists, in NetBSD they are boolean expressions, and in OpenBSD they do not exist
+        mk_info["LICENSE"] = mk_info["LICENSE"].split(),
     elif PLATFORM_STR.startswith("openbsd"):
         mk_info["PKGNAME"] = mk_info["FULLPKGNAME"]
 
     mk_info["PORTTREEID"] = str(Path(*Path(port_mk_file).parts[3:-1]))
 
+    # The following exists only for FreeBSD and OpenBSD but not for NetBSD
     if mk_info.get("GH_ACCOUNT", ""):
         mk_info["GH_URL"] = "https://github.com/" + mk_info.get("GH_ACCOUNT", "") + "/" + mk_info.get("GH_PROJECT", "")
     else:
@@ -176,8 +210,9 @@ def _collect_metadata(port_mk_files):
     Since parsing of metadata calls repeatedly the `make` command on the terminal
     this function takes long to complete (ca. 50 minutes)
     """
+    from tqdm import tqdm
     mk_file_metadata_map = {}
-    for port_idx, port_mk_file in enumerate(port_mk_files):
+    for port_idx, port_mk_file in tqdm(enumerate(port_mk_files)):
         if mk_info := _parse_metadata(port_mk_file):
             mk_info = _process_metadata(mk_info, port_mk_file)
         else:
@@ -207,7 +242,7 @@ def _collect_versions(mk_file_metadata_map, pkg_idx_map):
     if PLATFORM_STR.startswith("freebsd"):
         version_key = "PORTVERSION"  # or take DISTVERSION for FreeBSD?
     elif PLATFORM_STR.startswith("openbsd"):
-        version_key = "VERSION"  
+        version_key = "VERSION"
         # TODO: this variable is not always set. Instead, values may be encoded in DISTNAME for example like:
         # libdwarf-${V}
         # ${GH_PROJECT}-${V}
@@ -221,6 +256,10 @@ def _collect_versions(mk_file_metadata_map, pkg_idx_map):
         # ${GH_PROJECT}-${GH_TAGNAME:C/^(v|V|ver|[Rr]el|[Rr]elease)[-._]?([0-9])/\2/}
         # In future some of these values should be expanded. However, OpenBSD `make` does not support this unlike 
         # FreeBSD `make` with `-v` instead of `-V` 
+    elif PLATFORM_STR.startswith("netbsd"):
+        # NetBSD does not have such a field. Version numbers are stored in DISTNAME (and sometimes in PKGNAME) and
+        # They are not easily extracted from these since they do not follow a common schema.
+        version_key = ""
 
     versions = []
     for idx, (port_mk_file, mk_info) in enumerate(mk_file_metadata_map.items()):
@@ -230,10 +269,10 @@ def _collect_versions(mk_file_metadata_map, pkg_idx_map):
             idx=idx,  # There is only one version per Makefile
             pkg_idx=pkg_idx_map[pkg_name],
             name=pkg_name,
-            version=mk_info[version_key],
+            version=mk_info.get(version_key, ""),
             license=mk_info.get("LICENSE", ""),  # OpenBSD does not have a LICENSE field
             description=mk_info["COMMENT"],
-            homepage=None,
+            homepage=mk_info.get("HOMEPAGE", ""),  # Only NetBSD has such a field
             repository=mk_info.get("GH_URL", None),
             author=None,
             maintainer=mk_info["MAINTAINER"],
@@ -260,8 +299,21 @@ def _extract_dep_port_tree_id(dep_decl_str):
         # Detach the port flavor from the porttree id 
         dep_port_tree_id_els = dep_port_tree_id.split(",")
         dep_port_tree_id = dep_port_tree_id_els[0]
-        
+    elif PLATFORM_STR.startswith("netbsd"):
+        dep_els = dep_decl_str.split(":")
+        if len(dep_els) == 1:
+            dep_port_tree_id = ""
+        else:
+            dep_port_tree_id = dep_els[1].replace("../../", "")
     return dep_port_tree_id
+
+
+# for _, v in mk_file_metadata_map.items():
+#     if oi := _extract_dep_port_tree_id(v["DEPENDS"]):
+#         if oi.startswith("www/p5-Plack"):
+#             print(v)
+#             break
+
 
 
 def _collect_dependencies(mk_file_metadata_map, pkg_idx_map):
@@ -281,6 +333,8 @@ def _collect_dependencies(mk_file_metadata_map, pkg_idx_map):
         version_key = "PORTVERSION"  # or take DISTVERSION for FreeBSD?
     elif PLATFORM_STR.startswith("openbsd"):
         version_key = "VERSION"
+    elif PLATFORM_STR.startswith("netbsd"):
+        version_key = ""
 
     for idx, (port_mk_file, mk_info) in enumerate(mk_file_metadata_map.items()):
         pkg_name = mk_info["PORTTREEID"]
@@ -308,7 +362,7 @@ def _collect_dependencies(mk_file_metadata_map, pkg_idx_map):
                     target_idx=dep_port_idx,
                     source_name=pkg_name,
                     target_name=dep_port_tree_id,
-                    source_version=mk_info[version_key],
+                    source_version=mk_info.get(version_key, ""),  # Resort to DISTNAME on NetBSD instead?
                     target_version=dep_version_constraint,
                     kind=dep_kind_map[dep_kind].name,
                 )
@@ -321,7 +375,9 @@ import pickle
 oioioi = "/home/vagrant/data2.pickle"
 
 def mine():
+    print("Collecting Makefiles")
     port_mk_files = _collect_mk_files()
+    print(f"Found {len(port_mk_files)} ports...")
     if Path(oioioi).is_file():
         with open(oioioi, "rb") as fp:
             mk_file_metadata_map = pickle.load(fp)

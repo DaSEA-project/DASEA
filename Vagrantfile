@@ -57,7 +57,7 @@ Vagrant.configure("2") do |config|
       $HOME/.local/bin/poetry install
 
       # Start the actual mining process
-      # $HOME/.local/bin/poetry run dasea mine ports freebsd11
+      # $HOME/.local/bin/poetry run dasea mine ports
 
     SHELL
   end
@@ -101,7 +101,7 @@ Vagrant.configure("2") do |config|
       $HOME/.local/bin/poetry install
 
       # Start the actual mining process
-      # $HOME/.local/bin/poetry run dasea mine ports openbsd69
+      # $HOME/.local/bin/poetry run dasea mine ports
 
     SHELL
   end
@@ -110,6 +110,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "netbsd9", primary: false do |netbsd|
     netbsd.vm.box = "generic/netbsd9"
+    netbsd.vm.network "private_network", ip: "192.168.20.4"
     netbsd.vm.synced_folder "./", "/vagrant", type: "rsync", rsync__exclude: "data/tmp/"
     netbsd.vm.provider "virtualbox" do |vb|
       vb.memory = "2048"
@@ -119,7 +120,38 @@ Vagrant.configure("2") do |config|
     netbsd.vm.hostname = "netbsd9"
     netbsd.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from NetBSD"
+
+      echo "Setting up Python for dataset creation..."
+      pkgin -y install python39
+      pkgin -y install py39-expat  # A dependency for poetry, which is not installed by default
+      ln -s /usr/pkg/bin/python3.9 /usr/pkg/bin/python
+
+      pkgin -y install mozilla-rootcerts
+      mozilla-rootcerts install
+
+      echo "Collecting pkgsrc tree..."
+      ftp ftp://ftp.NetBSD.org/pub/pkgsrc/current/pkgsrc.tar.gz
+      tar -xzf pkgsrc.tar.gz -C /usr
+      rm pkgsrc.tar.gz
     SHELL
+
+    # netbsd.vm.provision "shell", privileged: false, inline: <<-SHELL      
+    #   echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+      
+    #   curl -sSL https://install.python-poetry.org | python -
+    #   echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
+    #   source $HOME/.bashrc
+      
+    #   mkdir -p /vagrant/data/tmp/ports/netbsd9
+    #   mkdir -p /vagrant/data/out/ports/netbsd9
+
+    #   cd /vagrant/
+    #   $HOME/.local/bin/poetry install
+
+    #   # Start the actual mining process
+    #   # $HOME/.local/bin/poetry run dasea mine pkgsrc
+
+    # SHELL
   end
 
 

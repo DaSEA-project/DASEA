@@ -11,6 +11,7 @@ Current:
 - Conan
 - Fpm
 - Vcpkg
+- Chromebrew (ChromeOS)
 
 Access datasets at [DASEA](https://heyjoakim.github.io/DASEA/)
 

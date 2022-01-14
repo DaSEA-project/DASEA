@@ -5,6 +5,7 @@ import logging
 import subprocess
 from glob import glob
 from pathlib import Path
+from datetime import datetime
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
@@ -13,9 +14,11 @@ from dasea.utils import _serialize_data
 CONAN_INDEX_URL = "https://github.com/conan-io/conan-center-index"
 CONAN_INDEX_LOCAL = "data/tmp/conan/conan-center-index"
 CONAN_METADATA = "data/tmp/conan/metadata"
-PKGS_FILE = "data/out/conan/packages.csv"
-VERSIONS_FILE = "data/out/conan/versions.csv"
-DEPS_FILE = "data/out/conan/dependencies.csv"
+
+TODAY = datetime.today().strftime("%m-%d-%Y")
+PKGS_FILE = f"data/out/conan/conan_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/conan/conan_versions_{TODAY}.csv"
+DEPS_FILE = f"data/out/conan/conan_dependencies_{TODAY}.csv"
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"

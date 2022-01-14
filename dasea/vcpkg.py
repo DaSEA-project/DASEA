@@ -1,14 +1,17 @@
 import logging
 import requests
+from datetime import datetime
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
 
 
 VCPKG_REGISTRY = "https://vcpkg.io/output.json"
-PKGS_FILE = "data/out/vcpkg/packages.csv"
-VERSIONS_FILE = "data/out/vcpkg/versions.csv"
-DEPS_FILE = "data/out/vcpkg/dependencies.csv"
+
+TODAY = datetime.today().strftime("%m-%d-%Y")
+PKGS_FILE = f"data/out/vcpkg/vcpkg_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/vcpkg/vcpkg_versions_{TODAY}.csv"
+DEPS_FILE = f"data/out/vcpkg/vcpkg_dependencies_{TODAY}.csv"
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"

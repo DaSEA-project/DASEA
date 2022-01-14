@@ -2,13 +2,17 @@ import sys
 import csv
 import logging
 import requests
+from datetime import datetime
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
 
+
 FPM_REGISTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json"
-PKGS_FILE = "data/out/fpm/packages.csv"
-VERSIONS_FILE = "data/out/fpm/versions.csv"
-DEPS_FILE = "data/out/fpm/dependencies.csv"
+
+TODAY = datetime.today().strftime("%m-%d-%Y")
+PKGS_FILE = f"data/out/fpm/fpm_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/fpm/fpm_versions_{TODAY}.csv"
+DEPS_FILE = f"data/out/fpm/fpm_dependencies_{TODAY}.csv"
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"

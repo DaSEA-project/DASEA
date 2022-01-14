@@ -8,14 +8,17 @@ from pathlib import Path
 from shutil import which
 from dataclasses import dataclass
 from urllib.parse import urlparse
+from datetime import datetime
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
 
 NIMBLE_MINE_DIR = "data/tmp/nimble"
 NIMBLE_REGISTRY = "https://raw.githubusercontent.com/nim-lang/packages/master/packages.json"
-PKGS_FILE = "data/out/nimble/packages.csv"
-VERSIONS_FILE = "data/out/nimble/versions.csv"
-DEPS_FILE = "data/out/nimble/dependencies.csv"
+
+TODAY = datetime.today().strftime("%m-%d-%Y")
+PKGS_FILE = f"data/out/nimble/nimble_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/nimble/nimble_versions_{TODAY}.csv"
+DEPS_FILE = f"data/out/nimble/nimble_dependencies_{TODAY}.csv"
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"

@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
 
@@ -10,10 +11,10 @@ from dasea.utils import _serialize_data
 # https://formulae.brew.sh/api/cask.json
 BREW_FORMULA_URL = "https://formulae.brew.sh/api/formula.json"
 
-
-PKGS_FILE = "data/out/homebrew/packages.csv"
-VERSIONS_FILE = "data/out/homebrew/versions.csv"
-DEPS_FILE = "data/out/homebrew/dependencies.csv"
+TODAY = datetime.today().strftime("%m-%d-%Y")
+PKGS_FILE = f"data/out/homebrew/homebrew_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/homebrew/homebrew_versions_{TODAY}.csv"
+DEPS_FILE = f"data/out/homebrew/homebrew_dependencies_{TODAY}.csv"
 
 
 def _collect_formulae():

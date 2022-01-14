@@ -5,6 +5,7 @@ import logging
 import subprocess
 from glob import glob
 from pathlib import Path
+from datetime import datetime
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
@@ -13,9 +14,10 @@ from dasea.utils import _serialize_data
 ALIRE_INDEX_URL = "https://github.com/alire-project/alire-index.git"
 ALIRE_INDEX_LOCAL = "data/tmp/alire/alire-index"
 
-PKGS_FILE = "data/out/alire/packages.csv"
-VERSIONS_FILE = "data/out/alire/versions.csv"
-DEPS_FILE = "data/out/alire/dependencies.csv"
+TODAY = datetime.today().strftime("%m-%d-%Y")
+PKGS_FILE = f"data/out/alire/alire_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/alire/alire_versions_{TODAY}.csv"
+DEPS_FILE = f"data/out/alire/alire_dependencies_{TODAY}.csv"
 
 
 logging.basicConfig(

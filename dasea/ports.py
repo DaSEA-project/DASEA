@@ -2,6 +2,7 @@ import logging
 import subprocess
 from glob import glob
 from pathlib import Path
+from datetime import datetime
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
@@ -114,9 +115,10 @@ elif PLATFORM_STR.startswith("netbsd"):
     PORTS_DIR = "/usr/pkgsrc/"
 
 
-PKGS_FILE = f"data/out/ports/{PLATFORM_STR}/packages.csv"
-VERSIONS_FILE = f"data/out/ports/{PLATFORM_STR}/versions.csv"
-DEPS_FILE = f"data/out/ports/{PLATFORM_STR}/dependencies.csv"
+TODAY = datetime.today().strftime("%m-%d-%Y")
+PKGS_FILE = f"data/out/ports/{PLATFORM_STR}/{PLATFORM_STR}_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/ports/{PLATFORM_STR}/{PLATFORM_STR}_versions_{TODAY}.csv"
+DEPS_FILE = f"data/out/ports/{PLATFORM_STR}/{PLATFORM_STR}_dependencies_{TODAY}.csv"
 
 
 def _collect_mk_files():

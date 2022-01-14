@@ -73,20 +73,11 @@ def read_meta_data(name, version):
     return d
 
 
-def generate_package_csv(pkg_names_map):
-    csv_rows = []
-    for idx, name in pkg_names_map.items():
-        p = Package(idx, name, "conan", "C/C++")
-        csv_rows.append(p.to_csv())
-
-    # with open()
-
-
 def _collect_packages(pkg_names_lst):
     pkg_idx_map = {name: idx for idx, name in enumerate(pkg_names_lst)}
     packages = []
     for pkg_name, idx in pkg_idx_map.items():
-        p = Package(idx, pkg_name, "Conan", "C/C++")
+        p = Package(idx, pkg_name, "Conan")
         packages.append(p)
 
     return pkg_idx_map, packages
@@ -154,7 +145,7 @@ def mine():
     # Collect for each package version a metadata JSON file via the `conan` tool
     # This takes ca. two hours, and it only collects information for packages that can be build on this platform.
     # TODO: Run the collection on Windows, Linux, and MacOS and subsequently
-    # merge the collected data
+    # merge the collected data, i.e., implement Joakims fix for this
     for name, version in name_version_lst:
         collect_dependency_info(name, version)
 

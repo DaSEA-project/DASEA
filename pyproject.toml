@@ -12,9 +12,12 @@ conan = "^1.43.0"
 toml = "^0.10.2"
 lxml = "^4.6.4"
 bs4 = "^0.0.1"
+html5lib = "^1.1"
+mongita = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 ipython = "^7.30.1"
+tqdm = "^4.62.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

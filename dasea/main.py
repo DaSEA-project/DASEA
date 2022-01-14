@@ -8,6 +8,7 @@ Options:
   -h --help     Show this screen.
   --version     Show version.
 """
+import sys
 from docopt import docopt
 
 
@@ -42,14 +43,25 @@ def main():
 
             nimble_mine()
         elif arguments["<pkgmanager>"] == "apt":
-            if arguments["<platform>"] == "ubuntu1804":
-                from dasea.apt import mine as apt_mine
+            from dasea.apt import mine as apt_mine
 
-                apt_mine(arguments["<platform>"])
+            apt_mine()
         elif arguments["<pkgmanager>"] == "ports":
             from dasea.ports import mine as ports_mine
 
             ports_mine()
+        elif arguments["<pkgmanager>"] == "pkgsrc":
+            from dasea.ports import mine as pkgsrc_mine
+
+            pkgsrc_mine()
+        elif arguments["<pkgmanager>"] == "homebrew":
+            from dasea.homebrew import mine as brew_mine
+
+            brew_mine()
+        else:
+            print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
+            sys.exit(127)
+
     elif arguments["release"]:
         from dasea.release_dataset import main as release_dataset
 

@@ -61,12 +61,115 @@ tar -jxf dasea_01-14-2022.tar.bz2 data/out/fpm/fpm_versions_01-14-2022.csv
 tar -jxf dasea_01-14-2022.tar.bz2 data/out/fpm/fpm_dependencies_01-14-2022.csv
 ```
 
-### Example use cases of the dataset
+### Example use cases
+
+
+
+#### SQL: Identify packages with highest in-degree
+
+
+
+#### NetworkX: Computing the PageRanks of all XXX Packages with
+
+
+#### Finding the Longest-Dependency Paths in XXX with Neo4j
+
+
+#### Pandas: Identify Conan packages that changed licenses between versions 
+
+Let's say we want to find the names of all packages from the Conan package managers that changed licenses between versions.
+Using the Python data analysis library [Pandas](https://pandas.pydata.org/), one could analyze the versions CSV file of the Conan dataset as in the following.
+There, we load the respective CSV file into a Pandas `DataFrame` and subsequently identify all those Conan packages (`groupby("pkg_idx")`) which had more than one license over multiple versions (`filter(lambda x: len(set(x.license)) > 1)`).
+To store the names and the licenses of these package in another `DataFrame` (`rdf`), one could group the previous results by package name (`groupby("name")`) and create a set of given licenses (`apply(lambda x: set(x.license))`).  
+
+```python
+import pandas as pd
+
+
+df = pd.read_csv("data/out/conan/conan_versions_01-14-2022.csv")
+
+# TODO: licenses to lists
+rdf = df.groupby("pkg_idx").filter(lambda x: len(set(x.license)) > 1).groupby("name").apply(lambda x: set(x.license)).reset_index(name="licenses")
+print(rdf.to_html())
+```
+
+The above program identifies ten Conan packages for which licenses change during their existence.
+Their names and licenses as stored in the resulting `DataFrame` (`rdf`) are:
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>licenses</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>bzip2</td>
+      <td>{['bzip2-1.0.6'], ['bzip2-1.0.8']}</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>freetype</td>
+      <td>{['bzip2-1.0.8'], ['MIT']}</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>mbedtls</td>
+      <td>{['Apache-2.0'], ['GPL-2.0', 'Apache-2.0']}</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>mosquitto</td>
+      <td>{['EPL-2.0'], ['MIT']}</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>opencv</td>
+      <td>{['Apache-2.0'], ['MPL-2.0', 'LGPL-3.0-or-later']}</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>openssl</td>
+      <td>{['Apache-2.0'], ['OpenSSL']}</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>poco</td>
+      <td>{['Apache-2.0'], ['bzip2-1.0.8']}</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>proj</td>
+      <td>{['GPL-2.0'], ['MIT']}</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>rmlui</td>
+      <td>{['bzip2-1.0.8'], ['MIT']}</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>vulkan-validationlayers</td>
+      <td>{['MIT-KhronosGroup'], ['MIT']}</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>zbar</td>
+      <td>{['LGPL-2.1'], ['LGPL-2.1-only']}</td>
+    </tr>
+  </tbody>
+</table>
+
+Note, that the given licenses are not in chronological order.
+For that, the above program would have to be modified.
 
 
 
 
-
+ the most common licenses with pandas
 
 
 ```python

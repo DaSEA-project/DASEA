@@ -60,7 +60,6 @@ def _collect_packages(pkgs_lst):
                 pkg_idx,
                 name=pkg_info["name"],
                 pkgman="Nimble",
-                platform="Nim",
                 repository=pkg_info.get("url", ""),
                 description=pkg_info.get("description", ""),
                 license=pkg_info.get("license", ""),

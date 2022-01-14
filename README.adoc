@@ -58,36 +58,31 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 | Alire
 | https://github.com/alire-project/alire-index.git
 | Programming Language
-| `$ poetry shell` +
-`(dasea)$ dasea mine alire`
+| `$ poetry run dasea mine alire`
 // Conan
 | C/C++
 | Conan
 |
 | Programming Language
-|`$ poetry shell` +
-`(dasea)$ dasea mine conan`
+|`$ poetry run dasea mine conan`
 // FPM
 | Fortran
 | FPM
 | https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json
 | Programming Language
-|`$ poetry shell` +
-`(dasea)$ dasea mine fpm`
+|`$ poetry run dasea mine fpm`
 // Nimble
 | Nim
 | Nimble
 | https://raw.githubusercontent.com/nim-lang/packages/master/packages.json
 | Programming Language
-|`$ poetry shell` +
-`(dasea)$ dasea mine nimble`
+|`$ poetry run dasea mine nimble`
 // VCPKG
 | C/C++
 | VCPKG
 | https://vcpkg.io/output.json
 | Programming Language
-|`$ poetry shell` +
-`(dasea)$ dasea mine vcpkg`
+|`$ poetry run dasea mine vcpkg`
 
 
 // Homebrew
@@ -95,8 +90,7 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 | Homebrew
 | https://formulae.brew.sh/api/formula.json
 | Operating system
-|`$ poetry shell` +
-`(dasea)$ dasea mine brew`
+|`$ poetry run dasea mine brew`
 
 // FreeBSD
 | FreeBSD ports

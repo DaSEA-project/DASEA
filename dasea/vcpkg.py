@@ -1,3 +1,4 @@
+import logging
 import requests
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind
@@ -8,6 +9,12 @@ VCPKG_REGISTRY = "https://vcpkg.io/output.json"
 PKGS_FILE = "data/out/vcpkg/packages.csv"
 VERSIONS_FILE = "data/out/vcpkg/versions.csv"
 DEPS_FILE = "data/out/vcpkg/dependencies.csv"
+
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"
+)
+logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
+LOGGER = logging.getLogger(__name__)
 
 
 @dataclass
@@ -27,7 +34,7 @@ def _collect_packages(metadata_lst):
     pkg_idx_map = {d["Name"]: idx for idx, d in enumerate(metadata_lst)}
     packages = []
     for pkg_name, idx in pkg_idx_map.items():
-        p = Package(idx, pkg_name, "VCPKG", "C/C++")
+        p = Package(idx, pkg_name, "VCPKG")
         packages.append(p)
 
     return pkg_idx_map, packages
@@ -87,7 +94,7 @@ def mine():
     try:
         metadata_lst = _collect_pkg_registry()
     except IOError as e:
-        # TODO: log error here
+        LOGGER.error(str(e))
         sys.exit(1)
     pkg_names = [d["Name"] for d in metadata_lst]
 

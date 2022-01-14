@@ -15,6 +15,9 @@ src/
 # Env files
 .env
 
+# ASCIIDoc artifact
+README.html
+
 # Dataset files
 data/**/*.csv
 data/tmp/alire/*

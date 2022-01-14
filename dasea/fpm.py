@@ -1,5 +1,6 @@
 import sys
 import csv
+import logging
 import requests
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
@@ -8,6 +9,12 @@ FPM_REGISTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/mast
 PKGS_FILE = "data/out/fpm/packages.csv"
 VERSIONS_FILE = "data/out/fpm/versions.csv"
 DEPS_FILE = "data/out/fpm/dependencies.csv"
+
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"
+)
+logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
+LOGGER = logging.getLogger(__name__)
 
 
 def _collect_pkg_registry():
@@ -22,7 +29,7 @@ def _collect_packages(metadata_dict):
     pkg_idx_map = {}
     packages = []
     for idx, (pkg_name, _) in enumerate(metadata_dict.items()):
-        p = Package(idx, pkg_name, "FPM", "Fortran")
+        p = Package(idx, pkg_name, "FPM")
         packages.append(p)
         pkg_idx_map[pkg_name] = idx
 
@@ -103,7 +110,7 @@ def mine():
     try:
         metadata_dict = _collect_pkg_registry()
     except IOError as e:
-        # TODO: log error here
+        LOGGER.error(str(e))
         sys.exit(1)
     pkg_names = list(metadata_dict.keys())
 

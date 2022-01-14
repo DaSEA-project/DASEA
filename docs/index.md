@@ -68,11 +68,102 @@ tar -jxf dasea_01-14-2022.tar.bz2 data/out/fpm/fpm_dependencies_01-14-2022.csv
 #### SQL: Identify packages with highest in-degree
 
 
+```python
+import pandas as pd
+from sqlalchemy import create_engine
+
+
+db_engine = create_engine('sqlite://')  # in memory DB
+
+# dependencies_df = pd.read_csv("data/out/ports/netbsd9/netbsd9_versions_01-14-2022.csv")
+deps_df = pd.read_csv("data/out/alire/alire_dependencies_01-14-2022.csv")
+deps_df.to_sql("Dependencies", db_engine)
+
+query = """SELECT target_name, COUNT(target_name) AS indegree FROM Dependencies
+GROUP BY target_name ORDER BY indegree DESC
+LIMIT 10;"""
+
+print(pd.read_sql(query, db_engine).to_html())
+```
+
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>target_name</th>
+      <th>indegree</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>matreshka_league</td>
+      <td>62</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>hal</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>gnatcoll</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>gnat</td>
+      <td>28</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>utilada</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>cortex_m</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>xmlada</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>libusb</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>libhidapi</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>make</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
 
 #### NetworkX: Computing the PageRanks of all XXX Packages with
 
 
-#### Finding the Longest-Dependency Paths in XXX with Neo4j
+```python
+import pandas as pd
+import networkx as nx
+
+
+df = pd.read_csv("data/out/conan/conan_versions_01-14-2022.csv")
+
+```
+
+
+
+#### Neo4j: Finding the Longest-Dependency Paths in XXX with Neo4j
 
 
 #### Pandas: Identify Conan packages that changed licenses between versions 

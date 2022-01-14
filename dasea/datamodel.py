@@ -9,6 +9,17 @@ class Kind(Enum):
     RUN = 2
     TEST = 3
     DEV = 4
+    LIB = 5
+    FETCH = 6
+    EXTRACT = 7
+    PATCH = 8
+    MY = 9
+    RECOMMEND = 10
+    OPTIONAL = 11
+    CONFLICTS = 12
+    USES_FROM_MACOS = 13
+    USES_FROM_MACOS_BUILD = 14
+    USES_FROM_MACOS_TEST = 15
 
 
 class Persistent:

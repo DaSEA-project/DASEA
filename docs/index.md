@@ -68,6 +68,11 @@ tar -jxf dasea_01-14-2022.tar.bz2 data/out/fpm/fpm_dependencies_01-14-2022.csv
 #### SQL: Identify packages with highest in-degree
 
 
+
+To count the in-degree
+
+For brevity of the example, we use Pandas' `to_sql` function, which creates the database schema automatically in the background.
+
 ```python
 import pandas as pd
 from sqlalchemy import create_engine
@@ -75,8 +80,8 @@ from sqlalchemy import create_engine
 
 db_engine = create_engine('sqlite://')  # in memory DB
 
-# dependencies_df = pd.read_csv("data/out/ports/netbsd9/netbsd9_versions_01-14-2022.csv")
-deps_df = pd.read_csv("data/out/alire/alire_dependencies_01-14-2022.csv")
+deps_df = pd.read_csv("data/out/ports/netbsd9/netbsd9_dependencies_01-14-2022.csv")
+# deps_df = pd.read_csv("data/out/alire/alire_dependencies_01-14-2022.csv")
 deps_df.to_sql("Dependencies", db_engine)
 
 query = """SELECT target_name, COUNT(target_name) AS indegree FROM Dependencies
@@ -85,7 +90,6 @@ LIMIT 10;"""
 
 print(pd.read_sql(query, db_engine).to_html())
 ```
-
 
 <table border="1" class="dataframe">
   <thead>
@@ -98,72 +102,132 @@ print(pd.read_sql(query, db_engine).to_html())
   <tbody>
     <tr>
       <th>0</th>
-      <td>matreshka_league</td>
-      <td>62</td>
+      <td>pkgtools/cwrappers</td>
+      <td>18194</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>hal</td>
-      <td>32</td>
+      <td>pkgtools/x11-links</td>
+      <td>2852</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>gnatcoll</td>
-      <td>31</td>
+      <td>x11/xorgproto</td>
+      <td>2465</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>gnat</td>
-      <td>28</td>
+      <td>x11/xcb-proto</td>
+      <td>2025</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>utilada</td>
-      <td>19</td>
+      <td>x11/qt4-tools</td>
+      <td>415</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>cortex_m</td>
-      <td>13</td>
+      <td>devel/boost-headers</td>
+      <td>332</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>xmlada</td>
-      <td>11</td>
+      <td>devel/extra-cmake-modules</td>
+      <td>322</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>libusb</td>
-      <td>11</td>
+      <td>misc/ocaml-opaline</td>
+      <td>252</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>libhidapi</td>
-      <td>11</td>
+      <td>devel/p5-Module-Build</td>
+      <td>223</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>make</td>
-      <td>10</td>
+      <td>devel/pcre2</td>
+      <td>158</td>
     </tr>
   </tbody>
 </table>
 
-#### NetworkX: Computing the PageRanks of all XXX Packages with
+The results in the table above show that almost all _pkgsrc_ packages (from NetBSD) depend on the [`pkgtools/cwrappers`](https://cdn.netbsd.org/pub/pkgsrc/current/pkgsrc/pkgtools/cwrappers/index.html) package.
+It has an indegree of 18194 (in `netbsd9_packages_01-14-2022.csv` are 18197 packages registered).
+The package with the second highest in-degree is [`pkgtools/x11-links`](https://cdn.netbsd.org/pub/pkgsrc/current/pkgsrc/pkgtools/x11-links/index.html) with 2852 packages that depend on it.
+
+
+#### NetworkX: Computing Betweenness Centrality of packages
+
+
+The Python package [NetworkX](https://networkx.org/) can [read and write a plethora of graph formats](https://networkx.org/documentation/stable/reference/readwrite/index.html).
+One of them are adjacency lists, which are simple text files containing node identifiers.
+To compute the [_Betweenness Centrality_](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.betweenness_centrality.html#networkx.algorithms.centrality.betweenness_centrality) of the packages in the dependency network of Alire (a package manager for ADA), we first create an adjacency list from the CSV files that contain information about packages and dependencies.
+The former is needed, since packages do not necessarily depend on other packages not are dependent of others.
+
+
+
+<!-- [_"Graph Algorithms: Practical Examples in Apache Spark and Neo4j"_](https://www.academia.edu/download/62067087/Graph_Algorithms_Neo4j20200211-122044-3inq88.pdf)
+ -->
 
 
 ```python
+import tempfile
 import pandas as pd
 import networkx as nx
+from pathlib import Path
 
 
-df = pd.read_csv("data/out/conan/conan_versions_01-14-2022.csv")
+def create_adjacency_lists():
+    pkgs_df = pd.read_csv("data/out/conan/conan_packages_01-14-2022.csv")
+    deps_df = pd.read_csv("data/out/conan/conan_dependencies_01-14-2022.csv")
+    deps_df = deps_df[(~deps_df.pkg_idx.isnull()) & (~deps_df.target_idx.isnull())]
 
+    fname = Path(tempfile.gettempdir(), "conan.adjl")
+    with open(fname, "w") as fp:
+        for node_id in pkgs_df.idx:
+            print(node_id, file=fp)
+        for _, (source_id, target_id) in deps_df[["pkg_idx", "target_idx"]].iterrows():
+              print(int(source_id), int(target_id), file=fp)
+    return fname
+
+
+g = nx.read_adjlist(create_adjacency_lists(), nodetype=int, create_using=nx.DiGraph)
+betweennes_ranks = nx.betweenness_centrality(g)
+print(list(sorted(betweennes_ranks.items(), key=lambda item: item[1], reverse=True))[:10])
 ```
 
+The program above generates an output similar to the following.
+
+```
+[(738, 1.4423449396770137e-05),
+ (83, 4.807816465590045e-06),
+ (455, 4.120985541934325e-06),
+ (520, 3.2967884335474596e-06),
+ (799, 2.0604927709671624e-06),
+ (40, 1.6483942167737298e-06),
+ (200, 1.6483942167737298e-06),
+ (356, 1.6483942167737298e-06),
+ (472, 1.6483942167737298e-06),
+ (163, 1.5110280320425857e-06)]
+```
+
+The printed results show, that the package with identifier 738 has the highest Betweenness Centrality.
+That package is [`openssl`](https://conan.io/center/openssl).
+The package with the second highest Betweenness Centrality is [`boost`](https://conan.io/center/boost) (identifier 83).
+
+Note, the program above does not illustrate the programmatic lookup of package names from identifier.
 
 
-#### Neo4j: Finding the Longest-Dependency Paths in XXX with Neo4j
+<!-- #### Neo4j: Finding the Longest-Dependency Paths in XXX with Neo4j
+
+Identifying all packages that depend directly or indirectly on the [`openssl`](https://conan.io/center/openssl) in Conan.
+
+Neo4j databases can be created from CSV file.
+The only requirement is, that columns are named in a certain way 
+
+ -->
 
 
 #### Pandas: Identify Conan packages that changed licenses between versions 
@@ -258,11 +322,49 @@ Note, that the given licenses are not in chronological order.
 For that, the above program would have to be modified.
 
 
+#### Gephi: Visualize an ecosystem
 
+The graph visualization program [Gephi](https://gephi.org/) can read graphs from many [kinds of files](https://gephi.org/users/supported-graph-formats/).
+Amongst others it supports reading CSV files.
+However, it requires that CSV files with graph nodes contain at least two columns with names `Id` and `Label` respectively.
+CSV files storing edges must specify the ends of edges in fields called `Source` and `Target` respectively.
+See the [linked tutorial](https://seinecle.github.io/gephi-tutorials/generated-html/importing-csv-data-in-gephi-en.html) for details of importing CSV data.
+The columns of the DaSEA dataset are called differently though.
 
- the most common licenses with pandas
+The following program illustrates how to convert a packages CSV file and a dependency CSV file from the Conan ecosystem into two CSV files of a format that Gephi can digest.
 
 
 ```python
-engine = create_engine('sqlite:///school.db', echo=True)
+import pandas as pd
+from pathlib import Path
+
+
+pkgs_df = pd.read_csv("data/out/conan/conan_packages_01-14-2022.csv")
+pkgs_df.rename(columns={"idx": "Id", "name": "Label"}, inplace=True)
+pkgs_df.to_csv(Path("/tmp", "conan_gephi_nodes.csv"), index=False)
+
+deps_df = pd.read_csv("data/out/conan/conan_dependencies_01-14-2022.csv")
+
+deps_df = deps_df[(~deps_df.pkg_idx.isnull()) & (~deps_df.target_idx.isnull())]
+deps_df.pkg_idx = deps_df.pkg_idx.astype(np.uint)
+deps_df.rename(columns={"pkg_idx": "Source", "target_idx": "Target"}, inplace=True)
+deps_df.to_csv(Path("/tmp", "conan_gephi_edges.csv"), index=False)
 ```
+
+The screenshots below illustrate the process of importing nodes and edges from their respective CSV files.
+
+![](images/import_nodes_1.png)
+![](images/import_nodes_2.png)
+![](images/import_edges_1.png)
+![](images/import_edges_2.png)
+![](images/import_final.png)
+
+After a bit of cosmetic changes to the Conan dependency network, i.e., Noverlap layout algorithm and node sizes and colors according to a nodes PageRank, a visualization of Conan's package dependency network look like in the following:
+
+![](images/conan_gephi.png)
+
+
+<!-- 
+
+ the most common licenses with pandas
+ -->

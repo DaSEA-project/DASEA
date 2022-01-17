@@ -212,9 +212,10 @@ def _collect_metadata(port_mk_files):
     Since parsing of metadata calls repeatedly the `make` command on the terminal
     this function takes long to complete (ca. 50 minutes)
     """
-    from tqdm import tqdm
+    # from tqdm import tqdm
     mk_file_metadata_map = {}
-    for port_idx, port_mk_file in tqdm(enumerate(port_mk_files)):
+    # for port_idx, port_mk_file in tqdm(enumerate(port_mk_files)):
+    for port_idx, port_mk_file in enumerate(port_mk_files):
         if mk_info := _parse_metadata(port_mk_file):
             mk_info = _process_metadata(mk_info, port_mk_file)
         else:

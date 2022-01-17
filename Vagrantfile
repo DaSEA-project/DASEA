@@ -35,8 +35,8 @@ Vagrant.configure("2") do |config|
       echo "Collecting ports tree..."
       # TODO: Use an alternative method to get quartely branch, see 
       # https://docs.freebsd.org/en/books/handbook/ports/#ports-using
-      # portsnap --interactive fetch
-      # portsnap --interactive extract
+      portsnap --interactive fetch
+      portsnap --interactive extract
     SHELL
 
     # For some reason extracting the ports tree unmounts the synced dir
@@ -437,4 +437,6 @@ Vagrant.configure("2") do |config|
       SHELL
 
   end
+
+  # TODO: Create a VM for mining Homebrew on MacOS
 end

@@ -67,21 +67,24 @@ def _collect_packages():
     return pkg_idx_map, packages
 
 
-def _collect_version_info(pkg_name, version_dicts=defaultdict(dict), kind="binary"):
+def _collect_version_info(metainfo_str, version_dicts=defaultdict(dict)):
     """Parsing of output from `apt-cache show` and `apt-cache showsrc` is expensive!
     However, since it seems that [`python-apt`](https://apt-team.pages.debian.net/python-apt/) does not provide information,
     such as, vcs-git fields, I resort to parsing the text output instead of wrapping libapt, which would be quicker
-    """
-    if kind == "binary":
-        cmd = f"apt-cache show {pkg_name}"
-    elif kind == "source":
-        cmd = f"apt-cache showsrc {pkg_name}"
-    else:
-        return {}
-    r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
+    Generally, there is a one-to-many relation between a source package and binary packages
+    apt-cache showsrc freeipa-server-trust-ad
+    apt-cache show freeipa-server-trust-ad
+    apt-cache show freeipa-admintools
+    apt-cache showsrc freeipa-admintools
+
+    where the source package is freeipa
+
+
+    , freeipa-common, freeipa-client, python-ipaclient, python-ipalib, freeipa-server, freeipa-server-dns, freeipa-server-trust-ad, freeipa-tests, python-ipaserver, python-ipatests
+    """
     version_dict = {}
-    for line in r.stdout.splitlines():
+    for line in metainfo_str.splitlines():
 
         if not line:  # Empty line denotes start of a new version
             if version_dict["Version"] in version_dicts[version_dict["Package"]].keys():
@@ -93,6 +96,8 @@ def _collect_version_info(pkg_name, version_dicts=defaultdict(dict), kind="binar
         elif line.startswith(" "):
             # That should only be the case for detailed package description,
             # which we ignore
+            # TODO: Check there are some other long fields like that?
+
             continue
         else:
             try:
@@ -201,47 +206,27 @@ def _collect_versions(pkg_names, pkg_idx_map):
 # apt-cache show exim4-daemon-light
 
 
-def _collect_version_deps(pkg_name):
+def _parse_version_deps(metainfo_str):
     """
-    This function parses the text output of apt-cache depends <pkg_name>.
-    The output looks as in the following.
-    $ apt-cache depends perl
-    perl
-      PreDepends: dpkg
-        dpkg:i386
-      Depends: perl-base
-      Depends: perl-modules-5.26
-      Depends: libperl5.26
-      Conflicts: libjson-pp-perl
-      Breaks: libperl-dev
-      Breaks: perl-doc
-      Recommends: netbase
-      Suggests: perl-doc
-     |Suggests: libterm-readline-gnu-perl
-      Suggests: libterm-readline-perl-perl
-      Suggests: make
-        make-guile
-      Replaces: <perl-modules>
-
-    Lines starting with `|` denote an alternative, package names in <> denote virtual packages, and
+    This function parses the text output of ...
     """
-    cmd = f"apt-cache depends {name}"
-    r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
     version_dicts = []
     version_dict = {}
-    for line in r.stdout.splitlines()[1:]:  # Skip the first line since
-
+    for line in metainfo_str.splitlines():
         if not line:  # Empty line denotes start of a new version
             version_dicts.append(version_dict)
             version_dict = {}
         elif line.startswith(" "):
             # That should only be the case for detailed package description,
             # which we ignore
+            # TODO: Check there are some other long fields like that?
             continue
         else:
             key, value = line.split(": ", 1)
             version_dict[key] = value
+            # TODO: in case of Depends and some others parse value 
+            # split on ",", strip, extract version in ()
 
     return version_dicts
 
@@ -292,9 +277,14 @@ def mine():
         bin_info = Path(Path.home(), "pkginfo", "bin", p)
         src_info = Path(Path.home(), "pkginfo", "src", p)
 
-        if os.path.getsize(bin_info) > 0
+        if os.path.getsize(bin_info) > 0:
             with open(bin_info) as fp:
                 bin_contents = fp.read()
+
+
+        if os.path.getsize(src_info) > 0:
+            with open(src_info) as fp:
+                src_contents = fp.read()
 
 
         for line in bin_contents.splitlines():

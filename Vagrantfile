@@ -8,8 +8,8 @@ Vagrant.configure("2") do |config|
     # The two-way synced directories seem to be flaky with the FreeBSD guest.
     # On the first write lower level directories do not exist anymore/are unmounted.
     # Consequently, we fall back to rsync
-    freebsd.vm.synced_folder "./", "/vagrant", type: "virtualbox"
-    # freebsd.vm.synced_folder "./", "/vagrant", type: "rsync"
+    # freebsd.vm.synced_folder "./", "/vagrant", type: "virtualbox"
+    freebsd.vm.synced_folder "./", "/vagrant", type: "rsync"
 
     freebsd.vm.provider "virtualbox" do |vb|
       vb.memory = "2048"

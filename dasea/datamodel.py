@@ -37,6 +37,7 @@ class Persistent:
         return output.getvalue().rstrip()
 
 
+# TODO: Make fields optional, e.g., via Optional[str]
 @dataclass
 class Package(Persistent):
     idx: int

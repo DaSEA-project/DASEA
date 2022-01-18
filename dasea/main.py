@@ -1,8 +1,11 @@
-"""Naval Fate.
+"""DaSEA - Dataset for Software Ecosystem Analysis.
+
+A tool to mine dependency networks from various software ecosystems.
 
 Usage:
   dasea mine <pkgmanager>
-  dasea release <zenodo_api_key>
+  dasea release
+  dasea push <dataset>
 
 Options:
   -h --help     Show this screen.
@@ -63,9 +66,13 @@ def main():
             sys.exit(127)
 
     elif arguments["release"]:
-        from dasea.release_dataset import main as release_dataset
+        from dasea.release_dataset import create_compressed_archive
 
-        release_dataset(arguments["<zenodo_api_key>"])
+        create_compressed_archive()
+    elif arguments["push"]:
+        from dasea.release_dataset import push_dataset_to_zenodo
+
+        push_dataset_to_zenodo(arguments["<dataset>"])
 
 
 if __name__ == "__main__":

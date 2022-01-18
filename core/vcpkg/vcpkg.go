@@ -40,9 +40,9 @@ const (
 
 var (
 	PKGS_MAP              = make(map[string]int64)
-	PKG_ID                = int64(0)
-	VERSION_ID            = int64(0)
-	DEPENDENCY_ID         = int64(0)
+	PKG_ID                = int64(1)
+	VERSION_ID            = int64(1)
+	DEPENDENCY_ID         = int64(1)
 	date                  = time.Now().Format("01-02-2006")
 	VCPKG_PACKAGE_DATA    = fmt.Sprintf("data/vcpkg/vcpkg_packages-%s.csv", date)
 	VCPKG_VERSION_DATA    = fmt.Sprintf("data/vcpkg/vcpkg_versions-%s.csv", date)
@@ -77,13 +77,8 @@ func formatAndExport(packages []pkg) {
 		pckg.ID = PKGS_MAP[p.Name]
 		pckg.Name = p.Name
 		pckg.PackageManager = "Vcpkg"
-		pckg.Platform = "C/C++"
-		pckg.Description = p.Description
-		pckg.HomepageURL = p.Homepage
-		pckg.SourceCodeURL = ""
-		pckg.Maintainer = p.Maintainer
-		pckg.License = p.License
-		pckg.Author = ""
+
+		// Write package data to CSV
 		helpers.WriteToCsv(pckg.GetKeys(), pckg.GetValues(), VCPKG_PACKAGE_DATA)
 
 		var version models.Version
@@ -91,6 +86,12 @@ func formatAndExport(packages []pkg) {
 		version.ID = VERSION_ID
 		version.PackageID = PKGS_MAP[p.Name]
 		version.Version = p.Version
+		version.Description = p.Description
+		version.HomepageURL = p.Homepage
+		version.Maintainer = p.Maintainer
+		version.License = p.License
+
+		// write version data to CSV
 		helpers.WriteToCsv(version.GetKeys(), version.GetValues(), VCPKG_VERSION_DATA)
 
 		if len(p.Dependencies) > 0 {

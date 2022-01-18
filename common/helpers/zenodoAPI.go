@@ -49,8 +49,8 @@ type DatasetInfo struct {
 }
 
 const (
-	// ZENODO_API = "https://zenodo.org/api/"
-	ZENODO_API = "https://sandbox.zenodo.org/api/" // Development testing API
+	ZENODO_API = "https://zenodo.org/api/"
+	// ZENODO_API = "https://sandbox.zenodo.org/api/" // Development testing API
 )
 
 func ReleaseDataset() {

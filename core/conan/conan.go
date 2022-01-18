@@ -54,7 +54,7 @@ type item struct {
 var (
 	currentTime           = time.Now()
 	date                  = currentTime.Format("01-02-2006")
-	dependencyCnt         int
+	dependencyCnt         = int64(1)
 	PKGS_MAP_IDX          = make(map[string]int)
 	PKGS_VISITED          = make(map[string]bool)
 	VERSIONS_MAP          = make(map[string][]string)
@@ -98,7 +98,7 @@ func conanInfo(name string, version string) {
 	arg3 := "requires"
 	arg4 := fmt.Sprintf("%s/%s@", name, version)
 	arg5 := "--json"
-	out := fmt.Sprintf("out/%s/%s.json", name, version)
+	out := fmt.Sprintf("core/conan/out/%s/%s.json", name, version)
 
 	log.Infof("Getting info from %s/%s", name, version)
 	externalCommand(arg0, arg1, arg2, arg3, arg4, arg5, out)
@@ -160,15 +160,8 @@ func parseJSON(name string, version string, pkgId int) {
 				pkg.ID = int64(pkgId)
 				pkg.Name = name
 				pkg.PackageManager = "Conan"
-				pkg.Platform = "C/C++"
-				pkg.Description = packages[i].Description
-				pkg.HomepageURL = packages[i].URL
-				pkg.SourceCodeURL = "N/A"
-				pkg.Maintainer = "N/A"
-				pkg.License = packages[i].License[0]
-				pkg.Author = "N/A"
-
 				helpers.WriteToCsv(pkg.GetKeys(), pkg.GetValues(), CONAN_PACKAGE_DATA)
+
 				PKGS_VISITED[name] = true
 			} else {
 				log.Debugf("%s already visited", name, version)
@@ -177,6 +170,10 @@ func parseJSON(name string, version string, pkgId int) {
 			v.ID = int64(VERSIONS_MAP_IDX[name+version])
 			v.PackageID = int64(pkgId)
 			v.Version = name + "@" + version
+			v.Description = packages[i].Description
+			v.HomepageURL = packages[i].URL
+			v.License = packages[i].License[0]
+
 			helpers.WriteToCsv(v.GetKeys(), v.GetValues(), CONAN_VERSION_DATA)
 
 			// Inside specific version
@@ -185,10 +182,9 @@ func parseJSON(name string, version string, pkgId int) {
 				// Looping thre requires slice
 				for _, dependency := range packages[i].Requires {
 					targetName := strings.Split(dependency, "/")
-					d.ID = int64(dependencyCnt)
+					d.ID = dependencyCnt
 					d.SourceID = int64(VERSIONS_MAP_IDX[name+version])
 					d.TargetID = int64(PKGS_MAP_IDX[targetName[0]])
-					d.Constraints = "N/A"
 					helpers.WriteToCsv(d.GetKeys(), d.GetValues(), CONAN_DEPENDENCY_DATA)
 					dependencyCnt++
 				}
@@ -198,7 +194,7 @@ func parseJSON(name string, version string, pkgId int) {
 			}
 
 		} else {
-			// log.Errorf("Package %s does not exist in conan info", name+version)
+			log.Errorf("Package %s does not exist in conan info", name+version)
 		}
 	}
 }
@@ -207,7 +203,7 @@ func getPackageInfo() {
 	err := filepath.Walk("core/conan/assets/repo/src/recipes", func(path string, info os.FileInfo, err error) error {
 
 		if err != nil {
-			// log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
+			log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
 			return err
 		}
 
@@ -233,7 +229,7 @@ func getPackageInfo() {
 
 func geteMaps() {
 	var tmpVersions []string
-	i := 0
+	i := 1
 	err := filepath.Walk("core/conan/out", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Errorf("Prevent panic by handling failure accessing a path %q: %v\n", path, err)
@@ -248,10 +244,10 @@ func geteMaps() {
 
 		if test == ".json" {
 			// Get current package
-			t := strings.Split(dir, "/")
+			t := strings.Split(dir, string(os.PathSeparator))
 			pkgName := t[len(t)-2]
 			if _, exists := PKGS_MAP_IDX[pkgName]; !exists {
-				PKGS_MAP_IDX[pkgName] = i //TODO: Save this to CSV INSTEAD
+				PKGS_MAP_IDX[pkgName] = i
 				i++
 			}
 
@@ -270,9 +266,9 @@ func geteMaps() {
 }
 
 func traverse() {
-	versionCnt := 0
+	versionCnt := 1
 
-	pkg_keys := make([]string, 0, len(PKGS_MAP_IDX)) //TODO: SMARTER
+	pkg_keys := make([]string, 1, len(PKGS_MAP_IDX))
 	for k := range PKGS_MAP_IDX {
 		pkg_keys = append(pkg_keys, k)
 	}
@@ -282,7 +278,6 @@ func traverse() {
 		pkgVersions := VERSIONS_MAP[name]
 
 		for _, version := range pkgVersions {
-			// fmt.Println(VERSIONS_MAP_IDX)
 			VERSIONS_MAP_IDX[name+version] = versionCnt
 			parseJSON(name, version, pkgId)
 			versionCnt++
@@ -320,7 +315,7 @@ func Traverse() {
 		}
 	}
 
-	//generatePackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
+	getPackageInfo() // Calls Conan Info, reupdating data (Time 0.5 - 1 hour)
 	geteMaps()
 	traverse()
 }

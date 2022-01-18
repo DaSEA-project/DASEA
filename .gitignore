@@ -25,6 +25,7 @@ data/tmp/alire/*
 data/tmp/conan/*
 !data/tmp/conan/.gitkeep
 *.zip
+data/out/dasea_*
 
 # OS files
 .DS_Store

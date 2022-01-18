@@ -93,6 +93,24 @@ $ poetry shell
 [poetry]$ dasea mine alire
 ```
 
+## Conan
+
+Conan is the [Ada Library Repository](https://alire.ada.dev/)
+Mining Conan packages takes approximately an hour.
+
+```bash
+$ poetry shell
+[poetry]$ dasea mine conan
+```
+
+## Nimble
+
+Nimble is [Nim's package manager](https://github.com/nim-lang/nimble)
+
+```bash
+$ dasea mine nimble
+```
+
 ## BSD Packages
 
 Mining of the respective packages takes place in Virtualbox virtual machines that are managed with Vagrant.
@@ -127,10 +145,3 @@ $ bash bin/get_netbsd_pkgsrc.sh
 
 
 
-## Nimble
-
-Nimble is [Nim's package manager](https://github.com/nim-lang/nimble)
-
-```bash
-$ dasea mine nimble
-```

@@ -27,8 +27,8 @@ Every ecosystem that can be mined remotely, i.e., by sending requests to web-API
 
 Requirements are:
 
-  * Python >= 3.9
-  * Poetry setup
+  * Python >= 3.9, for example installed via [`pyenv`](https://github.com/pyenv/pyenv)
+  * Poetry setup, see the [official documentation](https://python-poetry.org/docs/) for installation and use
 
 The following three steps have to be executed only once initially.
 

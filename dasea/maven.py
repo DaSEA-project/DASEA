@@ -23,57 +23,104 @@ import os
 import csv
 import sys
 import lxml
+import signal
 import pathlib
+import sqlite3
 import logging
 import requests
 from glob import glob
+from time import sleep
 from pathlib import Path
+from datetime import datetime
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
 
+# 22773
+
+# BASE_URL = "https://repo1.maven.org/maven2/"
+BASE_URL = "https://repo.maven.apache.org/maven2/"  # Apache mirror
 
 MAVEN_MINE_DIR = "data/tmp/maven"
 PKGS_FILE = "data/out/maven/packages.csv"
 VERSIONS_FILE = "data/out/maven/versions.csv"
 DEPS_FILE = "data/out/maven/dependencies.csv"
 
-REQUESTS_COUNTER_FILE = "data/tmp/maven/req_count.txt"
-POM_URLS_FILE = "data/tmp/maven/pom_urls.txt"
-REMAINING_URLS_FILE = "data/tmp/maven/remaining_urls.txt"
-
-# BASE_URL = "https://repo1.maven.org/maven2/"
-BASE_URL = "https://repo.maven.apache.org/maven2/"  # Apache mirror
-NO_REQUESTS = 0  # Number of requests are only counted to get a feeling for how expensive the process is. Can be removed again in the long run
+STATE_DB = "data/tmp/maven/pom_mining_state.db"
+if not Path(STATE_DB).is_file():
+    # Initialize the database in case it does not exist yet
+    CONNECTION = sqlite3.connect(STATE_DB)
+    cursor = CONNECTION.cursor()
+    cursor.execute("CREATE TABLE pom_urls (url TEXT UNIQUE)")
+    # Since SQLite dos not have a BOOLEAN type, 0 in seen are False and 1 are True
+    cursor.execute("CREATE TABLE remote_links (url TEXT UNIQUE, seen INTEGER)")
+    cursor.execute("CREATE TABLE request_count (count INTEGER)")
+    cursor.execute("INSERT INTO request_count VALUES (0)")
+    CONNECTION.commit()
+else:
+    CONNECTION = sqlite3.connect(STATE_DB)
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"
 )
 logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
-if os.path.isfile(REQUESTS_COUNTER_FILE):
-    with open(REQUESTS_COUNTER_FILE) as fp:
-        NO_REQUESTS = int(fp.read())
+
+START_TS = datetime.now()
+POM_URLS_FILE = "/vagrant/data/tmp/maven/pom_urls.txt"
 
 
 def _inc_req_count():
-    global NO_REQUESTS
-    NO_REQUESTS += 1
-    with open(REQUESTS_COUNTER_FILE, "w") as fp:
-        fp.write(str(NO_REQUESTS) + "\n")
+    cursor = CONNECTION.cursor()
+    rows = cursor.execute("SELECT count FROM request_count LIMIT 1").fetchall()
+    req_count = rows[0][0] + 1
+    cursor.execute("UPDATE request_count SET count = ?", (req_count,))
+    cursor.close()
+    CONNECTION.commit()
+    if req_count % 1000 == 0:
+        t_diff = datetime.now() - START_TS
+        print(f"{req_count} requests took {t_diff}", flush=True)
 
 
 def _store_pom_link(pom_url):
-    with open(POM_URLS_FILE, "a") as fp:
-        fp.write(pom_url + "\n")
+    cursor = CONNECTION.cursor()
+    cursor.execute("INSERT OR IGNORE INTO pom_urls VALUES (?)", (pom_url,))
+    cursor.close()
+    CONNECTION.commit()
 
 
 def _store_links_state(links):
-    # This is expensive! It is called often and serializes a lot of links
-    with open(REMAINING_URLS_FILE, "w") as fp:
-        for l in links:
-            fp.write(l + "\n")
+    cursor = CONNECTION.cursor()
+    # TODO: Remove this loop by inserting the values via the query
+    for link in links:
+        cursor.execute("INSERT OR IGNORE INTO remote_links VALUES (?, ?)", (link, 0))
+    cursor.close()
+    CONNECTION.commit()
+
+
+def _pop_next_link():
+    cursor = CONNECTION.cursor()
+    rows = cursor.execute("SELECT url FROM remote_links WHERE seen = 0 LIMIT 1").fetchall()
+    cursor.close()
+    if rows:
+        return rows[0][0]
+    else:
+        return None
+
+
+def _toggle_seen(link):
+    cursor = CONNECTION.cursor()
+    cursor.execute("UPDATE remote_links SET seen = ? WHERE url = ?", (1, link))
+    cursor.close()
+    CONNECTION.commit()
+
+
+def _seen_any_links():
+    cursor = CONNECTION.cursor()
+    rows = cursor.execute("SELECT COUNT (*) FROM remote_links").fetchall()
+    cursor.close()
+    return rows[0][0]
 
 
 def contains_link_to_pom(links):
@@ -99,8 +146,21 @@ def contains_link_to_pom(links):
 def get_links_from_page(path):
     """"""
     url = BASE_URL + path
-    r = requests.get(url)
-    _inc_req_count()
+
+    while True:
+        # Or better go for a Retry object???
+        # https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
+        try:
+            r = requests.get(url)
+            _inc_req_count()
+            break
+        except requests.exceptions.ConnectionError:
+            LOGGER.info("Connection refused. I will try again in 5 secs...")
+            sleep(5)
+            continue
+
+    # r = requests.get(url)
+    # _inc_req_count()
     if r.ok:
         soup = BeautifulSoup(r.content, features="html5lib")
         links = [path + a.get("href") for a in soup.find_all("a") if not a.get("href") == "../"]
@@ -121,31 +181,27 @@ def get_pom_links():
     # A result may look like in the following
     # links = set(['excalibur-pool/'])  #, 'jersey/', 'commons-util/', 'se/', 'classworlds/'])
     path = ""
-
-    if os.path.isfile(REMAINING_URLS_FILE):
-        with open(REMAINING_URLS_FILE) as fp:
-            links = fp.readlines()
-            links = set([l.strip() for l in links])
-    else:
+    if not _seen_any_links():
         # Get original links from start page
-        links = set([l for l in get_links_from_page(path) if l.endswith("/")])
+        links = [l for l in get_links_from_page(path) if l.endswith("/")]
+        _store_links_state(links)
 
-    links_to_poms = []
-    while links:
-        l = links.pop()
+    while True:
+        l = _pop_next_link()
+        if not l:
+            break
+
         # print(l)
         links_from_page = get_links_from_page(l)
         link_to_pom = contains_link_to_pom(links_from_page)
+
         if link_to_pom:
-            links_to_poms.append(link_to_pom)
             _store_pom_link(link_to_pom)
         else:
             # Filter metadata file links and checksums of these
             links_from_page = [l for l in links_from_page if l.endswith("/")]
-            links.update(set(links_from_page))
-
-        _store_links_state(links)
-    return links_to_poms
+            _store_links_state(links_from_page)
+        _toggle_seen(l)
 
 
 def pom_files():
@@ -246,21 +302,34 @@ def _collect_packages(pkg_lst):
     return pkg_idx_map, packages
 
 
-def mine():
-    paths = get_pom_links()
+def signal_handler(signal, frame):
+    CONNECTION.commit()
+    CONNECTION.close()
+    LOGGER.info("Somebody killed me...")
+    sys.exit(0)
 
+
+def mine():
+    # try:
+    #     paths = get_pom_links()
+    #     CONNECTION.commit()
+    #     CONNECTION.close()
+    # except Exception as e:
+    #     LOGGER.error(e)
+    #     CONNECTION.commit()
+    #     CONNECTION.close()
     for path in paths:
         download_pom(path)
 
-    pkg_config_files = [Path(MAVEN_MINE_DIR, p) for p in pom_files]
+    # pkg_config_files = [Path(MAVEN_MINE_DIR, p) for p in pom_files]
 
-    # Check if this fits in RAM with all POM files
-    metadata_lst = [parse_pom(p) for p in pkg_config_files]
-    pkg_names = [f'{m["group_id"]}:{m["artifactid_id"]}' for m in metadata_lst]
+    # # Check if this fits in RAM with all POM files
+    # metadata_lst = [parse_pom(p) for p in pkg_config_files]
+    # pkg_names = [f'{m["group_id"]}:{m["artifactid_id"]}' for m in metadata_lst]
 
-    pkg_idx_map, packages_lst = _collect_packages(metadata_lst)
-    _serialize_data(packages_lst, PKGS_FILE)
-    del packages_lst
+    # pkg_idx_map, packages_lst = _collect_packages(metadata_lst)
+    # _serialize_data(packages_lst, PKGS_FILE)
+    # del packages_lst
     # versions_lst = _collect_versions(metadata_lst, pkg_idx_map)
     # deps_lst = _collect_dependencies(metadata_lst, pkg_idx_map)
 
@@ -271,5 +340,6 @@ def mine():
     #     parse_pom(path)
 
 
+signal.signal(signal.SIGINT, signal_handler)
 if __name__ == "__main__":
     mine()

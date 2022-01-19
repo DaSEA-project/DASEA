@@ -16,15 +16,27 @@ out/
 # Env files
 .env
 
+# ASCIIDoc artifact
+README.html
+
 # Dataset files
-data/
+data/**/*.csv
+data/tmp/alire/*
+!data/tmp/alire/.gitkeep
+data/tmp/conan/*
+!data/tmp/conan/.gitkeep
 *.zip
+data/out/dasea_*
 
 # OS files
 .DS_Store
 
 # VS Code configuration
 .vscode/
+__pycache__/
+*.pyc
+
+.vagrant/
 
 # JetBrains IDEs
 .idea/

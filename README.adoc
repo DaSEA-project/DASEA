@@ -1,0 +1,120 @@
+https://www.gnu.org/licenses/agpl-3.0[image:https://img.shields.io/badge/License-AGPL%20v3-blue.svg[License: AGPL v3]]
+
+image:artwork/logo.png[image]
+
+== DaSEA - **Da**ta for **S**oftware **E**cosystem **A**nalysis
+
+
+DaSEA is the name of a dataset of software dependency networks of various ecosystems.
+In this repository is the code and documentation of the `dasea` tool, which mines, creates, and releases new versions of the dataset
+
+The latest versions of the dataset are available from https://<orgname>.github.io/DASEA/[DASEA].
+
+
+=== Contribute
+
+See link:https://github.com/<orgname>/DASEA/blob/main/CONTRIBUTE.md[CONTRIBUTE.md] file
+
+=== License
+
+The source code in this repository, i.e., the `dasea` tool is licensed under link:https://github.com/<orgname>/DASEA/blob/main/LICENSE[GNU Affero General Public License v3.0]
+
+
+=== Mining the Dataset
+
+
+Every ecosystem that can be mined remotely, i.e., by sending requests to web-APIs, text mining in cloned remote repositories, etc., can be mined directly on a Linux/Unix host.
+
+Requirements are:
+
+  * Python >= 3.9, for example installed via [`pyenv`](https://github.com/pyenv/pyenv)
+  * Poetry setup, see the [official documentation](https://python-poetry.org/docs/) for installation and use
+
+The following three steps have to be executed only once initially.
+
+[source,bash]
+$ git clone https://...
+$ cd <DASEA>
+$ poetry install
+
+
+The latter command installs
+Eventually, we will distribute DASEA as a Python package via PyPI.
+
+Some ecosystem miners, e.g., those mining BSD ports and NetBSD pkgsrc have to be run on the respective BSD OS.
+Therefore, in these cases mining takes place in Virtualbox virtual machines that are managed with Vagrant.
+That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` and `reload` have to be installed.
+
+
+
+
+.Currently supported miners and how to execute them.
+[width="100%",cols="5%,5%,40%,10%,40%",options="header",]
+|=======================================================================
+|Ecosystem |Package Manager |Repository |Ecosystem Kind |How-to Mine?
+
+// Alire
+| ADA
+| Alire
+| https://github.com/alire-project/alire-index.git
+| Programming Language
+| `$ poetry run dasea mine alire`
+// Conan
+| C/C++
+| Conan
+|
+| Programming Language
+|`$ poetry run dasea mine conan`
+// FPM
+| Fortran
+| FPM
+| https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json
+| Programming Language
+|`$ poetry run dasea mine fpm`
+// Nimble
+| Nim
+| Nimble
+| https://raw.githubusercontent.com/nim-lang/packages/master/packages.json
+| Programming Language
+|`$ poetry run dasea mine nimble`
+// VCPKG
+| C/C++
+| VCPKG
+| https://vcpkg.io/output.json
+| Programming Language
+|`$ poetry run dasea mine vcpkg`
+
+
+// Homebrew
+| MacOS packages
+| Homebrew
+| https://formulae.brew.sh/api/formula.json
+| Operating system
+|`$ poetry run dasea mine brew`
+
+// FreeBSD
+| FreeBSD ports
+| Ports
+| `portsnap --interactive fetch` +
+`portsnap --interactive extract`
+| Operating system
+|`$ vagrant up freebsd11` +
+`$ bash bin/get_freebsd_ports.sh`
+
+// NetBSD
+| NetBSD packages
+| PkgSrc
+| ftp://ftp.NetBSD.org/pub/pkgsrc/current/pkgsrc.tar.gz
+| Operating system
+|`$ vagrant up netbsd9` +
+`$ bash bin/get_netbsd_pkgsrc.sh`
+// OpenBSD
+| OpenBSD ports
+| Ports
+| https://cdn.openbsd.org/pub/OpenBSD/6.9/ports.tar.gz
+| Operating system
+|`$ vagrant up openbsd69` +
+`$ bash bin/get_openbsd_ports.sh`
+
+
+|=======================================================================

@@ -220,14 +220,57 @@ The package with the second highest Betweenness Centrality is [`boost`](https://
 Note, the program above does not illustrate the programmatic lookup of package names from identifier.
 
 
-<!-- #### Neo4j: Finding the Longest-Dependency Paths in XXX with Neo4j
+#### Neo4j: Finding versions of packages with a specific requirement
 
-Identifying all packages that depend directly or indirectly on the [`openssl`](https://conan.io/center/openssl) in Conan.
+Neo4j databases can be created from the DaSEA CSV files.
+The only requirement is, that columns are named in a certain way as described in the [official documentation](https://neo4j.com/developer/guide-import-csv/).
+For example, all the integer indexes that are used in the DaSEA dataset have to be named in a Neo4j specific manner so that graph nodes of the appropriate type are generated and that relations connect the respective nodes.
+The following is an excerpt from the [example script](neo4j_example/convert_headers_to_neo4j.py) that converts the headers of the CSV files corresponding to the Alire ecosystem into a header suitable for Neo4j.
 
-Neo4j databases can be created from CSV file.
-The only requirement is, that columns are named in a certain way 
+```python
+pkg_df.rename(columns={"idx": "pkgId:ID(Package)"}, inplace=True)
+ver_df.rename(columns={"idx": "verId:ID(Version)"}, inplace=True)
+dep_df.rename(columns={"source_idx": "verId:START_ID(Version)", "target_idx": "pkgId:END_ID(Package)"}, inplace=True)
+```
 
- -->
+After converting the CSV files into the right format for bulk import into Neo4j, one could start-up a Neo4j database for example via Docker as below.
+
+```bash
+$ docker run \
+      --name depgraphneo4j \
+      -p7474:7474 -p7687:7687 \
+      -d \
+      -v $(pwd)/data:/var/lib/neo4j/import \
+      --env NEO4J_AUTH=neo4j/password \
+      neo4j:4.4.3
+```
+
+The actual data import from the DaSEA dataset with Neo4j specific headers could be done as in the following.
+
+```bash
+$ docker exec depgraphneo4j neo4j-admin import --force \
+      --nodes=Package=/var/lib/neo4j/import/alire_packages_neo4j.csv \
+      --nodes=Version=/var/lib/neo4j/import/alire_versions_neo4j.csv \
+      --relationships=Dependency=/var/lib/neo4j/import/alire_dependencies_neo4j.csv \
+      --relationships=VersionOf=/var/lib/neo4j/import/alire_instancerels_neo4j.csv \
+      --skip-bad-relationships
+```
+
+Once the data is imported, the database engine needs to be restarted:
+
+```bash
+$ docker container restart depgraphneo4j
+```
+
+Thereafter, a Cypher query that searches for any version of a package that depends on a version of package `libadalang` would return respectively one version of `ada_language_server`, `libadalang_tools`, and `lal_highlight`, see the illustration below.
+
+```sql
+MATCH (dep:Version)-[:Dependency]->(n:Package {name: 'libadalang'}) RETURN n,dep
+```
+
+![](images/alire_cypher_example.png)
+
+A complete example can be found in [](./neo4j_example/).
 
 
 #### Pandas: Identify Conan packages that changed licenses between versions 
@@ -242,8 +285,6 @@ import pandas as pd
 
 
 df = pd.read_csv("data/out/conan/conan_versions_01-14-2022.csv")
-
-# TODO: licenses to lists
 rdf = df.groupby("pkg_idx").filter(lambda x: len(set(x.license)) > 1).groupby("name").apply(lambda x: set(x.license)).reset_index(name="licenses")
 print(rdf.to_html())
 ```

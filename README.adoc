@@ -15,6 +15,15 @@ The latest versions of the dataset are available from https://<orgname>.github.i
 
 See link:https://github.com/<orgname>/DASEA/blob/main/CONTRIBUTE.md[CONTRIBUTE.md] file
 
+==== Running Tests
+
+
+[source,bash]
+$ poetry run black -l 120 --check ./dasea
+$ poetry run pytest tests
+
+
+
 === License
 
 The source code in this repository, i.e., the `dasea` tool is licensed under link:https://github.com/<orgname>/DASEA/blob/main/LICENSE[GNU Affero General Public License v3.0]

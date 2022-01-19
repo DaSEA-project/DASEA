@@ -15,6 +15,15 @@ The latest versions of the dataset are available from https://<orgname>.github.i
 
 See link:https://github.com/<orgname>/DASEA/blob/main/CONTRIBUTE.md[CONTRIBUTE.md] file
 
+==== Running Tests
+
+
+[source,bash]
+$ poetry run black -l 120 --check ./dasea
+$ poetry run pytest tests
+
+
+
 === License
 
 The source code in this repository, i.e., the `dasea` tool is licensed under link:https://github.com/<orgname>/DASEA/blob/main/LICENSE[GNU Affero General Public License v3.0]
@@ -29,6 +38,7 @@ Requirements are:
 
   * Python >= 3.9, for example installed via [`pyenv`](https://github.com/pyenv/pyenv)
   * Poetry setup, see the [official documentation](https://python-poetry.org/docs/) for installation and use
+  * For miners running in virtual machines, which are currently the ports and pkgsrc miners on BSDs, vagrant and VirtualBox have to be installed
 
 The following three steps have to be executed only once initially.
 

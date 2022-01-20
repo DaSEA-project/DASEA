@@ -20,6 +20,7 @@ class Kind(Enum):
     USES_FROM_MACOS = 13
     USES_FROM_MACOS_BUILD = 14
     USES_FROM_MACOS_TEST = 15
+    NORMAL = 16  # Kind of dependency in Cargo
 
 
 class Persistent:

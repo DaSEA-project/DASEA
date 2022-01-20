@@ -438,5 +438,63 @@ Vagrant.configure("2") do |config|
 
   end
 
+  config.vm.define "cargominer", primary: false do |cargo|
+    cargo.vm.box = 'digital_ocean'
+    cargo.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+    cargo.ssh.private_key_path = '~/.ssh/id_rsa'
+    
+    # TODO: How to shorten the exclude list?
+    cargo.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ["./data/out/*.tar.bz2", "./data/out/alire", "./data/out/apt", "./data/out/conan", "./data/out/fpm", "./data/out/homebrew", "./data/out/nimble", "./data/out/ports", "./data/out/vcpkg", ".git/", "./data/tmp/alire", "./data/tmp/conan", "./data/tmp/fpm", "./data/tmp/nimle", "./data/tmp/ports", "./data/tmp/vcpkg"]
+    cargo.vm.hostname = "cargominer"
+    
+    cargo.vm.provider :digital_ocean do |provider|
+      provider.ssh_key_name = ENV["SSH_KEY_NAME"]
+      provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
+      provider.image = 'ubuntu-18-04-x64'
+      provider.region = 'fra1'
+      provider.size = 's-1vcpu-1gb'
+    end
+
+    cargo.vm.provision "shell", privileged: true, inline: <<-SHELL
+      apt update
+      apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+                     libreadline-dev libsqlite3-dev wget curl llvm \
+                     libncurses5-dev libncursesw5-dev xz-utils tk-dev \
+                     libffi-dev liblzma-dev python-openssl git
+
+
+      git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+
+      echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+      echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+      echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+      echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
+      source $HOME/.bashrc
+
+      # Since the above does not seem to work for some reason in the 
+      # non-interactive shell, I use the absolute path to pyenv in the following
+      pyenv install 3.9.4
+      pyenv global 3.9.4
+
+      # TODO: Consider dropping poetry installation on remote by building the
+      # DASEA package locally and install the tgz via pip on remote
+      curl -sSL https://install.python-poetry.org | python -
+      echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+      source $HOME/.bashrc
+
+      cd /vagrant
+      poetry install
+      # nohup poetry run dasea mine cargo > /tmp/cargo.log 2>&1 &
+
+
+
+
+      # cd /vagrant/
+      # nohup $HOME/.pyenv/versions/3.9.4/bin/python rubygems_main.py > /tmp/rubygems.log 2>&1 &
+      # #   echo "$ vagrant ssh [machinename]"
+    SHELL
+  end
+
+
   # TODO: Create a VM for mining Homebrew on MacOS
 end

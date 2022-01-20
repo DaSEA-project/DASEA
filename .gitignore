@@ -25,6 +25,9 @@ data/tmp/alire/*
 !data/tmp/alire/.gitkeep
 data/tmp/conan/*
 !data/tmp/conan/.gitkeep
+
+!data/out/cargo/.gitkeep
+!data/tmp/cargo/.gitkeep
 *.zip
 data/out/dasea_*
 

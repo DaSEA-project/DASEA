@@ -29,6 +29,10 @@ def main():
             from dasea.conan import mine as conan_mine
 
             conan_mine()
+        elif arguments["<pkgmanager>"] == "cargo":
+            from dasea.cargo import mine as cargo_mine
+
+            cargo_mine()
         elif arguments["<pkgmanager>"] == "vcpkg":
             from dasea.vcpkg import mine as vcpkg_mine
 

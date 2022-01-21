@@ -28,6 +28,8 @@ data/tmp/conan/*
 
 !data/out/cargo/.gitkeep
 !data/tmp/cargo/.gitkeep
+data/tmp/nimble/*
+
 *.zip
 data/out/dasea_*
 

@@ -12,6 +12,9 @@
     "PkgSrc"
   ],
   "datasets": [
-    { "date": "15-12-2021", "url": "https://zenodo.org/record/5781670" }
+    {
+      "date": "15-12-2021",
+      "url": "https://zenodo.org/record/5781670"
+    }
   ]
 }

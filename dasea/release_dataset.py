@@ -30,6 +30,21 @@ def create_compressed_archive():
     # print(r.status_code)
     # print(json.dumps(r.json(), indent=2))
 
+def update_homepage(new_dataset_url):
+    filename = "homepage/datasets.json"
+    file = open(filename,'r+')
+    file_data = json.load(file)
+    print(file_data)
+
+    latest_release = {
+        "date": TODAY,
+        "url": new_dataset_url
+    }
+
+    file_data['datasets'].append(latest_release)
+
+    file.seek(0)
+    json.dump(file_data, file, indent = 4)
 
 def push_dataset_to_zenodo(dataset_path):
     # API Documentation is here:
@@ -82,6 +97,8 @@ def push_dataset_to_zenodo(dataset_path):
         r = requests.post(publish_url, params=params)
         r.raise_for_status()
         final_url = r.json()["links"]["latest_html"]
+        update_homepage(final_url)
+
         print(f"Published dataset to {final_url}")
     else:
         print("Discarding the dataset...")

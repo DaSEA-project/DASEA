@@ -79,7 +79,6 @@ def _collect_dependencies(metadata_lst, pkg_idx_map):
 
             d = VCPKGDependency(
                 pkg_idx=source_pkg_idx,
-                # TODO: double check if the following lookup yields the desired result!
                 source_idx=version_idx,
                 target_idx=pkg_idx_map[dep_name],
                 source_name=data["Name"],

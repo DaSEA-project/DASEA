@@ -49,7 +49,7 @@
     <div class="wrapper">
       <div class="home">
         <p>A continuously updated dataset of software dependencies covering various package manager ecosystems.</p>
-        <h2>Currently Supported Datasets:</h3>
+        <h2>Currently Supported Package Managers:</h3>
           <ul id="package-managers"></ul>
           <h2>Latest Datasets</h2>
           <div id="datasets"></div>
@@ -91,7 +91,7 @@
     .then(json => {
       const { managers, datasets } = json;
       const managerList = document.querySelector("#package-managers");
-      managerList.innerHTML = managers.map(manager => `<li>${manager}</li>`).join("");
+      managerList.innerHTML = managers.sort().map(manager => `<li>${manager}</li>`).join("");
       let datasetsList = document.querySelector("#datasets");
       datasetsList.innerHTML = datasets.map(dataset => `<li><a href="${dataset.url}" target="_blank">${dataset.date}</a></li>`).join("");
     });

@@ -65,6 +65,11 @@ def main():
             from dasea.homebrew import mine as brew_mine
 
             brew_mine()
+
+        elif arguments["<pkgmanager>"] == "chromebrew":
+            from dasea.chromebrew import mine as chromebrew_mine
+
+            chromebrew_mine()
         else:
             print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
             sys.exit(127)

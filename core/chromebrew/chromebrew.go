@@ -8,57 +8,55 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"time"
 
 	"github.com/heyjoakim/DASEA/common/helpers"
 	"github.com/heyjoakim/DASEA/common/models"
-	"gopkg.in/src-d/go-git.v4"
 )
 
 var (
-	PACKAGE_REGESTRY           = "https://github.com/skycocker/chromebrew"
-	TMP_DIR                    = "./core/chromebrew/tmp"
-	PACKAGE_DIR                = "./core/chromebrew/tmp/packages"
-	PKG_ID                     = int64(1)
-	VERSION_ID                 = int64(1)
-	DEPENDENCY_ID              = int64(1)
-	date                       = time.Now().Format("01-02-2006")
-	PKGS_MAP                   = make(map[string]int64)
-	chromebrew_PACKAGE_DATA    = fmt.Sprintf("data/chromebrew/chromebrew_packages-%s.csv", date)
-	chromebrew_VERSION_DATA    = fmt.Sprintf("data/chromebrew/chromebrew_versions-%s.csv", date)
-	chromebrew_DEPENDENCY_DATA = fmt.Sprintf("data/chromebrew/chromebrew_dependencies-%s.csv", date)
+// PACKAGE_REGESTRY = "https://github.com/skycocker/chromebrew"
+// TMP_DIR     = "./core/chromebrew/tmp"
+// PACKAGE_DIR = "./core/chromebrew/tmp/packages"
+// PKG_ID                     = int64(1)
+// VERSION_ID                 = int64(1)
+// DEPENDENCY_ID              = int64(1)
+// date                       = time.Now().Format("01-02-2006")
+// PKGS_MAP                   = make(map[string]int64)
+// chromebrew_PACKAGE_DATA    = fmt.Sprintf("data/chromebrew/chromebrew_packages-%s.csv", date)
+// chromebrew_VERSION_DATA    = fmt.Sprintf("data/chromebrew/chromebrew_versions-%s.csv", date)
+// chromebrew_DEPENDENCY_DATA = fmt.Sprintf("data/chromebrew/chromebrew_dependencies-%s.csv", date)
 )
 
-func cloneRepository() {
-	fmt.Println("Cloning repository")
-	_, err := git.PlainClone(TMP_DIR, false, &git.CloneOptions{
-		URL:      PACKAGE_REGESTRY,
-		Progress: os.Stdout,
-	})
-	if err != nil {
-		panic(err)
-	}
-}
+// func cloneRepository() {
+// 	fmt.Println("Cloning repository")
+// 	_, err := git.PlainClone(TMP_DIR, false, &git.CloneOptions{
+// 		URL:      PACKAGE_REGESTRY,
+// 		Progress: os.Stdout,
+// 	})
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 
-func getPackageNames() []string {
-	files, err := ioutil.ReadDir(PACKAGE_DIR)
-	if err != nil {
-		log.Fatal(err)
-	}
+// func getPackageNames() []string {
+// 	files, err := ioutil.ReadDir(PACKAGE_DIR)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	packageNames := []string{}
-	for _, f := range files {
-		packageNames = append(packageNames, strings.Trim(f.Name(), ".rb"))
-	}
-	return packageNames
-}
+// 	packageNames := []string{}
+// 	for _, f := range files {
+// 		packageNames = append(packageNames, strings.Trim(f.Name(), ".rb"))
+// 	}
+// 	return packageNames
+// }
 
-func createNameIdPackageMap(packages []string) {
-	for _, packageName := range packages {
-		PKGS_MAP[packageName] = PKG_ID
-		PKG_ID++
-	}
-}
+// func createNameIdPackageMap(packages []string) {
+// 	for _, packageName := range packages {
+// 		PKGS_MAP[packageName] = PKG_ID
+// 		PKG_ID++
+// 	}
+// }
 
 func contains(s []string, searchterm string) bool {
 	i := sort.SearchStrings(s, searchterm)

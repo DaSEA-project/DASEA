@@ -102,6 +102,14 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 | Operating system
 |`$ poetry run dasea mine brew`
 
+// Chromebrew
+| ChromeOS packages
+| Chromebrew
+| https://github.com/skycocker/chromebrew/tree/master/packages
+| Operating system
+|`$ poetry run dasea mine chromebrew`
+
+
 // FreeBSD
 | FreeBSD ports
 | Ports

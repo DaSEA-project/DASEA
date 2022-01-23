@@ -11,7 +11,7 @@ from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
 
 CHROMEBREW_REGISTRY = "https://github.com/skycocker/chromebrew"
-TMP_DIR     = "./data/tmp/chromebrew"
+TMP_DIR = "./data/tmp/chromebrew"
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
 PKGS_FILE = f"data/out/chromebrew/chromebrew_packages_{TODAY}.csv"
@@ -27,19 +27,20 @@ LOGGER = logging.getLogger(__name__)
 
 def _collect_pkg_registry():
     try:
-      git.Repo.clone_from(CHROMEBREW_REGISTRY, TMP_DIR)
+        git.Repo.clone_from(CHROMEBREW_REGISTRY, TMP_DIR)
     except Exception as err:
         raise IOError("Cannot download Chromebew registry.")
 
 
 def _get_pkg_names():
     pkg_names = []
-    file_names = os.listdir(TMP_DIR + '/packages')
+    file_names = os.listdir(TMP_DIR + "/packages")
 
     for file_name in file_names:
-        pkg_names.append(file_name.replace('.rb', ''))
+        pkg_names.append(file_name.replace(".rb", ""))
 
     return pkg_names
+
 
 def _collect_packages(metadata_dict):
     pkg_idx_map = {}
@@ -55,30 +56,30 @@ def _collect_packages(metadata_dict):
 def _collect_versions(pkg_idx_map):
     versions = []
     version_idx = 0
-    file_names = os.listdir(TMP_DIR + '/packages')
+    file_names = os.listdir(TMP_DIR + "/packages")
     for file_name in file_names:
-        with open(TMP_DIR + '/packages/' + file_name, 'r') as file:
-            pkg_name = file_name.replace('.rb', '')
+        with open(TMP_DIR + "/packages/" + file_name, "r") as file:
+            pkg_name = file_name.replace(".rb", "")
             pkg_idx = pkg_idx_map.get(pkg_name, None)
 
             for line in file:
                 if "description '" in line:
-                    description = re.sub("description ","",line).strip().strip("'")
+                    description = re.sub("description ", "", line).strip().strip("'")
 
                 if "homepage '" in line:
-                    homepage = re.sub("homepage ","",line).strip().strip("'")
+                    homepage = re.sub("homepage ", "", line).strip().strip("'")
 
                 if "version '" in line:
-                    version = re.sub("version ","",line).strip().strip("'")
+                    version = re.sub("version ", "", line).strip().strip("'")
 
                 if "@_ver = '" in line:
-                    version = re.sub("@_ver = ","",line).strip().strip("'")
+                    version = re.sub("@_ver = ", "", line).strip().strip("'")
 
                 if "license '" in line:
-                    license = re.sub("license ","",line).strip().strip("'")
+                    license = re.sub("license ", "", line).strip().strip("'")
 
                 if "source_url '" in line:
-                    repository = re.sub("source_url ","",line).strip().strip("'")
+                    repository = re.sub("source_url ", "", line).strip().strip("'")
 
             v = Version(
                 idx=version_idx,
@@ -89,22 +90,22 @@ def _collect_versions(pkg_idx_map):
                 homepage=homepage,
                 license=license,
                 repository=repository,
-                author = None,
-                maintainer = None,
+                author=None,
+                maintainer=None,
             )
             versions.append(v)
             version_idx += 1
     return versions
 
 
-def _collect_dependencies(versions_lst,pkg_idx_map):
+def _collect_dependencies(versions_lst, pkg_idx_map):
     deps = []
     version_idx = 0
 
-    file_names = os.listdir(TMP_DIR + '/packages')
+    file_names = os.listdir(TMP_DIR + "/packages")
     for file_name in file_names:
-        with open(TMP_DIR + '/packages/' + file_name, 'r') as file:
-            pkg_name = file_name.replace('.rb', '')
+        with open(TMP_DIR + "/packages/" + file_name, "r") as file:
+            pkg_name = file_name.replace(".rb", "")
             source_pkg_idx = pkg_idx_map.get(pkg_name, None)
 
             for line in file:
@@ -122,7 +123,7 @@ def _collect_dependencies(versions_lst,pkg_idx_map):
                             source_name=pkg_name,
                             target_name=dep_name,
                             source_version=versions_lst[version_idx].version,
-                            target_version= versions_lst[target_pkg_idx].version if target_pkg_idx != None else None,
+                            target_version=versions_lst[target_pkg_idx].version if target_pkg_idx != None else None,
                             # double check this
                             kind=Kind.BUILD.name,
                         )
@@ -143,7 +144,7 @@ def mine():
 
     pkg_idx_map, packages_lst = _collect_packages(pkg_names)
     versions_lst = _collect_versions(pkg_idx_map)
-    deps_lst = _collect_dependencies(versions_lst,pkg_idx_map)
+    deps_lst = _collect_dependencies(versions_lst, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)

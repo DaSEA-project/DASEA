@@ -65,7 +65,7 @@ def _collect_pkg_metadata():
     next_page = r.json()["meta"]["next_page"]
     while next_page:
         if page_idx % 50 == 0:
-            print(page_idx)
+            LOGGER.info(page_idx)
         r = requests.get(CRATES_URL.format(page_idx=page_idx))
         crates_info += r.json()["crates"]
         next_page = r.json()["meta"]["next_page"]
@@ -94,6 +94,39 @@ def _parse_crates(crates_docs):
             crate_info[col] = c[col]
         crates_infos.append(crate_info)
     return crates_infos
+
+
+def get_remote_data(url, pkg_name, version_num=None):
+    if version_num:
+        url = url.format(name=pkg_name, version=version_num)
+    else:
+        url = url.format(name=pkg_name)
+    while True:
+        # Or better go for a Retry object???
+        # https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
+        try:
+            r = requests.get(url)
+            break
+        except requests.exceptions.ConnectionError:
+            LOGGER.info("Connection refused. I will try again in 5 secs...")
+            sleep(5)
+            continue
+        except requests.exceptions.ConnectionResetError:
+            LOGGER.info("Connection refused. I will try again in 5 secs...")
+            sleep(5)
+            continue
+        except Exception as e:
+            LOGGER.error(e)
+            sleep(5)
+            continue
+
+    if not r.ok:
+        if version_num:
+            LOGGER.warning(f"{r.status_code} VERSION {pkg_name} {version_num}")
+        else:
+            LOGGER.warning(f"{r.status_code} PKG {pkg_name}")
+
+    return r
 
 
 def iterative_data_collection(pkgs_lst):
@@ -136,11 +169,7 @@ def iterative_data_collection(pkgs_lst):
             fp.flush()
             os.fsync(fp)
 
-            r = requests.get(CRATE_URL.format(name=pkg_name))
-            if not r.ok:
-                LOGGER.warning(f"{r.status_code} PKG {pkg_name}")
-                continue
-
+            r = get_remote_data(CRATE_URL, pkg_name)
             for version_info in r.json()["versions"]:
                 crate = {}
                 if type(version_info["crate"]) == dict:
@@ -171,11 +200,7 @@ def iterative_data_collection(pkgs_lst):
                 os.fsync(fv)
                 version_idx += 1
 
-                r = requests.get(VERSION_URL.format(name=pkg_name, version=version_num))
-                if not r.ok:
-                    LOGGER.warning(f"{r.status_code} VERSION {pkg_name} {version_num}")
-                    continue
-
+                r = get_remote_data(VERSION_URL, pkg_name, version_num)
                 for dep_info in r.json().get("dependencies", []):
                     d = CargoDependency(
                         pkg_idx=pkg_idx_map.get(pkg_name, None),

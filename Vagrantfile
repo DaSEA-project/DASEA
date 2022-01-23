@@ -473,8 +473,8 @@ Vagrant.configure("2") do |config|
 
       # Since the above does not seem to work for some reason in the 
       # non-interactive shell, I use the absolute path to pyenv in the following
-      pyenv install 3.9.4
-      pyenv global 3.9.4
+      $HOME/.pyenv/bin/pyenv install 3.9.4
+      $HOME/.pyenv/bin/pyenv global 3.9.4
 
       # TODO: Consider dropping poetry installation on remote by building the
       # DASEA package locally and install the tgz via pip on remote
@@ -483,7 +483,7 @@ Vagrant.configure("2") do |config|
       source $HOME/.bashrc
 
       cd /vagrant
-      poetry install
+      $HOME/.local/bin/poetry install
       # nohup poetry run dasea mine cargo > /tmp/cargo.log 2>&1 &
     SHELL
   end

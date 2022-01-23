@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/heyjoakim/DASEA/common/helpers"
-	"github.com/heyjoakim/DASEA/core/chromebrew"
 	"github.com/heyjoakim/DASEA/core/conan"
 	"github.com/heyjoakim/DASEA/core/fpm"
 )
@@ -19,8 +18,6 @@ func main() {
 			fpm.Traverse()
 		case "conan":
 			conan.Traverse()
-		case "chromebrew":
-			chromebrew.Traverse()
 		case "release-dataset":
 			helpers.ReleaseDataset()
 		default:

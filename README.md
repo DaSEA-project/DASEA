@@ -14,6 +14,7 @@ Current:
 - Chromebrew (ChromeOS)
 
 Coming soon:
+
 - NixOS
 
 Access datasets at [DASEA](https://heyjoakim.github.io/DASEA/)
@@ -63,8 +64,7 @@ Licensed by the [GNU Affero General Public License v3.0](https://github.com/heyj
 
 Note: if you get a webrick-related [error](https://github.com/jekyll/jekyll/issues/8523), run `bundle add webrick`
 
-
-------------------------------------
+---
 
 # Mining in General
 
@@ -72,8 +72,8 @@ Every ecosystem that can be mined remotely, i.e., by sending requests to web-API
 
 Requirements are:
 
-  * Python >= 3.9
-  * Poetry setup
+- Python >= 3.9
+- Poetry setup
 
 The following three steps have to be executed only once initially.
 
@@ -83,10 +83,8 @@ $ cd <DASEA>
 $ poetry install
 ```
 
-The latter command installs 
+The latter command installs
 Eventually, we will distribute DASEA as a Python package via PyPI.
-
-
 
 ## Alire
 
@@ -115,11 +113,17 @@ Nimble is [Nim's package manager](https://github.com/nim-lang/nimble)
 $ dasea mine nimble
 ```
 
+## Chromebrew
+
+Chromebrew is [ChromeOS's package manager](https://github.com/skycocker/chromebrew)
+
+$ poetry shell
+[poetry]$ dasea mine chromebrew
+
 ## BSD Packages
 
 Mining of the respective packages takes place in Virtualbox virtual machines that are managed with Vagrant.
 That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins SCP and reload have to be installed.
-
 
 ### Mining FreeBSD Ports
 
@@ -129,7 +133,6 @@ Mining the Makefiles of the FreeBSD ports tree takes approximately an hour.
 $ vagrant up freebsd11
 $ bash bin/get_freebsd_ports.sh
 ```
-
 
 ### Mining OpenBSD Ports
 
@@ -146,6 +149,3 @@ Mining the Makefiles of the PkgSrc Makefiles takes in between 3.5 to 5 hours, de
 $ vagrant up netbsd9
 $ bash bin/get_netbsd_pkgsrc.sh
 ```
-
-
-

@@ -1,16 +1,11 @@
 import os
+import csv
 import json
 import logging
-import operator
 import requests
-import itertools
-from pathlib import Path
-from bs4 import BeautifulSoup
 from datetime import datetime
 from dataclasses import dataclass
-from collections import defaultdict
 from dasea.datamodel import Package, Version, Dependency, Kind
-from dasea.utils import _serialize_data
 
 
 # Based on the documentation form here:
@@ -70,7 +65,7 @@ def _collect_pkg_metadata():
     next_page = r.json()["meta"]["next_page"]
     while next_page:
         if page_idx % 50 == 0:
-            print(page_idx)
+            LOGGER.info(page_idx)
         r = requests.get(CRATES_URL.format(page_idx=page_idx))
         crates_info += r.json()["crates"]
         next_page = r.json()["meta"]["next_page"]
@@ -101,137 +96,136 @@ def _parse_crates(crates_docs):
     return crates_infos
 
 
-def _collect_version_metadata(pkgs_name_lst):
-    LOGGER.info("Collecting package versions from the web, it takes some hours..")
-    pkg_versions_map = {}
-    for pkg_name in pkgs_name_lst:
-        r = requests.get(CRATE_URL.format(name=pkg_name))
-        if not r.ok:
-            # print(r.status_code, "PKG", pkg_name)
-            LOGGER.warning(f"{r.status_code} PKG {pkg_name}")
+def get_remote_data(url, pkg_name, version_num=None):
+    if version_num:
+        url = url.format(name=pkg_name, version=version_num)
+    else:
+        url = url.format(name=pkg_name)
+    while True:
+        # Or better go for a Retry object???
+        # https://stackoverflow.com/questions/23013220/max-retries-exceeded-with-url-in-requests
+        try:
+            r = requests.get(url)
+            break
+        except requests.exceptions.ConnectionError:
+            LOGGER.info("Connection refused. I will try again in 5 secs...")
+            sleep(5)
             continue
-        pkg_versions_map[pkg_name] = r.json()["versions"]
-    return pkg_versions_map
+        except requests.exceptions.ConnectionResetError:
+            LOGGER.info("Connection refused. I will try again in 5 secs...")
+            sleep(5)
+            continue
+        except Exception as e:
+            LOGGER.error(e)
+            sleep(5)
+            continue
+
+    if not r.ok:
+        if version_num:
+            LOGGER.warning(f"{r.status_code} VERSION {pkg_name} {version_num}")
+        else:
+            LOGGER.warning(f"{r.status_code} PKG {pkg_name}")
+
+    return r
 
 
-def _collect_dependency_metadata(version_idx_map):
-    LOGGER.info("Collecting version dependencies from the web, it takes some hours..")
-    version_deps_map = defaultdict(dict)
-    for pkg_name, version_info in version_idx_map.items():
-        for version_num, version_idx in version_info.items():
-            print(pkg_name, version_num)
-            r = requests.get(VERSION_URL.format(name=pkg_name, version=version_num))
-            if not r.ok:
-                # print(r.status_code, "VERSION", pkg_name, version_num)
-                LOGGER.warning(f"{r.status_code} VERSION {pkg_name} {version_num}")
-                continue
-
-            version_deps_map[pkg_name][version_num] = r.json().get("dependencies", [])
-    return version_deps_map
-
-
-def _collect_packages(pkg_name_lst):
-    packages = []
-    pkg_idx_map = {}
-    for idx, pkg_info in enumerate(pkg_name_lst):
-        p = CargoPackage(
-            idx=idx,
-            name=pkg_info["name"],
-            pkgman="Cargo",
-            description=pkg_info["description"],
-            homepage=pkg_info["homepage"],
-            repository=pkg_info["repository"],
-        )
-        packages.append(p)
-        pkg_idx_map[pkg_info["name"]] = idx
-
-    return pkg_idx_map, packages
-
-
-def _collect_versions(version_metadata_dict, pkg_idx_map):
-    versions = []
-    version_idx = 0
-    version_idx_map = defaultdict(dict)
-    for pkg_name, version_info_lst in version_metadata_dict.items():
-        for version_info in version_info_lst:
-            crate = {}
-            if type(version_info["crate"]) == dict:
-                crate = version_info["crate"]
-            published_by = {}
-            if version_info["published_by"]:
-                published_by = version_info["published_by"]
-
-            v = CargoVersion(
-                idx=version_idx,
-                pkg_idx=pkg_idx_map.get(pkg_name, None),
-                name=pkg_name,
-                version=version_info["num"],
-                license=version_info["license"],
-                description=crate.get("description", None),
-                homepage=published_by.get("url", None),
-                repository=crate.get("repository", None),
-                author=published_by.get("name", None),  # or shall the login be taken?
-                maintainer=None,  # There is no such information
-                author_nick=published_by.get("login", None),
-                created_at=version_info["created_at"],
-                updated_at=version_info["updated_at"],
-                no_downloads=version_info["downloads"],
-            )
-            versions.append(v)
-            version_idx += 1
-
-            version_idx_map[pkg_name][version_info["num"]] = version_idx
-
-    return version_idx_map, versions
-
-
-def _collect_dependencies(version_idx_map, deps_metadata_dict, pkg_idx_map):
-    deps = []
+def iterative_data_collection(pkgs_lst):
     dep_kind_map = {
         "normal": Kind.NORMAL.name,
         "dev": Kind.DEV.name,
         "build": Kind.BUILD.name,
     }
+    pkg_idx_map = {p["name"]: idx for idx, p in enumerate(pkgs_lst)}
 
-    for pkg_name, version_idx_lst in version_idx_map.items():
-        for version_num, version_idx in version_idx_lst.items():
-            for dep_info in deps_metadata_dict[pkg_name][version_num]:
-                d = CargoDependency(
+    version_idx = 0
+
+    with open(PKGS_FILE, "a") as fp, open(VERSIONS_FILE, "a") as fv, open(DEPS_FILE, "a") as fd:
+        pkgs_csv_writer = csv.writer(fp)
+        versions_csv_writer = csv.writer(fv)
+        deps_csv_writer = csv.writer(fd)
+
+        pkgs_csv_writer.writerow(CargoPackage(None, None, None, None, None, None).__dict__.keys())
+        versions_csv_writer.writerow(
+            CargoVersion(
+                None, None, None, None, None, None, None, None, None, None, None, None, None, None
+            ).__dict__.keys()
+        )
+        deps_csv_writer.writerow(
+            CargoDependency(None, None, None, None, None, None, None, None, None, None, None).__dict__.keys()
+        )
+
+        for pkg_idx, pkg_info in enumerate(pkgs_lst):
+            pkg_name = pkg_info["name"]
+
+            pkg = CargoPackage(
+                idx=pkg_idx,
+                name=pkg_name,
+                pkgman="Cargo",
+                description=pkg_info["description"],
+                homepage=pkg_info["homepage"],
+                repository=pkg_info["repository"],
+            )
+            pkgs_csv_writer.writerow(pkg.__dict__.values())
+            fp.flush()
+            os.fsync(fp)
+
+            r = get_remote_data(CRATE_URL, pkg_name)
+            for version_info in r.json()["versions"]:
+                crate = {}
+                if type(version_info["crate"]) == dict:
+                    crate = version_info["crate"]
+                published_by = {}
+                if version_info["published_by"]:
+                    published_by = version_info["published_by"]
+                version_num = version_info["num"]
+                v = CargoVersion(
+                    idx=version_idx,
                     pkg_idx=pkg_idx_map.get(pkg_name, None),
-                    source_idx=version_idx,
-                    target_idx=pkg_idx_map[dep_info["crate_id"]],
-                    source_name=pkg_name,
-                    target_name=dep_info["crate_id"],
-                    source_version=version_idx,
-                    target_version=dep_info["req"],
-                    kind=dep_kind_map.get(dep_info["kind"], None),  # Kind.BUILD.name,
-                    kind_str=dep_info["kind"],
-                    optional=dep_info["optional"],
-                    target=dep_info["target"],
+                    name=pkg_name,
+                    version=version_num,
+                    license=version_info["license"],
+                    description=crate.get("description", None),
+                    homepage=published_by.get("url", None),
+                    repository=crate.get("repository", None),
+                    author=published_by.get("name", None),  # or shall the login be taken?
+                    maintainer=None,  # There is no such information
+                    author_nick=published_by.get("login", None),
+                    created_at=version_info["created_at"],
+                    updated_at=version_info["updated_at"],
+                    no_downloads=version_info["downloads"],
                 )
-                deps.append(d)
-    return deps
+
+                versions_csv_writer.writerow(v.__dict__.values())
+                fp.flush()
+                os.fsync(fv)
+                version_idx += 1
+
+                r = get_remote_data(VERSION_URL, pkg_name, version_num)
+                for dep_info in r.json().get("dependencies", []):
+                    d = CargoDependency(
+                        pkg_idx=pkg_idx_map.get(pkg_name, None),
+                        source_idx=version_idx,
+                        target_idx=pkg_idx_map[dep_info["crate_id"]],
+                        source_name=pkg_name,
+                        target_name=dep_info["crate_id"],
+                        source_version=version_idx,
+                        target_version=dep_info["req"],
+                        kind=dep_kind_map.get(dep_info["kind"], None),
+                        kind_str=dep_info["kind"],
+                        optional=dep_info["optional"],
+                        target=dep_info["target"],
+                    )
+                    deps_csv_writer.writerow(d.__dict__.values())
+                    fp.flush()
+                    os.fsync(fd)
 
 
 def mine():
     pkg_metadata_dict = _collect_pkg_metadata()
     pkgs_lst = _parse_crates(pkg_metadata_dict)
     LOGGER.info(f"There should be {len(pkgs_lst)} pkgs in the end.")
-    pkg_idx_map, packages_lst = _collect_packages(pkgs_lst)
-    _serialize_data(packages_lst, PKGS_FILE)
 
-    pkgs_name_lst = [p["name"] for p in pkgs_lst]
-    version_metadata_dict = _collect_version_metadata(pkgs_name_lst)
-    # -->
-    version_idx_map, versions_lst = _collect_versions(version_metadata_dict, pkg_idx_map)
-    _serialize_data(versions_lst, VERSIONS_FILE)
-    del versions_lst  # Free some RAM
-    del version_metadata_dict
-
-    deps_metadata_dict = _collect_dependency_metadata(version_idx_map)
-    deps_lst = _collect_dependencies(version_idx_map, deps_metadata_dict, pkg_idx_map)
-    _serialize_data(deps_lst, DEPS_FILE)
-
+    iterative_data_collection(pkgs_lst)
     # os.remove(INDEX_FILE)
 
 

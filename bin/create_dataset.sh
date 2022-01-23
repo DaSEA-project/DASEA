@@ -1,7 +1,17 @@
 #!/usr/bin/env bash
 
+# Runs long and remote, start it first
+vagrant up cargominer
+bash bin/get_cargo.sh
+vagrant destroy -f cargominer
+
 poetry run dasea mine alire
-poetry run dasea mine conan
+
+# TODO: Mine on a 2004 or even newer to get the latest gcc version automatically
+vagrant up ubuntu1804
+vagrant ssh ubuntu1804 --command "cd /vagrant/ && poetry run dasea mine conan"
+vagrant destroy -f ubuntu1804
+
 poetry run dasea mine fpm
 poetry run dasea mine nimble
 poetry run dasea mine vcpkg

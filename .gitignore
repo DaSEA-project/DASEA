@@ -27,7 +27,10 @@ data/tmp/conan/*
 !data/tmp/conan/.gitkeep
 
 !data/out/cargo/.gitkeep
+
 !data/tmp/cargo/.gitkeep
+!data/tmp/chromebrew/.gitkeep
+
 *.zip
 data/out/dasea_*
 

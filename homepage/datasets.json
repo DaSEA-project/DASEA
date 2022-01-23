@@ -1,1 +1,20 @@
-{"managers":["Conan","FPM","VCPKG"],"datasets":[{"date":"15-12-2021","url":"https://zenodo.org/record/5781670"}]}
+{
+  "managers": [
+    "Conan",
+    "FPM",
+    "VCPKG",
+    "Alire",
+    "Homebrew",
+    "Nimble",
+    "Chromebrew",
+    "Ports (FreeBSD)",
+    "Ports (OpenBSD)",
+    "PkgSrc"
+  ],
+  "datasets": [
+    {
+      "date": "15-12-2021",
+      "url": "https://zenodo.org/record/5781670"
+    }
+  ]
+}

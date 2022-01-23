@@ -31,6 +31,8 @@ data/tmp/conan/*
 !data/tmp/cargo/.gitkeep
 !data/tmp/chromebrew/.gitkeep
 
+data/tmp/nimble/*
+
 *.zip
 data/out/dasea_*
 

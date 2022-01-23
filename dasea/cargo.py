@@ -3,6 +3,7 @@ import csv
 import json
 import logging
 import requests
+import subprocess
 from datetime import datetime
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind
@@ -19,6 +20,7 @@ TODAY = datetime.today().strftime("%m-%d-%Y")
 PKGS_FILE = f"data/out/cargo/cargo_packages_{TODAY}.csv"
 VERSIONS_FILE = f"data/out/cargo/cargo_versions_{TODAY}.csv"
 DEPS_FILE = f"data/out/cargo/cargo_dependencies_{TODAY}.csv"
+DONE_FILE = "data/tmp/cargo/done"
 
 
 logging.basicConfig(
@@ -226,6 +228,18 @@ def mine():
     LOGGER.info(f"There should be {len(pkgs_lst)} pkgs in the end.")
 
     iterative_data_collection(pkgs_lst)
+
+    # Poor mans way to communicate to remote host that mining is complete
+    cmd = "hostname -I"
+    r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    host_ip = r.stdout.split()[0]
+    with open(DONE_FILE, "w") as fp:
+        fp.write(f"http://{host_ip}:8080/{PKGS_FILE}\n")
+        fp.write(f"http://{host_ip}:8080/{VERSIONS_FILE}\n")
+        fp.write(f"http://{host_ip}:8080/{DEPS_FILE}")
+
+    cmd = "nohup python -m http.server 8080 --directory /vagrant/data/out/cargo/ &"
+    subprocess.run(cmd, shell=True)
     # os.remove(INDEX_FILE)
 
 

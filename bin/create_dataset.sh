@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Runs long and remote, start it first
+# Runs long and remote, start it first?
 vagrant up cargominer
 bash bin/get_cargo.sh
 vagrant destroy -f cargominer

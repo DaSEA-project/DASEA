@@ -62,11 +62,15 @@ def collect_dependency_info(name, version):
     # Remember that the `conan` tool has to be on PATH
     outfile = Path(CONAN_METADATA, name, f"{version}.json")
     if not outfile.is_file():
-        cmd = f"conan info -n requires {name}/{version}@ --json {outfile}"
-        r = subprocess.run(cmd, shell=True)
-        if r.returncode != 0:
+        cmd_linux = f"conan info -s os='Linux' -n requires {name}/{version}@ --json {outfile}"
+        r_lin = subprocess.run(cmd_linux,shell=True)
+        if r_lin.returncode != 0:
             # TODO: log cmd error message?
-            LOGGER.error(f"Omitting {name}/{version}@ on {sys.platform}")
+            LOGGER.error(f"Error getting info from {name}/{version}@ on {sys.platform}, trying with target os as Windows")
+            cmd_win = f"conan info -s os='Windows' -n requires {name}/{version}@ --json {outfile}"
+            r_win = subprocess.run(cmd_win, shell=True)
+            if r_win.returncode != 0:
+                LOGGER.error(f"Ommiting {name}/{version}@ with os target Windows on {sys.platform}")
 
 
 def read_meta_data(name, version):
@@ -146,9 +150,7 @@ def mine():
     name_version_lst = create_name_version_lst(pkg_config_files)
 
     # Collect for each package version a metadata JSON file via the `conan` tool
-    # This takes ca. two hours, and it only collects information for packages that can be build on this platform.
-    # TODO: Run the collection on Windows, Linux, and MacOS and subsequently
-    # merge the collected data, i.e., implement Joakims fix for this
+    # This takes ca. two hours, and collects information for packages build on Linux or Windows.
     for name, version in name_version_lst:
         collect_dependency_info(name, version)
 

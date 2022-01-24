@@ -8,7 +8,8 @@ from datetime import datetime
 from dataclasses import dataclass
 from dasea.datamodel import Package, Version, Dependency, Kind
 
-
+# TODO: Switch mining to database dump: https://crates.io/data-access
+# TODO: Add request header as specified here https://crates.io/policies
 # Based on the documentation form here:
 CRATES_URL = "https://crates.io/api/v1/crates?page={page_idx}&per_page=100"
 CRATE_URL = "https://crates.io/api/v1/crates/{name}"
@@ -20,7 +21,7 @@ TODAY = datetime.today().strftime("%m-%d-%Y")
 PKGS_FILE = f"data/out/cargo/cargo_packages_{TODAY}.csv"
 VERSIONS_FILE = f"data/out/cargo/cargo_versions_{TODAY}.csv"
 DEPS_FILE = f"data/out/cargo/cargo_dependencies_{TODAY}.csv"
-DONE_FILE = "data/tmp/cargo/done"
+DONE_FILE = "data/out/cargo/done"
 
 
 logging.basicConfig(
@@ -207,7 +208,7 @@ def iterative_data_collection(pkgs_lst):
                     d = CargoDependency(
                         pkg_idx=pkg_idx_map.get(pkg_name, None),
                         source_idx=version_idx,
-                        target_idx=pkg_idx_map[dep_info["crate_id"]],
+                        target_idx=pkg_idx_map.get(dep_info["crate_id"], None),
                         source_name=pkg_name,
                         target_name=dep_info["crate_id"],
                         source_version=version_idx,

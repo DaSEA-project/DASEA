@@ -64,7 +64,7 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 |Ecosystem |Package Manager |Repository |Ecosystem Kind |How-to Mine?
 
 // Alire
-| ADA
+| Ada
 | Alire
 | https://github.com/alire-project/alire-index.git
 | Programming Language
@@ -75,6 +75,12 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 |
 | Programming Language
 |`$ poetry run dasea mine conan`
+// VCPKG
+| C/C++
+| VCPKG
+| https://vcpkg.io/output.json
+| Programming Language
+|`$ poetry run dasea mine vcpkg`
 // FPM
 | Fortran
 | FPM
@@ -87,13 +93,12 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 | https://raw.githubusercontent.com/nim-lang/packages/master/packages.json
 | Programming Language
 |`$ poetry run dasea mine nimble`
-// VCPKG
-| C/C++
-| VCPKG
-| https://vcpkg.io/output.json
+// Cargo
+| Rust
+| Cargo
+| https://crates.io/api/v1/crates
 | Programming Language
-|`$ poetry run dasea mine vcpkg`
-
+|`$ poetry run dasea mine cargo`
 
 // Homebrew
 | MacOS packages
@@ -101,15 +106,12 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 | https://formulae.brew.sh/api/formula.json
 | Operating system
 |`$ poetry run dasea mine brew`
-
 // Chromebrew
 | ChromeOS packages
 | Chromebrew
 | https://github.com/skycocker/chromebrew/tree/master/packages
 | Operating system
 |`$ poetry run dasea mine chromebrew`
-
-
 // FreeBSD
 | FreeBSD ports
 | Ports
@@ -118,7 +120,6 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 | Operating system
 |`$ vagrant up freebsd11` +
 `$ bash bin/get_freebsd_ports.sh`
-
 // NetBSD
 | NetBSD packages
 | PkgSrc

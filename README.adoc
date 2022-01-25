@@ -56,8 +56,6 @@ Therefore, in these cases mining takes place in Virtualbox virtual machines that
 That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` and `reload` have to be installed.
 
 
-
-
 .Currently supported miners and how to execute them.
 [width="100%",cols="5%,5%,40%,10%,40%",options="header",]
 |=======================================================================

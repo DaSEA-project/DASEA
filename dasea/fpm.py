@@ -10,9 +10,9 @@ from dasea.utils import _serialize_data
 FPM_REGISTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json"
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
-PKGS_FILE = f"data/out/fpm/fpm_packages_{TODAY}.csv"
-VERSIONS_FILE = f"data/out/fpm/fpm_versions_{TODAY}.csv"
-DEPS_FILE = f"data/out/fpm/fpm_dependencies_{TODAY}.csv"
+PKGS_FILE = f"../data/out/fpm/fpm_packages_{TODAY}.csv"
+VERSIONS_FILE = f"../data/out/fpm/fpm_versions_{TODAY}.csv"
+DEPS_FILE = f"../data/out/fpm/fpm_dependencies_{TODAY}.csv"
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"
@@ -45,7 +45,13 @@ def _collect_versions(metadata_dict, pkg_idx_map):
     versions = []
     version_idx = 0
     for pkg_name, data in metadata_dict.items():
+        package_versions = []
         for version, version_info in data.items():
+            # Add version number to list, to check if version appears more than once in package registry
+            if version_info["version"] in package_versions:
+                continue
+
+            package_versions.append(version_info["version"])
             pkg_idx = pkg_idx_map.get(pkg_name, None)
             v = Version(
                 idx=version_idx,
@@ -68,9 +74,14 @@ def _collect_dependencies(metadata_dict, pkg_idx_map):
     deps = []
     version_idx = 0
     for idx, (pkg_name, data) in enumerate(metadata_dict.items()):
+        package_versions = []
         for version, version_info in data.items():
-            source_pkg_idx = pkg_idx_map.get(pkg_name, None)
+            # Add version number to list, to check if version appears more than once in package registry
+            if version in package_versions:
+                continue
+            package_versions.append(version_info["version"])
 
+            source_pkg_idx = pkg_idx_map.get(pkg_name, None)
             deps_decl = version_info.get("dependencies", {})
             dev_deps_decl = version_info.get("dev-dependencies", {})
             if deps_decl == None:

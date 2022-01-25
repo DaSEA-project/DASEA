@@ -70,7 +70,7 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 // Conan
 | C/C++
 | Conan
-|
+| https://github.com/conan-io/conan-center-index
 | Programming Language
 |`$ poetry run dasea mine conan`
 // VCPKG

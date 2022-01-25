@@ -10,9 +10,9 @@ from dasea.utils import _serialize_data
 FPM_REGISTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json"
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
-PKGS_FILE = f"../data/out/fpm/fpm_packages_{TODAY}.csv"
-VERSIONS_FILE = f"../data/out/fpm/fpm_versions_{TODAY}.csv"
-DEPS_FILE = f"../data/out/fpm/fpm_dependencies_{TODAY}.csv"
+PKGS_FILE = f"data/out/fpm/fpm_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/fpm/fpm_versions_{TODAY}.csv"
+DEPS_FILE = f"data/out/fpm/fpm_dependencies_{TODAY}.csv"
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"

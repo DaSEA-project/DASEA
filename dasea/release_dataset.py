@@ -9,16 +9,17 @@ from datetime import datetime, timedelta
 
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
-DATA_DIR = "data/out"
+DATA_DIR = "data/out/"
 
 
 def create_compressed_archive():
-    glob_pattern = f"{DATA_DIR}/**/*.csv"
+    glob_pattern = f"{DATA_DIR}**/*.csv"
     data_files = glob(glob_pattern, recursive=True)
+    data_files = [d.replace(DATA_DIR, "") for d in data_files]
 
-    archive_file = Path(DATA_DIR, f"dasea_{TODAY}.tar.bz2")
+    archive_file = f"dasea_{TODAY}.tar.bz2"
     cmd = f"tar -cvjf {archive_file} {' '.join(data_files)}"
-    r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    r = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=DATA_DIR)
     if r.returncode != 0:
         print(f"Cannot create archive {archive_file}", file=sys.stderr)
         sys.exit(1)
@@ -30,21 +31,20 @@ def create_compressed_archive():
     # print(r.status_code)
     # print(json.dumps(r.json(), indent=2))
 
+
 def update_homepage(new_dataset_url):
     filename = "homepage/datasets.json"
-    file = open(filename,'r+')
+    file = open(filename, "r+")
     file_data = json.load(file)
     print(file_data)
 
-    latest_release = {
-        "date": TODAY,
-        "url": new_dataset_url
-    }
+    latest_release = {"date": TODAY, "url": new_dataset_url}
 
-    file_data['datasets'].append(latest_release)
+    file_data["datasets"].append(latest_release)
 
     file.seek(0)
-    json.dump(file_data, file, indent = 4)
+    json.dump(file_data, file, indent=4)
+
 
 def push_dataset_to_zenodo(dataset_path):
     # API Documentation is here:

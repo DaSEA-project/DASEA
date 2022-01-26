@@ -25,21 +25,21 @@ To get an overview over which ecosystems are included in the respective dataset 
 
 ```
 $ tar -tvjf dasea_01-14-2022.tar.bz2
--rw-r--r--  0 user   staff    5162 Jan 14 15:16 data/out/alire/alire_packages_01-14-2022.csv
--rw-r--r--  0 user   staff   94991 Jan 14 15:16 data/out/alire/alire_versions_01-14-2022.csv
--rw-r--r--  0 user   staff   27035 Jan 14 15:16 data/out/alire/alire_dependencies_01-14-2022.csv
--rw-r--r--  0 user   staff  133668 Jan 14 15:18 data/out/homebrew/homebrew_packages_01-14-2022.csv
--rw-r--r--  0 user   staff 1093756 Jan 14 15:18 data/out/homebrew/homebrew_versions_01-14-2022.csv
--rw-r--r--  0 user   staff  669156 Jan 14 15:18 data/out/homebrew/homebrew_dependencies_01-14-2022.csv
--rw-r--r--  0 user   staff    1954 Jan 14 15:17 data/out/fpm/fpm_dependencies_01-14-2022.csv
--rw-r--r--  0 user   staff     663 Jan 14 15:17 data/out/fpm/fpm_packages_01-14-2022.csv
--rw-r--r--  0 user   staff    7011 Jan 14 15:17 data/out/fpm/fpm_versions_01-14-2022.csv
--rw-r--r--  0 user   staff  262594 Jan 14 15:17 data/out/vcpkg/vcpkg_versions_01-14-2022.csv
--rw-r--r--  0 user   staff   37836 Jan 14 15:17 data/out/vcpkg/vcpkg_packages_01-14-2022.csv
--rw-r--r--  0 user   staff  296420 Jan 14 15:17 data/out/vcpkg/vcpkg_dependencies_01-14-2022.csv
--rw-r--r--  0 user   staff   60884 Jan 14 15:17 data/out/conan/conan_dependencies_01-14-2022.csv
--rw-r--r--  0 user   staff   21328 Jan 14 15:17 data/out/conan/conan_packages_01-14-2022.csv
--rw-r--r--  0 user   staff  455922 Jan 14 15:17 data/out/conan/conan_versions_01-14-2022.csv
+-rw-r--r--  0 user   staff    5162 Jan 14 15:16 alire/alire_packages_01-14-2022.csv
+-rw-r--r--  0 user   staff   94991 Jan 14 15:16 alire/alire_versions_01-14-2022.csv
+-rw-r--r--  0 user   staff   27035 Jan 14 15:16 alire/alire_dependencies_01-14-2022.csv
+-rw-r--r--  0 user   staff  133668 Jan 14 15:18 homebrew/homebrew_packages_01-14-2022.csv
+-rw-r--r--  0 user   staff 1093756 Jan 14 15:18 homebrew/homebrew_versions_01-14-2022.csv
+-rw-r--r--  0 user   staff  669156 Jan 14 15:18 homebrew/homebrew_dependencies_01-14-2022.csv
+-rw-r--r--  0 user   staff    1954 Jan 14 15:17 fpm/fpm_dependencies_01-14-2022.csv
+-rw-r--r--  0 user   staff     663 Jan 14 15:17 fpm/fpm_packages_01-14-2022.csv
+-rw-r--r--  0 user   staff    7011 Jan 14 15:17 fpm/fpm_versions_01-14-2022.csv
+-rw-r--r--  0 user   staff  262594 Jan 14 15:17 vcpkg/vcpkg_versions_01-14-2022.csv
+-rw-r--r--  0 user   staff   37836 Jan 14 15:17 vcpkg/vcpkg_packages_01-14-2022.csv
+-rw-r--r--  0 user   staff  296420 Jan 14 15:17 vcpkg/vcpkg_dependencies_01-14-2022.csv
+-rw-r--r--  0 user   staff   60884 Jan 14 15:17 conan/conan_dependencies_01-14-2022.csv
+-rw-r--r--  0 user   staff   21328 Jan 14 15:17 conan/conan_packages_01-14-2022.csv
+-rw-r--r--  0 user   staff  455922 Jan 14 15:17 conan/conan_versions_01-14-2022.csv
 ```
 
 The output shows that in this version of the dataset contains the package dependency networks from the ADA package manager Alire, the MacOS package manager Homebrew, the Fortran package manager FPM, and the C/C++ package managers Conan and VCPKG.
@@ -56,9 +56,9 @@ To only extract the dependency networks of a single package manager, or to extra
 For example, the dependency network from the Fortran packages in FPM can be extracted as in the following:
 
 ```bash
-tar -jxf dasea_01-14-2022.tar.bz2 data/out/fpm/fpm_packages_01-14-2022.csv
-tar -jxf dasea_01-14-2022.tar.bz2 data/out/fpm/fpm_versions_01-14-2022.csv
-tar -jxf dasea_01-14-2022.tar.bz2 data/out/fpm/fpm_dependencies_01-14-2022.csv
+tar -jxf dasea_01-14-2022.tar.bz2 fpm/fpm_packages_01-14-2022.csv
+tar -jxf dasea_01-14-2022.tar.bz2 fpm/fpm_versions_01-14-2022.csv
+tar -jxf dasea_01-14-2022.tar.bz2 fpm/fpm_dependencies_01-14-2022.csv
 ```
 
 ### Example use cases
@@ -80,8 +80,8 @@ from sqlalchemy import create_engine
 
 db_engine = create_engine('sqlite://')  # in memory DB
 
-deps_df = pd.read_csv("data/out/ports/netbsd9/netbsd9_dependencies_01-14-2022.csv")
-# deps_df = pd.read_csv("data/out/alire/alire_dependencies_01-14-2022.csv")
+deps_df = pd.read_csv("ports/netbsd9/netbsd9_dependencies_01-14-2022.csv")
+# deps_df = pd.read_csv("alire/alire_dependencies_01-14-2022.csv")
 deps_df.to_sql("Dependencies", db_engine)
 
 query = """SELECT target_name, COUNT(target_name) AS indegree FROM Dependencies
@@ -180,8 +180,8 @@ from pathlib import Path
 
 
 def create_adjacency_lists():
-    pkgs_df = pd.read_csv("data/out/conan/conan_packages_01-14-2022.csv")
-    deps_df = pd.read_csv("data/out/conan/conan_dependencies_01-14-2022.csv")
+    pkgs_df = pd.read_csv("conan/conan_packages_01-14-2022.csv")
+    deps_df = pd.read_csv("conan/conan_dependencies_01-14-2022.csv")
     deps_df = deps_df[(~deps_df.pkg_idx.isnull()) & (~deps_df.target_idx.isnull())]
 
     fname = Path(tempfile.gettempdir(), "conan.adjl")
@@ -284,7 +284,7 @@ To store the names and the licenses of these package in another `DataFrame` (`rd
 import pandas as pd
 
 
-df = pd.read_csv("data/out/conan/conan_versions_01-14-2022.csv")
+df = pd.read_csv("conan/conan_versions_01-14-2022.csv")
 rdf = df.groupby("pkg_idx").filter(lambda x: len(set(x.license)) > 1).groupby("name").apply(lambda x: set(x.license)).reset_index(name="licenses")
 print(rdf.to_html())
 ```
@@ -380,11 +380,11 @@ import pandas as pd
 from pathlib import Path
 
 
-pkgs_df = pd.read_csv("data/out/conan/conan_packages_01-14-2022.csv")
+pkgs_df = pd.read_csv("conan/conan_packages_01-14-2022.csv")
 pkgs_df.rename(columns={"idx": "Id", "name": "Label"}, inplace=True)
 pkgs_df.to_csv(Path("/tmp", "conan_gephi_nodes.csv"), index=False)
 
-deps_df = pd.read_csv("data/out/conan/conan_dependencies_01-14-2022.csv")
+deps_df = pd.read_csv("conan/conan_dependencies_01-14-2022.csv")
 
 deps_df = deps_df[(~deps_df.pkg_idx.isnull()) & (~deps_df.target_idx.isnull())]
 deps_df.pkg_idx = deps_df.pkg_idx.astype(np.uint)

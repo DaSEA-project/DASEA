@@ -187,14 +187,14 @@ def _collect_dependencies(crates_csv, versions_csv, deps_csv):
 def mine():
     LOGGER.info("Downloading database dump...")
     dump_file = Path(TMP_DIR, "db_dump.tar.gz")
-    # with open(dump_file, "wb") as fp:
-    #     r = requests.get(CARGO_DB_DUMP_URL)
-    #     fp.write(r.content)
-    # LOGGER.info("Extracting database dump...")
-    # with tarfile.open(dump_file) as fp:
-    #     fp.extractall(TMP_DIR)
+    with open(dump_file, "wb") as fp:
+        r = requests.get(CARGO_DB_DUMP_URL)
+        fp.write(r.content)
+    LOGGER.info("Extracting database dump...")
+    with tarfile.open(dump_file) as fp:
+        fp.extractall(TMP_DIR)
 
-    # os.remove(dump_file)
+    os.remove(dump_file)
     dataset_dir = glob(TMP_DIR + "*")[0]  # TODO: is it always the last?
     dataset_dir = Path(dataset_dir, "data")
 

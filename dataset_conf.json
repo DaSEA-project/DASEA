@@ -1,25 +1,25 @@
 {
   "title": "DaSEA - Dataset for Software Ecosystem Analysis",
-  "description": "A continuously updated dataset of dependency networks covering various software ecosystems. Read more on https://<organization>.github.io/DaSEA/",
+  "description": "A continuously updated dataset of dependency networks covering various software ecosystems. Read more on https://github.com/dependulum/DASEA",
   "access_right": "open",
   "license": "CC-BY-SA-4.0",
   "upload_type": "dataset",
   "creators": [
     {
-      "name": "Joakim Hey Hinnerskov <jhhi@itu.dk>",
-      "affiliation": "IT University of Copenhagen"
+      "name": "Placeholder <place@placeholder.com>",
+      "affiliation": "Placeholder"
     },
     {
-      "name": "Kasper Olsen <kols@itu.dk>",
-      "affiliation": "IT University of Copenhagen"
+      "name": "Placeholder <place@placeholder.com>",
+      "affiliation": "Placeholder"
     },
     {
-      "name": "Petya Dimitrova Buchkova <pebu@itu.dk>",
-      "affiliation": "IT University of Copenhagen"
+      "name": "Placeholder <place@placeholder.com>",
+      "affiliation": "Placeholder"
     },
     {
-      "name": "Helge Pfeiffer <ropf@itu.dk>",
-      "affiliation": "IT University of Copenhagen"
+      "name": "Placeholder <place@placeholder.com>",
+      "affiliation": "Placeholder"
     }
   ]
 }

@@ -27,6 +27,7 @@ data/tmp/conan/*
 !data/tmp/conan/.gitkeep
 
 !data/out/cargo/.gitkeep
+data/out/cargo/*
 
 !data/tmp/cargo/.gitkeep
 !data/tmp/chromebrew/.gitkeep
@@ -35,6 +36,7 @@ data/tmp/nimble/*
 
 *.zip
 data/out/dasea_*
+data/*.tar.bz2
 
 # OS files
 .DS_Store

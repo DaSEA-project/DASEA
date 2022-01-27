@@ -54,8 +54,8 @@ def push_dataset_to_zenodo(dataset_path):
     metadata_config_file = "dataset_conf.json"
 
     zenodo_api_token = os.environ["ZENODO_API_TOKEN"]
-    api_url = "https://zenodo.org/api/"
-    # api_url = "https://sandbox.zenodo.org/api/"  # Development testing API, for some reason it does not work with the token
+    #api_url = "https://zenodo.org/api/"
+    api_url = "https://sandbox.zenodo.org/api/"  # Development testing API, for some reason it does not work with the token
     deposit_url = f"{api_url}deposit/depositions"
     params = {"access_token": zenodo_api_token}
 

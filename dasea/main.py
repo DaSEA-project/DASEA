@@ -5,7 +5,7 @@ A tool to mine dependency networks from various software ecosystems.
 Usage:
   dasea mine <pkgmanager>
   dasea release
-  dasea push <dataset>
+  dasea push [--sandbox] <dataset>
 
 Options:
   -h --help     Show this screen.
@@ -81,7 +81,7 @@ def main():
     elif arguments["push"]:
         from dasea.release_dataset import push_dataset_to_zenodo
 
-        push_dataset_to_zenodo(arguments["<dataset>"])
+        push_dataset_to_zenodo(arguments["<dataset>"], sandbox=arguments["--sandbox"])
 
 
 if __name__ == "__main__":

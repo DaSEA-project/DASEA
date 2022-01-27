@@ -46,7 +46,7 @@ def update_homepage(new_dataset_url):
     json.dump(file_data, file, indent=4)
 
 
-def push_dataset_to_zenodo(dataset_path):
+def push_dataset_to_zenodo(dataset_path, sandbox=False):
     # API Documentation is here:
     # https://developers.zenodo.org/?python#quickstart-upload
     release_date_str = Path(dataset_path).name.replace("dasea_", "").split(".")[0]
@@ -58,10 +58,11 @@ def push_dataset_to_zenodo(dataset_path):
     except:
         print(f"Cannot find ZENODO_API_TOKEN in environment", file=sys.stderr)
         sys.exit(1)
-    # api_url = "https://zenodo.org/api/"
-    api_url = (
-        "https://sandbox.zenodo.org/api/"  # Development testing API, for some reason it does not work with the token
-    )
+
+    if sandbox:
+        api_url = "https://sandbox.zenodo.org/api/"
+    else:
+        api_url = "https://zenodo.org/api/"
     deposit_url = f"{api_url}deposit/depositions"
     params = {"access_token": zenodo_api_token}
 

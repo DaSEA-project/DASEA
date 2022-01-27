@@ -148,7 +148,7 @@ def _collect_dependencies(crates_csv, versions_csv, deps_csv):
         inplace=True,
     )
 
-    short_cdf = cdf[["pkg_idx", "name"]]
+    short_cdf = cdf[["pkg_idx", "name"]].copy()
     short_cdf.rename(
         columns={
             "pkg_idx": "target_idx",

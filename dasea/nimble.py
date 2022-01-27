@@ -41,6 +41,7 @@ class NimblePackage(Package):
 
 
 def _collect_pkg_registry():
+    LOGGER.info("Collecting Nimble registry...")
     r = requests.get(NIMBLE_REGISTRY)
     if not r.ok:
         raise IOError("Cannot download Nimble registry.")
@@ -175,7 +176,9 @@ def mine():
         LOGGER.error(e)
         sys.exit(1)
 
+    LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_lst)
+    LOGGER.info("Creating DaSEA versions and dependencies...")
     versions_lst, deps_lst = _collect_versions(metadata_lst, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)

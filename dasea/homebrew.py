@@ -18,6 +18,7 @@ DEPS_FILE = f"data/out/homebrew/homebrew_dependencies_{TODAY}.csv"
 
 
 def _collect_formulae():
+    LOGGER.info("Collecting Homebrew registry...")
     # Alternatively, they could also be cloned and parsed with Ruby from
     # https://github.com/Homebrew/homebrew-core/tree/master/Formula
     r = requests.get(BREW_FORMULA_URL)
@@ -144,8 +145,11 @@ def mine():
 
     pkg_idx_map = {f["name"]: idx for idx, f in enumerate(formulae)}
 
+    LOGGER.info("Creating DaSEA packages...")
     packages_lst = _collect_packages(pkg_idx_map)
+    LOGGER.info("Creating DaSEA versions...")
     versions_lst = _collect_versions(formulae, pkg_idx_map)
+    LOGGER.info("Creating DaSEA dependencies...")
     deps_lst = _collect_dependencies(formulae, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)

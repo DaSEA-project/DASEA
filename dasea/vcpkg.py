@@ -26,6 +26,7 @@ class VCPKGDependency(Dependency):
 
 
 def _collect_pkg_registry():
+    LOGGER.info("Collecting vcpkg registry...")
     r = requests.get(VCPKG_REGISTRY)
     if not r.ok:
         raise IOError("Cannot download VCPKG registry.")
@@ -100,8 +101,11 @@ def mine():
         sys.exit(1)
     pkg_names = [d["Name"] for d in metadata_lst]
 
+    LOGGER.info("Creating DaSEA dependencies...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_lst)
+    LOGGER.info("Creating DaSEA versions...")
     versions_lst = _collect_versions(metadata_lst, pkg_idx_map)
+    LOGGER.info("Creating DaSEA packages...")
     deps_lst = _collect_dependencies(metadata_lst, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)

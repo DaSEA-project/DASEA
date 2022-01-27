@@ -22,6 +22,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def _collect_pkg_registry():
+    LOGGER.info("Downloading FPM registry...")
     r = requests.get(FPM_REGISTRY)
     if not r.ok:
         raise IOError("Cannot download FPM registry.")
@@ -129,8 +130,11 @@ def mine():
         sys.exit(1)
     pkg_names = list(metadata_dict.keys())
 
+    LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
+    LOGGER.info("Creating DaSEA versions...")
     versions_lst = _collect_versions(metadata_dict, pkg_idx_map)
+    LOGGER.info("Creating DaSEA dependencies...")
     deps_lst = _collect_dependencies(metadata_dict, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)

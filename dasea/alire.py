@@ -33,6 +33,7 @@ class AlireDependency(Dependency):
 
 
 def clone_index_repo():
+    LOGGER.info("Downloading Alire registry")
     if Path(ALIRE_INDEX_LOCAL).is_dir():
         cmd = f"git -C {ALIRE_INDEX_LOCAL} pull"
     else:
@@ -135,8 +136,11 @@ def mine():
     pkg_name_lst = sorted(set([Path(p).parts[-2] for p in pkg_config_files]))
     metadata_lst = [read_meta_data(p) for p in pkg_config_files]
 
+    LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(pkg_name_lst)
+    LOGGER.info("Creating DaSEA versions...")
     versions_lst = _collect_versions(metadata_lst, pkg_idx_map)
+    LOGGER.info("Creating DaSEA dependencies...")
     deps_lst = _collect_dependencies(metadata_lst, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)

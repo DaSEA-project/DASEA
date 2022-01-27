@@ -43,6 +43,7 @@ def _get_pkg_names():
 
 
 def _collect_packages(metadata_dict):
+    LOGGER.info("Collecting Chromebrew registry...")
     pkg_idx_map = {}
     packages = []
     for idx, pkg_name in enumerate(metadata_dict):
@@ -141,9 +142,11 @@ def mine():
         sys.exit(1)
 
     pkg_names = _get_pkg_names()
-
+    LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(pkg_names)
+    LOGGER.info("Creating DaSEA versions...")
     versions_lst = _collect_versions(pkg_idx_map)
+    LOGGER.info("Creating DaSEA dependencies...")
     deps_lst = _collect_dependencies(versions_lst, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)

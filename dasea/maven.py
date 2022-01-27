@@ -38,6 +38,11 @@ from dasea.datamodel import Package, Version, Dependency, Kind
 from dasea.utils import _serialize_data
 
 # 22773
+# TODO: Switch to:
+# https://maven.apache.org/repository/central-index.html
+# https://github.com/borisbaldassari/maven-index-exporter
+# https://stackoverflow.com/questions/5776519/how-to-parse-unzip-unpack-maven-repository-indexes-generated-by-nexus
+
 
 # BASE_URL = "https://repo1.maven.org/maven2/"
 BASE_URL = "https://repo.maven.apache.org/maven2/"  # Apache mirror

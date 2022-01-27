@@ -373,31 +373,25 @@ def _collect_dependencies(mk_file_metadata_map, pkg_idx_map):
     return dependencies
 
 
-import pickle
-# oioioi = "/usr/home/vagrant/data2.pickle"
-oioioi = "/home/vagrant/data2.pickle"
-
 def mine():
-    print("Collecting Makefiles")
+    LOGGER.info("Collecting Makefiles")
     port_mk_files = _collect_mk_files()
-    print(f"Found {len(port_mk_files)} ports...")
-    if Path(oioioi).is_file():
-        with open(oioioi, "rb") as fp:
-            mk_file_metadata_map = pickle.load(fp)
-    else:
-        mk_file_metadata_map = _collect_metadata(port_mk_files)
-        with open(oioioi, "wb") as fp:
-            pickle.dump(mk_file_metadata_map, fp)
+    LOGGER.info(f"Found {len(port_mk_files)} ports...")
 
+    LOGGER.info("Parsing metadata from Makefiles...")
+    mk_file_metadata_map = _collect_metadata(port_mk_files)
 
+    LOGGER.info("Converting packages to DaSEA...")
     pkg_idx_map, packages_lst = _collect_packages(mk_file_metadata_map)
     _serialize_data(packages_lst, PKGS_FILE)
     del packages_lst  # free some memory
 
+    LOGGER.info("Converting versions to DaSEA...")
     versions_lst = _collect_versions(mk_file_metadata_map, pkg_idx_map)
     _serialize_data(versions_lst, VERSIONS_FILE)
     del versions_lst  # free some memory
 
+    LOGGER.info("Converting dependencies to DaSEA...")
     deps_lst = _collect_dependencies(mk_file_metadata_map, pkg_idx_map)
     _serialize_data(deps_lst, DEPS_FILE)
     del deps_lst  # free some memory

@@ -53,9 +53,15 @@ def push_dataset_to_zenodo(dataset_path):
     # TODO: Move that to another place once the package gets distributed via PyPI
     metadata_config_file = "dataset_conf.json"
 
-    zenodo_api_token = os.environ["ZENODO_API_TOKEN"]
-    #api_url = "https://zenodo.org/api/"
-    api_url = "https://sandbox.zenodo.org/api/"  # Development testing API, for some reason it does not work with the token
+    try:
+        zenodo_api_token = os.environ["ZENODO_API_TOKEN"]
+    except:
+        print(f"Cannot find ZENODO_API_TOKEN in environment", file=sys.stderr)
+        sys.exit(1)
+    # api_url = "https://zenodo.org/api/"
+    api_url = (
+        "https://sandbox.zenodo.org/api/"  # Development testing API, for some reason it does not work with the token
+    )
     deposit_url = f"{api_url}deposit/depositions"
     params = {"access_token": zenodo_api_token}
 

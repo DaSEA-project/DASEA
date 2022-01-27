@@ -8,12 +8,12 @@ image:artwork/logo.png[image]
 DaSEA is the name of a dataset of software dependency networks of various ecosystems.
 In this repository is the code and documentation of the `dasea` tool, which mines, creates, and releases new versions of the dataset
 
-The latest versions of the dataset are available from https://<orgname>.github.io/DASEA/[DASEA].
+The latest versions of the dataset are available from https://dependulum.github.io/DASEA/[DASEA].
 
 
 === Contribute
 
-See link:https://github.com/<orgname>/DASEA/blob/main/CONTRIBUTE.md[CONTRIBUTE.md] file
+See link:https://github.com/dependulum/DASEA/blob/main/CONTRIBUTE.md[CONTRIBUTE.md] file
 
 ==== Running Tests
 
@@ -26,7 +26,7 @@ $ poetry run pytest tests
 
 === License
 
-The source code in this repository, i.e., the `dasea` tool is licensed under link:https://github.com/<orgname>/DASEA/blob/main/LICENSE[GNU Affero General Public License v3.0]
+The source code in this repository, i.e., the `dasea` tool is licensed under link:https://github.com/dependulum/DASEA/blob/main/LICENSE[GNU Affero General Public License v3.0]
 
 
 === Mining the Dataset
@@ -36,15 +36,15 @@ Every ecosystem that can be mined remotely, i.e., by sending requests to web-API
 
 Requirements are:
 
-  * Python >= 3.9, for example installed via [`pyenv`](https://github.com/pyenv/pyenv)
-  * Poetry setup, see the [official documentation](https://python-poetry.org/docs/) for installation and use
+  * Python >= 3.9, for example installed via https://github.com/pyenv/pyenv[pyenv]
+  * Poetry setup, see the https://python-poetry.org/docs/[official documentation] for installation and use
   * For miners running in virtual machines, which are currently the ports and pkgsrc miners on BSDs, vagrant and VirtualBox have to be installed
   * To release the dataset, `tar` and `bzip2` have to be installed and users need a Zenodo API token
 
 The following three steps have to be executed only once initially.
 
 [source,bash]
-$ git clone https://...
+$ git clone git@github.com...
 $ cd <DASEA>
 $ poetry install
 

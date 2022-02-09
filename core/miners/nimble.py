@@ -9,8 +9,8 @@ from shutil import which
 from dataclasses import dataclass
 from urllib.parse import urlparse
 from datetime import datetime
-from dasea.datamodel import Package, Version, Dependency, Kind
-from dasea.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
+from core.common.utils import _serialize_data
 
 NIMBLE_MINE_DIR = "data/tmp/nimble"
 NIMBLE_REGISTRY = "https://raw.githubusercontent.com/nim-lang/packages/master/packages.json"

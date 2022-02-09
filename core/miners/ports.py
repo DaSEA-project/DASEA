@@ -4,8 +4,8 @@ from glob import glob
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
-from dasea.datamodel import Package, Version, Dependency, Kind
-from dasea.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
+from core.common.utils import _serialize_data
 
 
 logging.basicConfig(
@@ -166,7 +166,7 @@ def _process_metadata(mk_info, port_mk_file):
             "FETCH_DEPENDS",
             "EXTRACT_DEPENDS",
             "PATCH_DEPENDS",
-            "TEST_DEPENDS",  # OpenBSD and NetBSD  
+            "TEST_DEPENDS",  # OpenBSD and NetBSD
             "USES",
             # NetBSD values:
             "DEPENDS",
@@ -257,8 +257,8 @@ def _collect_versions(mk_file_metadata_map, pkg_idx_map):
         # pg-toolbox-$V
         # metaauto-${VERSION}
         # ${GH_PROJECT}-${GH_TAGNAME:C/^(v|V|ver|[Rr]el|[Rr]elease)[-._]?([0-9])/\2/}
-        # In future some of these values should be expanded. However, OpenBSD `make` does not support this unlike 
-        # FreeBSD `make` with `-v` instead of `-V` 
+        # In future some of these values should be expanded. However, OpenBSD `make` does not support this unlike
+        # FreeBSD `make` with `-v` instead of `-V`
     elif PLATFORM_STR.startswith("netbsd"):
         # NetBSD does not have such a field. Version numbers are stored in DISTNAME (and sometimes in PKGNAME) and
         # They are not easily extracted from these since they do not follow a common schema.
@@ -299,7 +299,7 @@ def _extract_dep_port_tree_id(dep_decl_str):
                 dep_port_tree_id = dep_els[1]
             else:
                 dep_port_tree_id = dep_els[0]
-        # Detach the port flavor from the porttree id 
+        # Detach the port flavor from the porttree id
         dep_port_tree_id_els = dep_port_tree_id.split(",")
         dep_port_tree_id = dep_port_tree_id_els[0]
     elif PLATFORM_STR.startswith("netbsd"):
@@ -381,17 +381,17 @@ def mine():
     LOGGER.info("Parsing metadata from Makefiles...")
     mk_file_metadata_map = _collect_metadata(port_mk_files)
 
-    LOGGER.info("Converting packages to DaSEA...")
+    LOGGER.info("Converting packages to core...")
     pkg_idx_map, packages_lst = _collect_packages(mk_file_metadata_map)
     _serialize_data(packages_lst, PKGS_FILE)
     del packages_lst  # free some memory
 
-    LOGGER.info("Converting versions to DaSEA...")
+    LOGGER.info("Converting versions to core...")
     versions_lst = _collect_versions(mk_file_metadata_map, pkg_idx_map)
     _serialize_data(versions_lst, VERSIONS_FILE)
     del versions_lst  # free some memory
 
-    LOGGER.info("Converting dependencies to DaSEA...")
+    LOGGER.info("Converting dependencies to core...")
     deps_lst = _collect_dependencies(mk_file_metadata_map, pkg_idx_map)
     _serialize_data(deps_lst, DEPS_FILE)
     del deps_lst  # free some memory

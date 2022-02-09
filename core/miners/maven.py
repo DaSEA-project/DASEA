@@ -1,8 +1,8 @@
 """
-This program is expensive to run! Identification of all POM files from the 
+This program is expensive to run! Identification of all POM files from the
 remote server takes 1.5 to two weeks. There are more than 1.6 millions of these.
-The POM identification process writes also quite a bit to disc! On every step, 
-i.e., for parsing of each website, all links that remain to be mined are newly 
+The POM identification process writes also quite a bit to disc! On every step,
+i.e., for parsing of each website, all links that remain to be mined are newly
 stored to the REMAINING_URLS_FILE. The reason for that is to be able to continue the process in case of a failure.
 
 On every sent request REQUESTS_COUNTER_FILE is overwritten with a new value.
@@ -12,8 +12,8 @@ This program drew inspiration from https://github.com/yegor256/scrape-maven-cent
 TODO: Keep the POM files around so that in future only a "delta" has to be mined
 and downloaded. That requires a bit of a rewrite of the logic under `get_pom_links()` and `download_pom(path)`.
 
-WARNING: Before running this program against the Maven central repository, 
-contact the team since it is not in accordance with their terms of service 
+WARNING: Before running this program against the Maven central repository,
+contact the team since it is not in accordance with their terms of service
 https://repo1.maven.org/terms.html.
 
 Since this program is running for more than a week it is best started with:
@@ -34,8 +34,8 @@ from pathlib import Path
 from datetime import datetime
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
-from dasea.datamodel import Package, Version, Dependency, Kind
-from dasea.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
+from core.common.utils import _serialize_data
 
 # 22773
 # TODO: Switch to:

@@ -1,6 +1,6 @@
 from glob import glob
 from pathlib import Path
-from dasea.fpm import mine
+from core.fpm import mine
 
 
 DATA_DIR = "data/out/fpm/"

@@ -7,8 +7,8 @@ from glob import glob
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
-from dasea.datamodel import Package, Version, Dependency, Kind
-from dasea.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
+from core.common.utils import _serialize_data
 
 
 ALIRE_INDEX_URL = "https://github.com/alire-project/alire-index.git"

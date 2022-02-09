@@ -1,6 +1,6 @@
 from glob import glob
 from pathlib import Path
-from dasea.homebrew import mine
+from core.homebrew import mine
 
 
 DATA_DIR = "data/out/homebrew/"

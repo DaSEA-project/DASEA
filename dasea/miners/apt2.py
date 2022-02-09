@@ -1,8 +1,8 @@
 import requests
 import subprocess
 from dataclasses import dataclass
-from dasea.datamodel import Package, Version, Dependency, Kind
-from dasea.utils import _serialize_data
+from dasea.helpers.datamodel import Package, Version, Dependency, Kind
+from dasea.helpers.utils import _serialize_data
 from collections import defaultdict
 from tqdm import tqdm
 
@@ -150,7 +150,7 @@ def _parse_apt_block(lines, kind="binary"):
             continue
 
         splitted_line = line.split(": ", 1)
-        if len(splitted_line) > 1: 
+        if len(splitted_line) > 1:
             key, value = splitted_line
             if key in key_set:
                 version_dict[key] = value
@@ -173,7 +173,7 @@ def _parse_relation(rel_str):
         elif "<" in dep_els[1]:
             # contains other constraint
             pass
-    
+
     dep_target = rel_str.split(" ", 1)
 
 
@@ -186,8 +186,8 @@ def _parse_relations(lst_str):
             disjunction_dep_els = d.split("|")
             disjunction_dep_els = [d.strip() for d in disjunction_dep_els]
         else:
-            
-        
+
+
 
 
         if len(dep_els) == 1:

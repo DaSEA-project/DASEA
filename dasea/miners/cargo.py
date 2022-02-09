@@ -6,7 +6,7 @@ import pandas as pd
 from glob import glob
 from pathlib import Path
 from datetime import datetime
-from dasea.datamodel import Kind
+from dasea.helpers.datamodel import Kind
 
 
 TODAY = datetime.today().strftime("%m-%d-%Y")

@@ -1,8 +1,8 @@
 import requests
 import subprocess
 from dataclasses import dataclass
-from dasea.datamodel import Package, Version, Dependency, Kind
-from dasea.utils import _serialize_data
+from dasea.helpers.datamodel import Package, Version, Dependency, Kind
+from dasea.helpers.utils import _serialize_data
 from collections import defaultdict
 from mongita import MongitaClientDisk
 from tqdm import tqdm
@@ -225,7 +225,7 @@ def _parse_version_deps(metainfo_str):
         else:
             key, value = line.split(": ", 1)
             version_dict[key] = value
-            # TODO: in case of Depends and some others parse value 
+            # TODO: in case of Depends and some others parse value
             # split on ",", strip, extract version in ()
 
     return version_dicts

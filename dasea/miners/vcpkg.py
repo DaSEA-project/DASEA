@@ -2,8 +2,8 @@ import logging
 import requests
 from datetime import datetime
 from dataclasses import dataclass
-from dasea.helpers.datamodel import Package, Version, Dependency, Kind
-from dasea.helpers.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
+from dasea.common.utils import _serialize_data
 
 
 VCPKG_REGISTRY = "https://vcpkg.io/output.json"

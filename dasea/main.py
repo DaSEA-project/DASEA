@@ -75,11 +75,11 @@ def main():
             sys.exit(127)
 
     elif arguments["release"]:
-        from dasea.helpers.release_dataset import create_compressed_archive
+        from dasea.common.release_dataset import create_compressed_archive
 
         create_compressed_archive()
     elif arguments["push"]:
-        from dasea.helpers.release_dataset import push_dataset_to_zenodo
+        from dasea.common.release_dataset import push_dataset_to_zenodo
 
         push_dataset_to_zenodo(arguments["<dataset>"], sandbox=arguments["--sandbox"])
 

@@ -7,8 +7,8 @@ from glob import glob
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
-from dasea.helpers.datamodel import Package, Version, Dependency, Kind
-from dasea.helpers.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
+from dasea.common.utils import _serialize_data
 
 
 CONAN_INDEX_URL = "https://github.com/conan-io/conan-center-index"

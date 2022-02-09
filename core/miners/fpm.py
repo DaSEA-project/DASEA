@@ -3,8 +3,8 @@ import csv
 import logging
 import requests
 from datetime import datetime
-from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
+from core.common.utils import _serialize_data
 
 
 FPM_REGISTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json"

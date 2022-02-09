@@ -1,8 +1,8 @@
 import requests
 import subprocess
 from dataclasses import dataclass
-from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
+from core.common.utils import _serialize_data
 from collections import defaultdict
 from tqdm import tqdm
 

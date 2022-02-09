@@ -34,8 +34,8 @@ from pathlib import Path
 from datetime import datetime
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
-from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
+from core.common.utils import _serialize_data
 
 # 22773
 # TODO: Switch to:

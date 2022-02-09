@@ -1,6 +1,6 @@
 from glob import glob
 from pathlib import Path
-from dasea.nimble import mine
+from core.nimble import mine
 
 
 DATA_DIR = "data/out/nimble/"

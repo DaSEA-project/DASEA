@@ -1,6 +1,6 @@
 from glob import glob
 from pathlib import Path
-from dasea.alire import mine
+from core.alire import mine
 
 
 DATA_DIR = "data/out/alire/"

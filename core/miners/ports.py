@@ -4,8 +4,8 @@ from glob import glob
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
-from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
+from core.common.utils import _serialize_data
 
 
 logging.basicConfig(
@@ -381,17 +381,17 @@ def mine():
     LOGGER.info("Parsing metadata from Makefiles...")
     mk_file_metadata_map = _collect_metadata(port_mk_files)
 
-    LOGGER.info("Converting packages to DaSEA...")
+    LOGGER.info("Converting packages to core...")
     pkg_idx_map, packages_lst = _collect_packages(mk_file_metadata_map)
     _serialize_data(packages_lst, PKGS_FILE)
     del packages_lst  # free some memory
 
-    LOGGER.info("Converting versions to DaSEA...")
+    LOGGER.info("Converting versions to core...")
     versions_lst = _collect_versions(mk_file_metadata_map, pkg_idx_map)
     _serialize_data(versions_lst, VERSIONS_FILE)
     del versions_lst  # free some memory
 
-    LOGGER.info("Converting dependencies to DaSEA...")
+    LOGGER.info("Converting dependencies to core...")
     deps_lst = _collect_dependencies(mk_file_metadata_map, pkg_idx_map)
     _serialize_data(deps_lst, DEPS_FILE)
     del deps_lst  # free some memory

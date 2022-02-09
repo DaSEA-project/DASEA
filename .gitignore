@@ -38,6 +38,8 @@ data/tmp/nimble/*
 data/out/dasea_*
 data/*.tar.bz2
 
+dist
+
 # OS files
 .DS_Store
 

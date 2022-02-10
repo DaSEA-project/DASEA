@@ -4,7 +4,6 @@ from datetime import datetime
 from core.common.datamodel import Package, Version, Dependency, Kind
 from core.common.utils import _serialize_data
 
-
 # The API documentation is here: https://formulae.brew.sh/docs/api/
 #  It does not mention any rate limits
 # Currently, we only mine MacOS formulae excluding casks. There would be two more URLs...

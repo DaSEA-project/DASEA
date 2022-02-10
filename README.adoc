@@ -141,8 +141,9 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 === Compatibility
 The following table shows which miners can run on which architecture.
 
+
 |===
-|Ecosystem |Package Manager |linux/arm64 |linux/amd64 |macOS M1 |macOS x86-64 (Intel) |Windows x86-64
+|*Ecosystem* |*Package Manager* |*linux/arm64* |*linux/amd64* |*macOS M1* |*macOS x86-64 (Intel)* |*Windows x86-64*
 |Ada
 |Alire
 |

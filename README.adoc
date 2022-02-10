@@ -139,50 +139,51 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 
 
 === Compatibility
+The following table shows which miners can run on which architecture.
 
 |===
 |Ecosystem |Package Manager |linux/arm64 |linux/amd64 |macOS M1 |macOS x86-64 (Intel) |Windows x86-64
 |Ada
 |Alire
 |
-|
-|
-|
+| ✅
+| ✅
+| ✅
 |
 |C/C++
 |Conan
 |
-|
-|
-|
+| ✅
+| ✅
+| ✅
 |
 |C/C++
 |VCPKG
 |
-|
-|
-|
+| ✅
+| ✅
+| ✅
 |
 |Fortran
 |FPM
 |
-|
 | ✅
-|
+| ✅
+| ✅
 |
 |Nim
 |Nimble
 |
 |
-|
+| ❌
 |
 |
 |Rust
 |Cargo
 |
-|
-|
-|
+| ✅
+| ✅
+| ✅
 |
 |macOS packages
 |Homebrew
@@ -194,9 +195,9 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 |ChromOS packages
 |Chromebrew
 |
-|
-|
-|
+| ✅
+| ✅
+| ✅
 |
 |FreeBSD ports
 |Ports
@@ -209,13 +210,14 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 |PkgSrc
 |
 |
-| 
+| ❌
 |
 |
 |OpenBSD
 |Ports
 |
 |
+| ❌
 |
 |
-||===
+|===

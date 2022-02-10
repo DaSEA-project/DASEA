@@ -1,4 +1,5 @@
 import requests
+import logging
 from datetime import datetime
 from core.common.datamodel import Package, Version, Dependency, Kind
 from core.common.utils import _serialize_data
@@ -15,6 +16,12 @@ TODAY = datetime.today().strftime("%m-%d-%Y")
 PKGS_FILE = f"data/out/homebrew/homebrew_packages_{TODAY}.csv"
 VERSIONS_FILE = f"data/out/homebrew/homebrew_versions_{TODAY}.csv"
 DEPS_FILE = f"data/out/homebrew/homebrew_dependencies_{TODAY}.csv"
+
+logging.basicConfig(
+    level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"
+)
+logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
+LOGGER = logging.getLogger(__name__)
 
 
 def _collect_formulae():

@@ -104,7 +104,7 @@ That is, on the host machine VirtualBox, Vagrant, and the Vagrant plugins `scp` 
 | Homebrew
 | https://formulae.brew.sh/api/formula.json
 | Operating system
-|`$ poetry run dasea mine brew`
+|`$ poetry run dasea mine homebrew`
 // Chromebrew
 | ChromeOS packages
 | Chromebrew

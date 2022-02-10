@@ -25,14 +25,16 @@ data/tmp/alire/*
 !data/tmp/alire/.gitkeep
 data/tmp/conan/*
 !data/tmp/conan/.gitkeep
+!data/tmp/cargo/.gitkeep
+data/tmp/cargo/*
+!data/tmp/chromebrew/.gitkeep
+!data/tmp/chromebrew/*
+
+data/tmp/nimble/*
+
 
 !data/out/cargo/.gitkeep
 data/out/cargo/*
-
-!data/tmp/cargo/.gitkeep
-!data/tmp/chromebrew/.gitkeep
-
-data/tmp/nimble/*
 
 *.zip
 data/out/dasea_*

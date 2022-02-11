@@ -1,4 +1,5 @@
 import os
+import shutil
 import logging
 import tarfile
 import requests
@@ -183,6 +184,11 @@ def _collect_dependencies(crates_csv, versions_csv, deps_csv):
     ddf.fillna("", inplace=True)
     ddf.to_csv(DEPS_FILE, index=False)
 
+def cleanup():
+    filelist = glob(os.path.join(TMP_DIR, "*"))
+    for f in filelist:
+        if not f.endswith(".gitkeep"):
+            shutil.rmtree(f)
 
 def mine():
     LOGGER.info("Downloading database dump...")
@@ -210,6 +216,8 @@ def mine():
     LOGGER.info("Converting dependencies to core...")
     _collect_dependencies(crates_csv, versions_csv, deps_csv)
 
+    cleanup()
+    
 
 if __name__ == "__main__":
     mine()

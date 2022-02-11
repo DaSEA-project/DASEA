@@ -1,16 +1,17 @@
+import os
 import sys
-import csv
+import shutil
 import logging
 import requests
 import subprocess
 from glob import glob
-from pathlib import Path
 from shutil import which
+from pathlib import Path
+from datetime import datetime
 from dataclasses import dataclass
 from urllib.parse import urlparse
-from datetime import datetime
-from core.common.datamodel import Package, Version, Dependency, Kind
 from core.common.utils import _serialize_data
+from core.common.datamodel import Package, Version, Dependency, Kind
 
 NIMBLE_MINE_DIR = "data/tmp/nimble"
 NIMBLE_REGISTRY = "https://raw.githubusercontent.com/nim-lang/packages/master/packages.json"
@@ -168,6 +169,11 @@ def _collect_versions(pkgs_lst, pkg_idx_map):
 
     return versions, deps
 
+def cleanup():
+    filelist = glob(os.path.join(NIMBLE_MINE_DIR, "*"))
+    for f in filelist:
+        if not f.endswith(".gitkeep"):
+            shutil.rmtree(f)
 
 def mine():
     try:
@@ -184,6 +190,8 @@ def mine():
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)
     _serialize_data(deps_lst, DEPS_FILE)
+
+    cleanup()
 
 
 if __name__ == "__main__":

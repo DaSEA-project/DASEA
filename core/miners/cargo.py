@@ -216,9 +216,8 @@ def mine():
     LOGGER.info("Converting dependencies to core...")
     _collect_dependencies(crates_csv, versions_csv, deps_csv)
 
-    cleanup()    
+    cleanup()
     
-
 
 if __name__ == "__main__":
     mine()

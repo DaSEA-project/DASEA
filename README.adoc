@@ -156,75 +156,75 @@ The following table shows which miners can run on which architecture.
 | ✅
 | ✅
 | ✅
-|
+|❌
 |C/C++
 |Conan
 |
 | ✅
 | ✅
 | ✅
-|
+|❌
 |C/C++
 |VCPKG
 |
 | ✅
 | ✅
 | ✅
-|
+|❌
 |Fortran
 |FPM
 |
 | ✅
 | ✅
 | ✅
-|
+|❌
 |Nim
 |Nimble
 |
 |
 | ✅
 |
-|
+|❌
 |Rust
 |Cargo
 |
 | ✅
 | ✅
 | ✅
-|
+|❌
 |macOS packages
 |Homebrew
 |
 | ✅
 | ✅
 | ✅
-|
+|❌
 |ChromOS packages
 |Chromebrew
 |
 | ✅
 | ✅
 | ✅
-|
+|❌
 |FreeBSD ports
 |Ports
 |
 | ✅
 | ❌
 | ✅
-|
+|❌
 |NetBSD pacakges
 |PkgSrc
 |
 |
 | ❌
 | ✅
-|
+|❌
 |OpenBSD
 |Ports
 |
 | ✅
 | ❌
 | ✅
-|
+|❌
 |===

@@ -149,7 +149,7 @@ The following table shows which miners can run on which architecture.
 
 [options="header",]
 |===
-|Ecosystem |Package Manager |linux/arm64 |linux/amd64 |macOS arm |macOS x86-64 (Intel) |Windows x86-64
+|Ecosystem |Package Manager |linux/arm64 |linux/amd64 |macOS arm (M1) |macOS x86-64 (Intel) |Windows x86-64
 |Ada
 |Alire
 |

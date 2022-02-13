@@ -7,7 +7,7 @@ import pandas as pd
 from glob import glob
 from pathlib import Path
 from datetime import datetime
-from core.common.datamodel import Kind
+from dasea.common.datamodel import Kind
 
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
@@ -209,11 +209,11 @@ def mine():
     users_csv = Path(dataset_dir, "users.csv")
     deps_csv = Path(dataset_dir, "dependencies.csv")
 
-    LOGGER.info("Converting packages to core...")
+    LOGGER.info("Converting packages to dasea...")
     _collect_packages(crates_csv)
-    LOGGER.info("Converting versions to core...")
+    LOGGER.info("Converting versions to dasea...")
     _collect_versions(crates_csv, versions_csv, users_csv)
-    LOGGER.info("Converting dependencies to core...")
+    LOGGER.info("Converting dependencies to dasea...")
     _collect_dependencies(crates_csv, versions_csv, deps_csv)
 
     cleanup()

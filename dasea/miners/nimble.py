@@ -10,8 +10,8 @@ from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
 from urllib.parse import urlparse
-from core.common.utils import _serialize_data
-from core.common.datamodel import Package, Version, Dependency, Kind
+from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 NIMBLE_MINE_DIR = "data/tmp/nimble"
 NIMBLE_REGISTRY = "https://raw.githubusercontent.com/nim-lang/packages/master/packages.json"

@@ -1,6 +1,6 @@
 from glob import glob
 from pathlib import Path
-from core.conan import mine
+from dasea.conan import mine
 
 
 DATA_DIR = "data/out/conan/"

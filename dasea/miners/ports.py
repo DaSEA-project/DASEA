@@ -274,12 +274,15 @@ def _collect_versions(mk_file_metadata_map, pkg_idx_map):
             name=pkg_name,
             version=mk_info.get(version_key, ""),
             license=mk_info.get("LICENSE", ""),  # OpenBSD does not have a LICENSE field
-            description=mk_info["COMMENT"],
+            # description=mk_info["COMMENT"],  # NetBSD fails on this line
+            description=mk_info.get("COMMENT", ""),
             homepage=mk_info.get("HOMEPAGE", ""),  # Only NetBSD has such a field
             repository=mk_info.get("GH_URL", None),
             author=None,
-            maintainer=mk_info["MAINTAINER"],
-            distname=mk_info["DISTNAME"]
+            # maintainer=mk_info["MAINTAINER"], # NetBSD fails on this line
+            maintainer=mk_info.get("MAINTAINER", ""),
+            # distname=mk_info["DISTNAME"] # NetBSD fails on this line
+            distname=mk_info.get("DISTNAME", ""),
         )
 
         versions.append(v)

@@ -6,7 +6,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  provision_do:
+  provision:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,10 +19,5 @@ jobs:
         with:
           token: ${{secrets.DO_ACCESS_TOKEN}}
       
-      - name: Provision droplet
-        run: doctl compute droplet list
-  test:
-    runs-on: ubuntu latest
-    steps:
       - name: Provision droplet
         run: doctl compute droplet list

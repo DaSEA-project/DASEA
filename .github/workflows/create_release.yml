@@ -17,8 +17,6 @@ jobs:
       - name: GitHub Action for DigitalOcean - doctl
         uses: digitalocean/action-doctl@v2.1.0
         with:
-        # Version of doctl to install
-          version: default
           token: ${{secrets.DO_ACCESS_TOKEN}}
       
 #      - name: Provision droplet

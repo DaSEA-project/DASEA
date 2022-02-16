@@ -1,14 +1,14 @@
 import sys
 import toml
-import json
+import shutil
 import logging
 import subprocess
 from glob import glob
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
-from core.common.datamodel import Package, Version, Dependency, Kind
-from core.common.utils import _serialize_data
+from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 
 ALIRE_INDEX_URL = "https://github.com/alire-project/alire-index.git"
@@ -146,6 +146,8 @@ def mine():
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)
     _serialize_data(deps_lst, DEPS_FILE)
+
+    shutil.rmtree(ALIRE_INDEX_LOCAL)
 
 
 if __name__ == "__main__":

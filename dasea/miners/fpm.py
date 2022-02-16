@@ -1,10 +1,9 @@
 import sys
-import csv
 import logging
 import requests
 from datetime import datetime
-from core.common.datamodel import Package, Version, Dependency, Kind
-from core.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
+from dasea.common.utils import _serialize_data
 
 
 FPM_REGISTRY = "https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json"
@@ -47,7 +46,7 @@ def _collect_versions(metadata_dict, pkg_idx_map):
     version_idx = 0
     for pkg_name, data in metadata_dict.items():
         package_versions = []
-        for version, version_info in data.items():
+        for _, version_info in data.items():
             # Add version number to list, to check if version appears more than once in package registry
             if version_info["version"] in package_versions:
                 continue

@@ -1,6 +1,6 @@
 from glob import glob
 from pathlib import Path
-from core.chromebrew import mine
+from dasea.miners.chromebrew import mine
 
 
 DATA_DIR = "data/out/chromebrew/"

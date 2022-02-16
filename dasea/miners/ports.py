@@ -4,8 +4,8 @@ from glob import glob
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
-from core.common.datamodel import Package, Version, Dependency, Kind
-from core.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
+from dasea.common.utils import _serialize_data
 
 
 logging.basicConfig(
@@ -274,12 +274,15 @@ def _collect_versions(mk_file_metadata_map, pkg_idx_map):
             name=pkg_name,
             version=mk_info.get(version_key, ""),
             license=mk_info.get("LICENSE", ""),  # OpenBSD does not have a LICENSE field
-            description=mk_info["COMMENT"],
+            # description=mk_info["COMMENT"],  # NetBSD fails on this line
+            description=mk_info.get("COMMENT", ""),
             homepage=mk_info.get("HOMEPAGE", ""),  # Only NetBSD has such a field
             repository=mk_info.get("GH_URL", None),
             author=None,
-            maintainer=mk_info["MAINTAINER"],
-            distname=mk_info["DISTNAME"]
+            # maintainer=mk_info["MAINTAINER"], # NetBSD fails on this line
+            maintainer=mk_info.get("MAINTAINER", ""),
+            # distname=mk_info["DISTNAME"] # NetBSD fails on this line
+            distname=mk_info.get("DISTNAME", ""),
         )
 
         versions.append(v)
@@ -381,17 +384,17 @@ def mine():
     LOGGER.info("Parsing metadata from Makefiles...")
     mk_file_metadata_map = _collect_metadata(port_mk_files)
 
-    LOGGER.info("Converting packages to core...")
+    LOGGER.info("Converting packages to dasea...")
     pkg_idx_map, packages_lst = _collect_packages(mk_file_metadata_map)
     _serialize_data(packages_lst, PKGS_FILE)
     del packages_lst  # free some memory
 
-    LOGGER.info("Converting versions to core...")
+    LOGGER.info("Converting versions to dasea...")
     versions_lst = _collect_versions(mk_file_metadata_map, pkg_idx_map)
     _serialize_data(versions_lst, VERSIONS_FILE)
     del versions_lst  # free some memory
 
-    LOGGER.info("Converting dependencies to core...")
+    LOGGER.info("Converting dependencies to dasea...")
     deps_lst = _collect_dependencies(mk_file_metadata_map, pkg_idx_map)
     _serialize_data(deps_lst, DEPS_FILE)
     del deps_lst  # free some memory

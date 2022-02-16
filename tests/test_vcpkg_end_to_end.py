@@ -1,6 +1,6 @@
 from glob import glob
 from pathlib import Path
-from core.vcpkg import mine
+from dasea.miners.vcpkg import mine
 
 
 DATA_DIR = "data/out/vcpkg/"

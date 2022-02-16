@@ -182,9 +182,9 @@ The following table shows which miners can run on which architecture.
 |Nim
 |Nimble
 |
-| ❌
 | ✅
-| ❌
+| ✅
+| ✅
 | ❌
 |Rust
 |Cargo

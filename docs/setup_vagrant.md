@@ -1,22 +1,22 @@
 # Locally setup Vagrant
 
-## 🍏 MacOS
+## 🍏 macOS
 
 ### Install VirtualBox
 
-Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) for OS X hosts.
+Download and install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) for macOS hosts.
 
-!! Make sure to allow VM and Vigrant on MacOS in System Preferences > Security & Privacy
+!! Make sure to allow VM and Vigrant on macOS in System Preferences > Security & Privacy
 
 ### Install Vagrant
 
 Download and install [Vagrant](https://www.vagrantup.com/downloads).
 
-!! Make sure to allow VM and Vigrant on MacOS in System Preferences > Security & Privacy
+!! Make sure to allow VM and Vigrant on macOS in System Preferences > Security & Privacy
 
 ### Install Vagrant plugins
 
-```bash
+```zsh
 vagrant plugin uninstall vagrant-vbguest
 vagrant plugin install vagrant-reload
 vagrant plugin install vagrant-scp

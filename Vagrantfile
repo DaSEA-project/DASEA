@@ -2,11 +2,15 @@ Vagrant.configure("2") do |config|
 # Needed on MacOS: https://github.com/dotless-de/vagrant-vbguest/issues/362
 
   # TODO: How to handle new OS version?
+  # Start FreeBSD VM
   config.vm.define "freebsd11", primary: false do |freebsd|
     freebsd.vm.box = "bento/freebsd-11"
+
+    # MacOS settings needed for vbguest
     if Vagrant.has_plugin?("vagrant-vbguest")
       config.vbguest.auto_update = false
     end
+
     # Private network is needed for synced folder to work, see https://www.vagrantup.com/docs/synced-folders/nfs#prerequisites
     freebsd.vm.network "private_network", ip: "192.168.20.2"
     # The two-way synced directories seem to be flaky with the FreeBSD guest.
@@ -52,7 +56,6 @@ Vagrant.configure("2") do |config|
 
       curl -sSL https://install.python-poetry.org | python3 -
       echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
-      # source $HOME/.bashrc
 
       mkdir -p /vagrant/data/tmp/ports/freebsd11
       mkdir -p /vagrant/data/out/ports/freebsd11
@@ -60,13 +63,11 @@ Vagrant.configure("2") do |config|
       cd /vagrant/
       $HOME/.local/bin/poetry install
 
-      # Start the actual mining process
-      # $HOME/.local/bin/poetry run dasea mine ports
-
     SHELL
   end
+  # End FreeBSD VM
 
-
+  # Start OpenBSD VM
   config.vm.define "openbsd69", primary: false do |openbsd|
     openbsd.vm.box = "generic/openbsd6"
     openbsd.vm.network "private_network", ip: "192.168.20.3"
@@ -109,8 +110,9 @@ Vagrant.configure("2") do |config|
 
     SHELL
   end
+  # End OpenBSD VM
 
-
+  # Start NetBSD VM
   config.vm.define "netbsd9", primary: false do |netbsd|
     netbsd.vm.box = "generic/netbsd9"
     netbsd.vm.network "private_network", ip: "192.168.20.4"
@@ -137,99 +139,83 @@ Vagrant.configure("2") do |config|
       tar -xzf pkgsrc.tar.gz -C /usr
       rm pkgsrc.tar.gz
     SHELL
-
-    # netbsd.vm.provision "shell", privileged: false, inline: <<-SHELL
-    #   echo ". $HOME/.bashrc" >> $HOME/.bash_profile
-
-    #   curl -sSL https://install.python-poetry.org | python -
-    #   echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
-    #   source $HOME/.bashrc
-
-    #   mkdir -p /vagrant/data/tmp/ports/netbsd9
-    #   mkdir -p /vagrant/data/out/ports/netbsd9
-
-    #   cd /vagrant/
-    #   $HOME/.local/bin/poetry install
-
-    #   # Start the actual mining process
-    #   # $HOME/.local/bin/poetry run dasea mine pkgsrc
-
-    # SHELL
   end
+  # End NetBSD VM
 
 
-  config.vm.define "ubuntu1804", primary: false do |ubuntu|
-    ubuntu.vm.box = "bento/ubuntu-18.04"
-    # To make the two-way sync work, the vbguest plugin has to be installed:
-    # vagrant plugin install vagrant-vbguest
-    ubuntu.vm.synced_folder "./", "/vagrant", type: "virtualbox"
+  # FIXME: Delete if not in use
+  # config.vm.define "ubuntu1804", primary: false do |ubuntu|
+  #   ubuntu.vm.box = "bento/ubuntu-18.04"
+  #   # To make the two-way sync work, the vbguest plugin has to be installed:
+  #   # vagrant plugin install vagrant-vbguest
+  #   ubuntu.vm.synced_folder "./", "/vagrant", type: "virtualbox"
 
-    ubuntu.vm.provider "virtualbox" do |vb|
-      # TODO: Are less resources doable?
-      vb.memory = "4096"
-      vb.cpus = "2"
-    end
+  #   ubuntu.vm.provider "virtualbox" do |vb|
+  #     # TODO: Are less resources doable?
+  #     vb.memory = "4096"
+  #     vb.cpus = "2"
+  #   end
 
-    if Vagrant.has_plugin?("vagrant-vbguest")
-      config.vbguest.auto_update = false
-    end
+  #   if Vagrant.has_plugin?("vagrant-vbguest")
+  #     config.vbguest.auto_update = false
+  #   end
 
-    ubuntu.vm.hostname = "ubuntu1804"
-    ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
-      echo "Hej from Ubuntu 18.04"
+  #   ubuntu.vm.hostname = "ubuntu1804"
+  #   ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
+  #     echo "Hej from Ubuntu 18.04"
 
-      # Include the source packages for each configured binary package
-      # repository too, see https://askubuntu.com/a/1212734
-      # That leaves out the `partner` repositories, which are not configured by
-      # default
-      grep '^deb ' /etc/apt/sources.list | perl -pe 's/deb /deb-src /' >> /etc/apt/sources.list
+  #     # Include the source packages for each configured binary package
+  #     # repository too, see https://askubuntu.com/a/1212734
+  #     # That leaves out the `partner` repositories, which are not configured by
+  #     # default
+  #     grep '^deb ' /etc/apt/sources.list | perl -pe 's/deb /deb-src /' >> /etc/apt/sources.list
 
-      apt update
+  #     apt update
 
-      echo "Setting up Python for dataset creation..."
+  #     echo "Setting up Python for dataset creation..."
 
-      # DASEA needs a Python 3.9, which we setup via pyenv. The following are
-      # the dependencies to build Python
-      apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
-                     libreadline-dev libsqlite3-dev wget curl llvm \
-                     libncurses5-dev libncursesw5-dev xz-utils tk-dev \
-                     libffi-dev liblzma-dev python-openssl git python3-venv
+  #     # DASEA needs a Python 3.9, which we setup via pyenv. The following are
+  #     # the dependencies to build Python
+  #     apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+  #                    libreadline-dev libsqlite3-dev wget curl llvm \
+  #                    libncurses5-dev libncursesw5-dev xz-utils tk-dev \
+  #                    libffi-dev liblzma-dev python-openssl git python3-venv
 
-      # The following is needed to find all
-      apt install -y aptitude
+  #     # The following is needed to find all
+  #     apt install -y aptitude
 
-    SHELL
-    ubuntu.vm.provision "shell", privileged: false, inline: <<-SHELL
-      git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+  #   SHELL
+  #   ubuntu.vm.provision "shell", privileged: false, inline: <<-SHELL
+  #     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
-      echo ". $HOME/.bashrc" >> $HOME/.bash_profile
-      echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-      echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-      echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
-      source $HOME/.bashrc
-      source $HOME/.bash_profile
+  #     echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+  #     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+  #     echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+  #     echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
+  #     source $HOME/.bashrc
+  #     source $HOME/.bash_profile
 
-      # Since the above does not seem to work for some reason in the
-      # non-interactive shell, I use the absolute path to pyenv in the following
-      $HOME/.pyenv/bin/pyenv install 3.9.4
-      $HOME/.pyenv/bin/pyenv global 3.9.4
+  #     # Since the above does not seem to work for some reason in the
+  #     # non-interactive shell, I use the absolute path to pyenv in the following
+  #     $HOME/.pyenv/bin/pyenv install 3.9.4
+  #     $HOME/.pyenv/bin/pyenv global 3.9.4
 
-      # TODO: Consider dropping poetry installation on remote by building the
-      # DASEA package locally and install the tgz via pip on remote
-      curl -sSL https://install.python-poetry.org | python3 -
-      echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-      source $HOME/.bashrc
+  #     # TODO: Consider dropping poetry installation on remote by building the
+  #     # DASEA package locally and install the tgz via pip on remote
+  #     curl -sSL https://install.python-poetry.org | python3 -
+  #     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+  #     source $HOME/.bashrc
 
-      mkdir -p /vagrant/data/tmp/ubuntu
-      mkdir -p /vagrant/data/tmp/ubuntu/versions_db
-      mkdir -p /vagrant/data/out/ubuntu
+  #     mkdir -p /vagrant/data/tmp/ubuntu
+  #     mkdir -p /vagrant/data/tmp/ubuntu/versions_db
+  #     mkdir -p /vagrant/data/out/ubuntu
 
-      cd /vagrant
-      $HOME/.local/bin/poetry install
-      SHELL
-  end
+  #     cd /vagrant
+  #     $HOME/.local/bin/poetry install
+  #     SHELL
+  # end
 
-
+  # Start Conan VM
   config.vm.define "ubuntu2104", primary: false do |ubuntu|
     ubuntu.vm.box = "bento/ubuntu-21.04"
     # To make the two-way sync work, the vbguest plugin has to be installed:
@@ -260,8 +246,9 @@ Vagrant.configure("2") do |config|
       $HOME/.local/bin/poetry install
     SHELL
   end
+  # End Conan VM
 
-
+  # Start Nible VM
   config.vm.define "ubuntu2104oneway", primary: false do |ubuntu|
     ubuntu.vm.box = "bento/ubuntu-21.04"
     # To make the two-way sync work, the vbguest plugin has to be installed:
@@ -275,13 +262,14 @@ Vagrant.configure("2") do |config|
     end
 
     ubuntu.vm.hostname = "ubuntu2104oneway"
+    # Install needed dependencies
     ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from Ubuntu 21.04"
       apt update
-
-      # echo "Setting up Python for dataset creation..."
       apt install -y python3 python3.9-venv
     SHELL
+
+    # Install Poetry
     ubuntu.vm.provision "shell", privileged: false, inline: <<-SHELL
       curl -sSL https://install.python-poetry.org | python3 -
       echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
@@ -290,7 +278,14 @@ Vagrant.configure("2") do |config|
       cd /vagrant
       $HOME/.local/bin/poetry install
     SHELL
+
+    # Install Nimble
+    ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
+      apt install -y nim
+      echo 'export PATH="$HOME/.nimble/bin:$PATH"' >> ~/.bashrc
+    SHELL
   end
+  # End Nible VM
 
   # TODO: Create a VM for mining Homebrew on MacOS
 end

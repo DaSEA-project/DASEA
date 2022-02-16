@@ -1,12 +1,11 @@
 Vagrant.configure("2") do |config|
-# Needed on MacOS: https://github.com/dotless-de/vagrant-vbguest/issues/362
 
   # TODO: How to handle new OS version?
   # Start FreeBSD VM
   config.vm.define "freebsd11", primary: false do |freebsd|
     freebsd.vm.box = "bento/freebsd-11"
 
-    # MacOS settings needed for vbguest
+    # Needed on MacOS: https://github.com/dotless-de/vagrant-vbguest/issues/362
     if Vagrant.has_plugin?("vagrant-vbguest")
       config.vbguest.auto_update = false
     end
@@ -141,79 +140,6 @@ Vagrant.configure("2") do |config|
     SHELL
   end
   # End NetBSD VM
-
-
-  # FIXME: Delete if not in use
-  # config.vm.define "ubuntu1804", primary: false do |ubuntu|
-  #   ubuntu.vm.box = "bento/ubuntu-18.04"
-  #   # To make the two-way sync work, the vbguest plugin has to be installed:
-  #   # vagrant plugin install vagrant-vbguest
-  #   ubuntu.vm.synced_folder "./", "/vagrant", type: "virtualbox"
-
-  #   ubuntu.vm.provider "virtualbox" do |vb|
-  #     # TODO: Are less resources doable?
-  #     vb.memory = "4096"
-  #     vb.cpus = "2"
-  #   end
-
-  #   if Vagrant.has_plugin?("vagrant-vbguest")
-  #     config.vbguest.auto_update = false
-  #   end
-
-  #   ubuntu.vm.hostname = "ubuntu1804"
-  #   ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
-  #     echo "Hej from Ubuntu 18.04"
-
-  #     # Include the source packages for each configured binary package
-  #     # repository too, see https://askubuntu.com/a/1212734
-  #     # That leaves out the `partner` repositories, which are not configured by
-  #     # default
-  #     grep '^deb ' /etc/apt/sources.list | perl -pe 's/deb /deb-src /' >> /etc/apt/sources.list
-
-  #     apt update
-
-  #     echo "Setting up Python for dataset creation..."
-
-  #     # DASEA needs a Python 3.9, which we setup via pyenv. The following are
-  #     # the dependencies to build Python
-  #     apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
-  #                    libreadline-dev libsqlite3-dev wget curl llvm \
-  #                    libncurses5-dev libncursesw5-dev xz-utils tk-dev \
-  #                    libffi-dev liblzma-dev python-openssl git python3-venv
-
-  #     # The following is needed to find all
-  #     apt install -y aptitude
-
-  #   SHELL
-  #   ubuntu.vm.provision "shell", privileged: false, inline: <<-SHELL
-  #     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-
-  #     echo ". $HOME/.bashrc" >> $HOME/.bash_profile
-  #     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-  #     echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-  #     echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
-  #     source $HOME/.bashrc
-  #     source $HOME/.bash_profile
-
-  #     # Since the above does not seem to work for some reason in the
-  #     # non-interactive shell, I use the absolute path to pyenv in the following
-  #     $HOME/.pyenv/bin/pyenv install 3.9.4
-  #     $HOME/.pyenv/bin/pyenv global 3.9.4
-
-  #     # TODO: Consider dropping poetry installation on remote by building the
-  #     # DASEA package locally and install the tgz via pip on remote
-  #     curl -sSL https://install.python-poetry.org | python3 -
-  #     echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-  #     source $HOME/.bashrc
-
-  #     mkdir -p /vagrant/data/tmp/ubuntu
-  #     mkdir -p /vagrant/data/tmp/ubuntu/versions_db
-  #     mkdir -p /vagrant/data/out/ubuntu
-
-  #     cd /vagrant
-  #     $HOME/.local/bin/poetry install
-  #     SHELL
-  # end
 
   # Start Conan VM
   config.vm.define "ubuntu2104", primary: false do |ubuntu|

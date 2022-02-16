@@ -1,6 +1,6 @@
 from glob import glob
 from pathlib import Path
-from dasea.cargo import mine
+from dasea.miners.cargo import mine
 
 
 DATA_DIR = "data/out/cargo/"

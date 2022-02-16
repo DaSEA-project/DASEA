@@ -1,7 +1,7 @@
 <!-- # Welcome to the DaSEA documentation
  -->
-![](images/logo.png)
 
+![](images/logo.png)
 
 ## Using the DaSEA Dataset
 
@@ -15,11 +15,9 @@ That is, The file `dasea_01-14-2022.tar.bz2` corresponds to the dataset that was
 
 The dataset can be downloaded from Zenodo for example as in the following:
 
-TODO: update the link to the most current dataset!
 ```bash
-wget https://zenodo.org/record/5781670/files/dasea_01-14-2022.tar.bz2
+wget https://sandbox.zenodo.org/record/1003976#.Yg0Nwu5KhhE
 ```
-
 
 To get an overview over which ecosystems are included in the respective dataset before decompression, the files of the dataset can be listed:
 
@@ -63,11 +61,7 @@ tar -jxf dasea_01-14-2022.tar.bz2 fpm/fpm_dependencies_01-14-2022.csv
 
 ### Example use cases
 
-
-
 #### SQL: Identify packages with highest in-degree
-
-
 
 To count the in-degree
 
@@ -157,20 +151,15 @@ The results in the table above show that almost all _pkgsrc_ packages (from NetB
 It has an indegree of 18194 (in `netbsd9_packages_01-14-2022.csv` are 18197 packages registered).
 The package with the second highest in-degree is [`pkgtools/x11-links`](https://cdn.netbsd.org/pub/pkgsrc/current/pkgsrc/pkgtools/x11-links/index.html) with 2852 packages that depend on it.
 
-
 #### NetworkX: Computing Betweenness Centrality of packages
-
 
 The Python package [NetworkX](https://networkx.org/) can [read and write a plethora of graph formats](https://networkx.org/documentation/stable/reference/readwrite/index.html).
 One of them are adjacency lists, which are simple text files containing node identifiers.
 To compute the [_Betweenness Centrality_](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.centrality.betweenness_centrality.html#networkx.algorithms.centrality.betweenness_centrality) of the packages in the dependency network of Alire (a package manager for ADA), we first create an adjacency list from the CSV files that contain information about packages and dependencies.
 The former is needed, since packages do not necessarily depend on other packages not are dependent of others.
 
-
-
 <!-- [_"Graph Algorithms: Practical Examples in Apache Spark and Neo4j"_](https://www.academia.edu/download/62067087/Graph_Algorithms_Neo4j20200211-122044-3inq88.pdf)
  -->
-
 
 ```python
 import tempfile
@@ -218,7 +207,6 @@ That package is [`openssl`](https://conan.io/center/openssl).
 The package with the second highest Betweenness Centrality is [`boost`](https://conan.io/center/boost) (identifier 83).
 
 Note, the program above does not illustrate the programmatic lookup of package names from identifier.
-
 
 #### Neo4j: Finding versions of packages with a specific requirement
 
@@ -272,13 +260,12 @@ MATCH (dep:Version)-[:Dependency]->(n:Package {name: 'libadalang'}) RETURN n,dep
 
 A complete example can be found in [](./neo4j_example/).
 
-
-#### Pandas: Identify Conan packages that changed licenses between versions 
+#### Pandas: Identify Conan packages that changed licenses between versions
 
 Let's say we want to find the names of all packages from the Conan package managers that changed licenses between versions.
 Using the Python data analysis library [Pandas](https://pandas.pydata.org/), one could analyze the versions CSV file of the Conan dataset as in the following.
 There, we load the respective CSV file into a Pandas `DataFrame` and subsequently identify all those Conan packages (`groupby("pkg_idx")`) which had more than one license over multiple versions (`filter(lambda x: len(set(x.license)) > 1)`).
-To store the names and the licenses of these package in another `DataFrame` (`rdf`), one could group the previous results by package name (`groupby("name")`) and create a set of given licenses (`apply(lambda x: set(x.license))`).  
+To store the names and the licenses of these package in another `DataFrame` (`rdf`), one could group the previous results by package name (`groupby("name")`) and create a set of given licenses (`apply(lambda x: set(x.license))`).
 
 ```python
 import pandas as pd
@@ -362,7 +349,6 @@ Their names and licenses as stored in the resulting `DataFrame` (`rdf`) are:
 Note, that the given licenses are not in chronological order.
 For that, the above program would have to be modified.
 
-
 #### Gephi: Visualize an ecosystem
 
 The graph visualization program [Gephi](https://gephi.org/) can read graphs from many [kinds of files](https://gephi.org/users/supported-graph-formats/).
@@ -373,7 +359,6 @@ See the [linked tutorial](https://seinecle.github.io/gephi-tutorials/generated-h
 The columns of the DaSEA dataset are called differently though.
 
 The following program illustrates how to convert a packages CSV file and a dependency CSV file from the Conan ecosystem into two CSV files of a format that Gephi can digest.
-
 
 ```python
 import pandas as pd
@@ -404,8 +389,7 @@ After a bit of cosmetic changes to the Conan dependency network, i.e., Noverlap 
 
 ![](images/conan_gephi.png)
 
-
-<!-- 
+<!--
 
  the most common licenses with pandas
  -->

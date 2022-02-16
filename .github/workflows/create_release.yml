@@ -21,3 +21,8 @@ jobs:
       
       - name: Provision droplet
         run: doctl compute droplet list
+  test:
+    runs-on: ubuntu latest
+    steps:
+      - name: Provision droplet
+        run: doctl compute droplet list

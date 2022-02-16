@@ -1,0 +1,80 @@
+=== Available Commands
+
+.Currently supported miners and how to execute them.
+[width="100%",cols="5%,5%,40%,10%,40%",options="header",]
+|=======================================================================
+|Ecosystem |Package Manager |Repository |Ecosystem Kind |How-to Mine?
+
+// Alire
+| Ada
+| Alire
+| https://github.com/alire-project/alire-index.git
+| Programming Language
+| `$ poetry run dasea mine alire`
+// Conan
+| C/C++
+| Conan
+| https://github.com/conan-io/conan-center-index
+| Programming Language
+|`$ poetry run dasea mine conan`
+// VCPKG
+| C/C++
+| VCPKG
+| https://vcpkg.io/output.json
+| Programming Language
+|`$ poetry run dasea mine vcpkg`
+// FPM
+| Fortran
+| FPM
+| https://raw.githubusercontent.com/fortran-lang/fpm-registry/master/index.json
+| Programming Language
+|`$ poetry run dasea mine fpm`
+// Nimble
+| Nim
+| Nimble
+| https://raw.githubusercontent.com/nim-lang/packages/master/packages.json
+| Programming Language
+|`$ poetry run dasea mine nimble`
+// Cargo
+| Rust
+| Cargo
+| https://crates.io/api/v1/crates
+| Programming Language
+|`$ poetry run dasea mine cargo`
+
+// Homebrew
+| MacOS packages
+| Homebrew
+| https://formulae.brew.sh/api/formula.json
+| Operating system
+|`$ poetry run dasea mine homebrew`
+// Chromebrew
+| ChromeOS packages
+| Chromebrew
+| https://github.com/skycocker/chromebrew/tree/master/packages
+| Operating system
+|`$ poetry run dasea mine chromebrew`
+// FreeBSD
+| FreeBSD ports
+| Ports
+| `portsnap --interactive fetch` +
+`portsnap --interactive extract`
+| Operating system
+|`$ vagrant up freebsd11` +
+`$ bash bin/get_freebsd_ports.sh`
+// NetBSD
+| NetBSD packages
+| PkgSrc
+| ftp://ftp.NetBSD.org/pub/pkgsrc/current/pkgsrc.tar.gz
+| Operating system
+|`$ vagrant up netbsd9` +
+`$ bash bin/get_netbsd_pkgsrc.sh`
+// OpenBSD
+| OpenBSD ports
+| Ports
+| https://cdn.openbsd.org/pub/OpenBSD/6.9/ports.tar.gz
+| Operating system
+|`$ vagrant up openbsd69` +
+`$ bash bin/get_openbsd_ports.sh`
+
+|=======================================================================

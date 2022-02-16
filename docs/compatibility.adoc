@@ -1,0 +1,85 @@
+=== Compatibility
+The following table shows which miners can run on which architecture.
+
+
+[options="header",]
+|===
+|Ecosystem |Package Manager |linux/arm64 |linux/amd64 |macOS arm (M1) |macOS x86-64 (Intel) |Windows x86-64
+|Ada
+|Alire
+|
+| ✅
+| ✅
+| ✅
+| ❌
+|C/C++
+|Conan
+|
+| ✅
+| ✅
+| ✅
+| ❌
+|C/C++
+|VCPKG
+|
+| ✅
+| ✅
+| ✅
+| ❌
+|Fortran
+|FPM
+|
+| ✅
+| ✅
+| ✅
+| ✅
+|Nim
+|Nimble
+|
+| ✅
+| ✅
+| ✅
+| ❌
+|Rust
+|Cargo
+|
+| ✅
+| ✅
+| ✅
+| ❌
+|macOS packages
+|Homebrew
+|
+| ✅
+| ✅
+| ✅
+| ❌
+|ChromOS packages
+|Chromebrew
+|
+| ✅
+| ✅
+| ✅
+| ❌
+|FreeBSD ports
+|Ports
+|
+| ✅
+| ❌
+| ✅
+| ❌
+|NetBSD pacakges
+|PkgSrc
+|
+| ✅
+| ❌
+| ✅
+| ❌
+|OpenBSD
+|Ports
+|
+| ✅
+| ❌
+| ✅
+| ❌
+|===

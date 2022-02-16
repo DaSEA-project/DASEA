@@ -1,8 +1,12 @@
 Vagrant.configure("2") do |config|
+# Needed on MacOS: https://github.com/dotless-de/vagrant-vbguest/issues/362
 
   # TODO: How to handle new OS version?
   config.vm.define "freebsd11", primary: false do |freebsd|
     freebsd.vm.box = "bento/freebsd-11"
+    if Vagrant.has_plugin?("vagrant-vbguest")
+      config.vbguest.auto_update = false
+    end
     # Private network is needed for synced folder to work, see https://www.vagrantup.com/docs/synced-folders/nfs#prerequisites
     freebsd.vm.network "private_network", ip: "192.168.20.2"
     # The two-way synced directories seem to be flaky with the FreeBSD guest.
@@ -15,7 +19,7 @@ Vagrant.configure("2") do |config|
       vb.memory = "2048"
       vb.cpus = "2"
     end
-   
+
     freebsd.vm.hostname = "freebsd11"
     freebsd.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from FreeBSD"
@@ -31,9 +35,9 @@ Vagrant.configure("2") do |config|
       # Both of the following are needed for lxml, a Python dependency of DASEA
       pkg install -y libxml2
       pkg install -y libxslt
-      
+
       echo "Collecting ports tree..."
-      # TODO: Use an alternative method to get quartely branch, see 
+      # TODO: Use an alternative method to get quartely branch, see
       # https://docs.freebsd.org/en/books/handbook/ports/#ports-using
       portsnap --interactive fetch
       portsnap --interactive extract
@@ -45,7 +49,7 @@ Vagrant.configure("2") do |config|
 
     freebsd.vm.provision "shell", privileged: false, inline: <<-SHELL
       echo ". $HOME/.bashrc" >> $HOME/.bash_profile
-      
+
       curl -sSL https://install.python-poetry.org | python3 -
       echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
       # source $HOME/.bashrc
@@ -71,7 +75,7 @@ Vagrant.configure("2") do |config|
       vb.memory = "2048"
       vb.cpus = "2"
     end
-   
+
     openbsd.vm.hostname = "openbsd69"
     openbsd.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from OpenBSD"
@@ -91,9 +95,9 @@ Vagrant.configure("2") do |config|
 
     SHELL
 
-    openbsd.vm.provision "shell", privileged: false, inline: <<-SHELL      
+    openbsd.vm.provision "shell", privileged: false, inline: <<-SHELL
       curl -sSL https://install.python-poetry.org | python -
-      
+
       mkdir -p /vagrant/data/tmp/ports/openbsd69
       mkdir -p /vagrant/data/out/ports/openbsd69
 
@@ -115,7 +119,7 @@ Vagrant.configure("2") do |config|
       vb.memory = "2048"
       vb.cpus = "2"
     end
-   
+
     netbsd.vm.hostname = "netbsd9"
     netbsd.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from NetBSD"
@@ -134,13 +138,13 @@ Vagrant.configure("2") do |config|
       rm pkgsrc.tar.gz
     SHELL
 
-    # netbsd.vm.provision "shell", privileged: false, inline: <<-SHELL      
+    # netbsd.vm.provision "shell", privileged: false, inline: <<-SHELL
     #   echo ". $HOME/.bashrc" >> $HOME/.bash_profile
-      
+
     #   curl -sSL https://install.python-poetry.org | python -
     #   echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
     #   source $HOME/.bashrc
-      
+
     #   mkdir -p /vagrant/data/tmp/ports/netbsd9
     #   mkdir -p /vagrant/data/out/ports/netbsd9
 
@@ -165,7 +169,11 @@ Vagrant.configure("2") do |config|
       vb.memory = "4096"
       vb.cpus = "2"
     end
-   
+
+    if Vagrant.has_plugin?("vagrant-vbguest")
+      config.vbguest.auto_update = false
+    end
+
     ubuntu.vm.hostname = "ubuntu1804"
     ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from Ubuntu 18.04"
@@ -173,21 +181,21 @@ Vagrant.configure("2") do |config|
       # Include the source packages for each configured binary package
       # repository too, see https://askubuntu.com/a/1212734
       # That leaves out the `partner` repositories, which are not configured by
-      # default 
+      # default
       grep '^deb ' /etc/apt/sources.list | perl -pe 's/deb /deb-src /' >> /etc/apt/sources.list
-      
+
       apt update
 
       echo "Setting up Python for dataset creation..."
-      
-      # DASEA needs a Python 3.9, which we setup via pyenv. The following are 
+
+      # DASEA needs a Python 3.9, which we setup via pyenv. The following are
       # the dependencies to build Python
       apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
                      libreadline-dev libsqlite3-dev wget curl llvm \
                      libncurses5-dev libncursesw5-dev xz-utils tk-dev \
                      libffi-dev liblzma-dev python-openssl git python3-venv
 
-      # The following is needed to find all 
+      # The following is needed to find all
       apt install -y aptitude
 
     SHELL
@@ -201,7 +209,7 @@ Vagrant.configure("2") do |config|
       source $HOME/.bashrc
       source $HOME/.bash_profile
 
-      # Since the above does not seem to work for some reason in the 
+      # Since the above does not seem to work for some reason in the
       # non-interactive shell, I use the absolute path to pyenv in the following
       $HOME/.pyenv/bin/pyenv install 3.9.4
       $HOME/.pyenv/bin/pyenv global 3.9.4
@@ -233,7 +241,7 @@ Vagrant.configure("2") do |config|
       vb.memory = "4096"
       vb.cpus = "2"
     end
-   
+
     ubuntu.vm.hostname = "ubuntu2104"
     ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from Ubuntu 21.04"
@@ -265,7 +273,7 @@ Vagrant.configure("2") do |config|
       vb.memory = "4096"
       vb.cpus = "2"
     end
-   
+
     ubuntu.vm.hostname = "ubuntu2104oneway"
     ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from Ubuntu 21.04"

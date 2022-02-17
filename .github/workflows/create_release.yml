@@ -18,6 +18,11 @@ jobs:
         uses: digitalocean/action-doctl@v2.1.0
         with:
           token: ${{secrets.DO_ACCESS_TOKEN}}
-      
       - name: Provision droplet
+        run: doctl compute droplet create --image ubuntu-20-04-x64 --size s-1vcpu-1gb --region ams3 DASEA-tool
+      
+      - name: List droplets
         run: doctl compute droplet list
+        
+#      - name: Destroy droplet
+#        run: doctl compute droplet delete DASEA-tool

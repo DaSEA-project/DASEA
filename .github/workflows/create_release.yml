@@ -12,20 +12,42 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run a one-line script
-        run: echo "::set-output name=output1::'1234'"
+        run: echo 1234
         id: hello
-      
+
+      - name: GitHub Action for DigitalOcean - doctl
+        uses: digitalocean/action-doctl@v2.1.0
+        with:
+          token: ${{secrets.DO_ACCESS_TOKEN}}
+      - name: Provision droplet
+        run: > 
+          doctl compute droplet create 
+          --image ubuntu-20-04-x64
+          --size s-1vcpu-1gb 
+          --region ams3  
+          --wait
+          --ssh-keys "{{secrets.SSH_PUBLIC_KEY_FINGERPRINT}}"
+          DASEA-tool
+
       - name: Get IP of droplet
+        # run: doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool
+        run: echo "::set-output name=value::doctl compute droplet get --format \"PublicIPv4\" --no-header DASEA-tool"
+        id: SSH_HOST
+
+      - name: Echo IP
         run: |
-          echo "Output1: ${{ steps.hello.outputs.output1 }}"
+          echo "IP: ${{ steps.hello.outputs.value }}"
+      
+      # - name: List droplets
+      #   run: doctl compute droplet list
         
-      #- name: SSH into droplet
+      # - name: SSH into droplet
       #  uses: appleboy/ssh-action@master
       #  with:
-      #    host: ${{ secrets.HOST }}
-       #   username: ${{ secrets.USERNAME }}
-        #  key: ${{ secrets.SSH_PRIVATE_KEY }}
-         # script: whoami
+      #    host: 
+      #    username: ${{ secrets.USERNAME }}
+      #    key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #    script: whoami
         
 #      - name: Destroy droplet
 #        run: doctl compute droplet delete DASEA-tool

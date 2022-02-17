@@ -42,7 +42,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ steps.SSH_HOST.outputs.value }}
-          username: ${{ secrets.USERNAME }}
+          username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: whoami
 

@@ -12,24 +12,19 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run a one-line script
-        run: echo Hello, world!
-
-      - name: GitHub Action for DigitalOcean - doctl
-        uses: digitalocean/action-doctl@v2.1.0
-        with:
-          token: ${{secrets.DO_ACCESS_TOKEN}}
-      - name: Provision droplet
-        run: > 
-          doctl compute droplet create 
-          --image ubuntu-20-04-x64
-          --size s-1vcpu-1gb 
-          --region ams3  
-          --wait
-          --ssh-keys {{secrets.DO_SSHKEY_JHI}} 
-          DASEA-tool
+        run: echo 1234
+        id: hello
       
-      - name: List droplets
-        run: doctl compute droplet list
+      - name: Get IP of droplet
+        run: echo {{ steps.hello.outputs }}
+        
+      #- name: SSH into droplet
+      #  uses: appleboy/ssh-action@master
+      #  with:
+      #    host: ${{ secrets.HOST }}
+       #   username: ${{ secrets.USERNAME }}
+        #  key: ${{ secrets.SSH_PRIVATE_KEY }}
+         # script: whoami
         
 #      - name: Destroy droplet
 #        run: doctl compute droplet delete DASEA-tool

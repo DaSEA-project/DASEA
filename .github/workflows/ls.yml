@@ -1,4 +1,4 @@
-name: On-demand dataset release
+name: ls content
 on:
   # Only allow manual triggers for now
   workflow_dispatch:

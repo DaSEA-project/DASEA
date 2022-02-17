@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run a one-line script
-        run: echo 1234
+        run: echo ::set-output name=1234
         id: hello
       
       - name: Get IP of droplet

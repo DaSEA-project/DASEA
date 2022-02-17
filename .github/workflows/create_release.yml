@@ -29,6 +29,11 @@ jobs:
           --ssh-keys "${{secrets.SSH_PUBLIC_KEY_FINGERPRINT}}"
           DASEA-tool
 
+      - name: Sleep for 30 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '30s'
+        
       - name: Get IP of droplet
         run: |
           echo "::set-output name=value::$(doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool)"

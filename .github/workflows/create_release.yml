@@ -23,9 +23,10 @@ jobs:
           doctl compute droplet create 
           --image ubuntu-20-04-x64
           --size s-1vcpu-1gb 
-          --region ams3 DASEA-tool 
-          --wait # wait for droplet to be created before it returns
+          --region ams3  
+          --wait
           --ssh-keys "{{.secrets.DO_SSHKEYS_JHI}},{{.secrets.DO_SSHKEYS_KOLS}}" 
+          DASEA-tool
       
       - name: List droplets
         run: doctl compute droplet list

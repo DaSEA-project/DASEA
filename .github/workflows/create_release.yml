@@ -37,7 +37,7 @@ jobs:
 
       - name: Echo IP
         run: |
-          echo "IP: ${{ steps.hello.outputs.value }}"
+          echo "IP: ${{ steps.SSH_HOST.outputs.value }}"
 
       # - name: List droplets
       #   run: doctl compute droplet list

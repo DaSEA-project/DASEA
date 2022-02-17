@@ -20,11 +20,11 @@ jobs:
         with:
           token: ${{secrets.DO_ACCESS_TOKEN}}
       # - name: Provision droplet
-      #   run: > 
-      #     doctl compute droplet create 
+      #   run: >
+      #     doctl compute droplet create
       #     --image ubuntu-20-04-x64
-      #     --size s-1vcpu-1gb 
-      #     --region ams3  
+      #     --size s-1vcpu-1gb
+      #     --region ams3
       #     --wait
       #     --ssh-keys "${{secrets.SSH_PUBLIC_KEY_FINGERPRINT}}"
       #     DASEA-tool
@@ -32,23 +32,23 @@ jobs:
       - name: Get IP of droplet
         # run: doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool
         run: |
-          echo "::set-output name=value::'doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool'"
+          echo "::set-output name=value::'halløj kammerat'"
         id: SSH_HOST
 
       - name: Echo IP
         run: |
           echo "IP: ${{ steps.hello.outputs.value }}"
-      
+
       # - name: List droplets
       #   run: doctl compute droplet list
-        
+
       # - name: SSH into droplet
       #  uses: appleboy/ssh-action@master
       #  with:
-      #    host: 
+      #    host:
       #    username: ${{ secrets.USERNAME }}
       #    key: ${{ secrets.SSH_PRIVATE_KEY }}
       #    script: whoami
-        
+
 #      - name: Destroy droplet
 #        run: doctl compute droplet delete DASEA-tool

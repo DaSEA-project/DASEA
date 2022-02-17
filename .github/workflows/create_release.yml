@@ -16,7 +16,7 @@ jobs:
         id: hello
       
       - name: Get IP of droplet
-        run: echo ${{ steps.hello.outputs }}
+        run: echo ${{ steps.hello.outputs.value }}
         
       #- name: SSH into droplet
       #  uses: appleboy/ssh-action@master

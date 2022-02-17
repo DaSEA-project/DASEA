@@ -26,7 +26,7 @@ jobs:
           --size s-1vcpu-1gb 
           --region ams3  
           --wait
-          --ssh-keys "{{secrets.SSH_PUBLIC_KEY_FINGERPRINT}}"
+          --ssh-keys "${{secrets.SSH_PUBLIC_KEY_FINGERPRINT}}"
           DASEA-tool
 
       - name: Get IP of droplet

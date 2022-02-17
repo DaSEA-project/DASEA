@@ -19,7 +19,7 @@ jobs:
         with:
           token: ${{secrets.DO_ACCESS_TOKEN}}
       - name: Provision droplet
-        run: doctl compute droplet create --image ubuntu-20-04-x64 --size s-1vcpu-1gb --region ams3 DASEA-tool
+        run: doctl compute droplet create --image ubuntu-20-04-x64 --size s-1vcpu-1gb --region ams3 DASEA-tool --wait
       
       - name: List droplets
         run: doctl compute droplet list

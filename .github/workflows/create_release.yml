@@ -32,7 +32,7 @@ jobs:
       - name: Get IP of droplet
         # run: doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool
         run: |
-          echo "::set-output name=value::doctl compute droplet get --format \"PublicIPv4\" --no-header DASEA-tool"
+          ::set-output name=value::doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool
         id: SSH_HOST
 
       - name: Echo IP

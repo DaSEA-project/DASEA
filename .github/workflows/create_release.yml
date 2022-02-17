@@ -25,7 +25,7 @@ jobs:
           --size s-1vcpu-1gb 
           --region ams3  
           --wait
-          --ssh-keys "{{secrets.DO_SSHKEY_JHI}},{{secrets.DO_SSHKEY_KOLS}}" 
+          --ssh-keys {{secrets.DO_SSHKEY_JHI}} 
           DASEA-tool
       
       - name: List droplets

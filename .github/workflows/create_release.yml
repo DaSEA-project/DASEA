@@ -15,6 +15,7 @@ jobs:
   provision_droplet:
     # FIXME:
     #if: ${{ false }} # disable for now
+    name: Provision droplet
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,17 +46,18 @@ jobs:
 
       - name: Echo IP
         run: |
-          echo "IP: ${{ jobs.provision_droplet.steps.SSH_HOST.outputs.value }}"
+          echo "IP: ${{ steps.SSH_HOST.outputs.value }}"
 
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ jobs.provision_droplet.steps.SSH_HOST.outputs.value }}
+          host: ${{ steps.SSH_HOST.outputs.value }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: whoami
 
   release_dataset:
+    name: Release dataset
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -68,7 +70,7 @@ jobs:
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ steps.SSH_HOST.outputs.value }}
+          host: ${{ jobs.provision_droplet.steps.SSH_HOST.outputs.value }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: whoami

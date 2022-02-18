@@ -30,7 +30,7 @@ jobs:
       - name: Provision droplet
         run: >
           doctl compute droplet create
-          --image DASEA-tool
+          --image ${{secrets.DO_DASEA_SNAPSHOT_ID}}
           --size s-1vcpu-1gb
           --region ams3
           --wait

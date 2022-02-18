@@ -10,6 +10,9 @@ Vagrant.configure("2") do |config|
       config.vbguest.auto_update = false
     end
 
+    # Increase timeout to 10 minutes (600 seconds) to ensure boot on DO droplet
+    config.vm.boot_timeout = 600
+
     # Private network is needed for synced folder to work, see https://www.vagrantup.com/docs/synced-folders/nfs#prerequisites
     freebsd.vm.network "private_network", ip: "192.168.20.2"
     # The two-way synced directories seem to be flaky with the FreeBSD guest.

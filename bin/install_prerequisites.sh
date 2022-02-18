@@ -1,6 +1,6 @@
 
-## Apt
-sudo apt update && upgrade -y
+## Apt update and upgrade
+sudo apt update -y && sudo apt upgrade -y
 
 ## Install Python
 sudo apt install python3.9

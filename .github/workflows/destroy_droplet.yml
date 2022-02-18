@@ -1,0 +1,20 @@
+name: On-demand dataset release
+on:
+  # Only allow manual triggers for now
+  workflow_dispatch:
+
+jobs:
+  destroy_droplet:
+    #if: ${{ false }} # disable for now
+    name: Destroy droplet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: GitHub Action for DigitalOcean - doctl
+        uses: digitalocean/action-doctl@v2.1.0
+        with:
+          token: ${{secrets.DO_ACCESS_TOKEN}}
+
+      - name: Destroy droplet
+        run: doctl compute droplet delete DASEA-tool

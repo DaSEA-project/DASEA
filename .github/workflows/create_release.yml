@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     # Map a step output to a job output
     outputs:
-      IPAddress: ${{ steps.ipAddress.outputs.ip }}
+      IPAddress: ${{ steps.ipAddress.outputs.ipAddress }}
     steps:
       - uses: actions/checkout@v2
 

@@ -85,6 +85,11 @@ jobs:
           source: "./"
           target: "dasea-tool"
 
+      - name: Sleep for 5 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: "5s"
+
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
         with:

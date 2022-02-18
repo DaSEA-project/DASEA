@@ -26,7 +26,7 @@ jobs:
           --size s-1vcpu-1gb
           --region ams3
           --wait
-          --ssh-keys "${{secrets.SSH_PUBLIC_KEY_FINGERPRINT}},${{secrets.DO_SSHKEY_JHI}},${{secrets.DO_SSHKEY_KOLS}},${{secrets.DO_SSHKEY_PEBU}}"
+          --ssh-keys ${{secrets.SSH_PUBLIC_KEY_FINGERPRINT}},${{secrets.DO_SSHKEY_JHI}},${{secrets.DO_SSHKEY_KOLS}},${{secrets.DO_SSHKEY_PEBU}}
           DASEA-tool
 
       - name: Sleep for 30 seconds

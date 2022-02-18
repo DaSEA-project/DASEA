@@ -17,7 +17,7 @@ Download and install [Vagrant](https://www.vagrantup.com/downloads).
 ### Install Vagrant plugins
 
 ```zsh
-vagrant plugin uninstall vagrant-vbguest
+vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-reload
 vagrant plugin install vagrant-scp
 ```

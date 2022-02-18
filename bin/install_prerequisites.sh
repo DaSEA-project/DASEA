@@ -26,7 +26,12 @@ source ~/.profile
 ## Activate the virtual enviornment
 # source env/dasea/bin/activate
 
-## TODO: Install virtualbox
+## Install virtualbox
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+sudo apt-get update -y && sudo apt-get install vagrant -y
+vagrant plugin install vagrant-reload
+vagrant plugin install vagrant-scp
 
 ## Enter dasea project
 cd dasea-tool
@@ -37,5 +42,9 @@ cd dasea-tool
 ## Install dependencies
 # poetry install
 
-## Run FPM miner
-poetry run dasea mine fpm
+## Try out the tool
+# poetry run dasea mine fpm
+
+vagrant up freebsd11
+vagrant destroy .f freebsd11
+#bash bin/get_freebsd_ports.sh

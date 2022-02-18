@@ -37,10 +37,10 @@ jobs:
           --ssh-keys ${{secrets.SSH_PUBLIC_KEY_FINGERPRINT}},${{secrets.DO_SSHKEY_JHI}},${{secrets.DO_SSHKEY_KOLS}},${{secrets.DO_SSHKEY_PEBU}}
           DASEA-tool
 
-      - name: Sleep for 30 seconds
+      - name: Sleep for 15 seconds
         uses: jakejarvis/wait-action@master
         with:
-          time: '15s'
+          time: "15s"
 
       - name: Get IP of droplet
         run: |
@@ -83,9 +83,9 @@ jobs:
           #host: 165.22.199.251
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: './'
-          target: 'dasea-tool'
-          
+          source: "./"
+          target: "dasea-tool"
+
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
         with:

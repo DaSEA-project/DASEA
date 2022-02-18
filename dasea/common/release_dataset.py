@@ -66,11 +66,16 @@ def push_dataset_to_zenodo(dataset_path, sandbox=False):
     deposit_url = f"{api_url}deposit/depositions"
     params = {"access_token": zenodo_api_token}
 
-    # A continuously updated dataset of software dependencies covering various package manager ecosystems. Read more on https://<organization>.github.io/DASEA/
-    modification_time = datetime.fromtimestamp(os.stat(metadata_config_file)[-2])
-    if datetime.now() - modification_time > timedelta(minutes=3):
-        print(f"Be sure to update the dataset metadata in {metadata_config_file} before push!", file=sys.stderr)
+    fileExists = os.path.exists(Path(dataset_path))
+    if (not fileExists):
+        print(f"Cannot find file with path {dataset_path}", file=sys.stderr)
         sys.exit(1)
+
+    # A continuously updated dataset of software dependencies covering various package manager ecosystems. Read more on https://<organization>.github.io/DASEA/
+    # modification_time = datetime.fromtimestamp(os.stat(metadata_config_file)[-2])
+    # if datetime.now() - modification_time > timedelta(minutes=3):
+    #     print(f"Be sure to update the dataset metadata in {metadata_config_file} before push!", file=sys.stderr)
+    #     sys.exit(1)
     with open(metadata_config_file) as fp:
         metadata = json.load(fp)
 

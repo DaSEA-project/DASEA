@@ -14,7 +14,7 @@ jobs:
   # This workflow contains a single job called "build"
   provision_droplet:
     # FIXME:
-    if: ${{ false }} # disable for now
+    # if: ${{ false }} # disable for now
     name: Provision droplet
     runs-on: ubuntu-latest
     # Map a step output to a job output
@@ -65,7 +65,7 @@ jobs:
   release_dataset:
     name: Release dataset
     runs-on: ubuntu-latest
-    # needs: provision_droplet
+    needs: provision_droplet
     steps:
       - uses: actions/checkout@v2
 
@@ -74,23 +74,23 @@ jobs:
         with:
           token: ${{secrets.DO_ACCESS_TOKEN}}
 
-      # - run: echo ${{ needs.provision_droplet.outputs.IPAddress}}
-
-      - name: SSH into droplet
-        uses: appleboy/ssh-action@master
-        with:
-          # host: ${{ needs.provision_droplet.outputs.IPAddress}}
-          host: 165.22.199.251
-          username: ${{ secrets.DO_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: whoami
+      - run: echo ${{ needs.provision_droplet.outputs.IPAddress}}
 
       - name: Copy DaSEA tool
         uses: appleboy/scp-action@master
         with:
-          # host: ${{ needs.provision_droplet.outputs.IPAddress}}
-          host: 165.22.199.251
+          host: ${{ needs.provision_droplet.outputs.IPAddress}}
+          #host: 165.22.199.251
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: './'
           target: 'dasea-tool'
+          
+      - name: SSH into droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ needs.provision_droplet.outputs.IPAddress}}
+          #host: 165.22.199.251
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: bash dasea-tool/bin/install_prerequisites.sh

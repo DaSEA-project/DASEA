@@ -29,4 +29,4 @@ bash bin/get_nimble_pkgs.sh
 vagrant destroy -f ubuntu2104oneway
 
 poetry run dasea release
-# poetry run dasea push
+# poetry run dasea push --sandbox insert_dataset_file_path_here

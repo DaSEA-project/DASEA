@@ -3,10 +3,10 @@
 sudo apt update -y && sudo apt upgrade -y
 
 ## Install Python
-sudo apt install python3.9
+sudo apt install python3.9 -y
 
 ## Install Pip
-sudo apt install python3-pip
+sudo apt install python3-pip -y
 
 ## Install Virtualenv
 sudo pip3 install virtualenv

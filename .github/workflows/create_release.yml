@@ -96,4 +96,5 @@ jobs:
           host: ${{ needs.provision_droplet.outputs.IPAddress}}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: bash dasea-tool/bin/install_prerequisites.sh
+          script: source ~/.profile
+          # script: bash dasea-tool/bin/install_prerequisites.sh

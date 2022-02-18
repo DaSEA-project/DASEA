@@ -1,4 +1,4 @@
-name: On-demand dataset release
+name: Destry Droplet
 on:
   # Only allow manual triggers for now
   workflow_dispatch:

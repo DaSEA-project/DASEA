@@ -2,18 +2,22 @@ name: On-demand dataset release
 on:
   # Only allow manual triggers for now
   workflow_dispatch:
+  # Only trigger, when the build workflow succeeded
+  # TODO: uncomemnt me
+  # workflow_run:
+  #   workflows: ['Build And Test Workflow']
+  #   types:
+  #     - completed
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  provision:
+  provision_droplet:
+    # FIXME:
+    #if: ${{ false }} # disable for now
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Run a one-line script
-        run: echo 1234
-        id: hello
 
       - name: GitHub Action for DigitalOcean - doctl
         uses: digitalocean/action-doctl@v2.1.0
@@ -33,7 +37,7 @@ jobs:
         uses: jakejarvis/wait-action@master
         with:
           time: '30s'
-        
+
       - name: Get IP of droplet
         run: |
           echo "::set-output name=value::$(doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool)"
@@ -41,7 +45,25 @@ jobs:
 
       - name: Echo IP
         run: |
-          echo "IP: ${{ steps.SSH_HOST.outputs.value }}"
+          echo "IP: ${{ jobs.provision_droplet.steps.SSH_HOST.outputs.value }}"
+
+      - name: SSH into droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ jobs.provision_droplet.steps.SSH_HOST.outputs.value }}
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: whoami
+
+  release_dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: GitHub Action for DigitalOcean - doctl
+        uses: digitalocean/action-doctl@v2.1.0
+        with:
+          token: ${{secrets.DO_ACCESS_TOKEN}}
 
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
@@ -50,6 +72,7 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: whoami
-
+# FIXME: move to a new action
+#  destrop_droplet:
 #      - name: Destroy droplet
 #        run: doctl compute droplet delete DASEA-tool

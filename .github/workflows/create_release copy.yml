@@ -14,7 +14,7 @@ jobs:
   # This workflow contains a single job called "build"
   provision_droplet:
     # FIXME:
-    #if: ${{ false }} # disable for now
+    if: ${{ false }} # disable for now
     name: Provision droplet
     runs-on: ubuntu-latest
     # Map a step output to a job output
@@ -74,16 +74,23 @@ jobs:
         with:
           token: ${{secrets.DO_ACCESS_TOKEN}}
 
-      - run: echo ${{ needs.provision_droplet.outputs.IPAddress}}
+      # - run: echo ${{ needs.provision_droplet.outputs.IPAddress}}
 
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ needs.provision_droplet.outputs.IPAddress}}
+          # host: ${{ needs.provision_droplet.outputs.IPAddress}}
+          host: 165.22.199.251
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: whoami
-# FIXME: move to a new action
-#  destrop_droplet:
-#      - name: Destroy droplet
-#        run: doctl compute droplet delete DASEA-tool
+
+      - name: Copy DaSEA tool
+        uses: appleboy/scp-action@master
+        with:
+          # host: ${{ needs.provision_droplet.outputs.IPAddress}}
+          host: 165.22.199.251
+          username: ${{ secrets.DO_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: './'
+          target: 'dasea-tool'

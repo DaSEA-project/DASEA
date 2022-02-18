@@ -18,7 +18,7 @@
 # curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 
 ## Source profile
-# source ~/.profile
+source ~/.profile
 
 ## Create virtual enviornment
 # virtualenv --python=/usr/bin/python3.9 env/dasea

@@ -1,32 +1,35 @@
 
-## Apt update and upgrade
-# sudo apt update -y
+# Apt update and upgrade
+sudo apt update -y
 
-## Install Python
-# sudo apt install python3.9 -y
+# Install Python
+sudo apt install python3.9 -y
 
-## Install Pip
-# sudo apt install python3-pip -y
+# Install Pip
+sudo apt install python3-pip -y
 
-## Install Virtualenv
-# sudo pip3 install virtualenv
+# Install Virtualbox
+sudo apt install virtualbox -y
 
-##  Make a folder for virtual enviornments
-# mkdir env
+# Install Virtualenv
+sudo pip3 install virtualenv
 
-## Install Poetry
-# curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+#  Make a folder for virtual enviornments
+mkdir env
 
-## Source profile
+# Install Poetry
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+
+# Source profile
 source ~/.profile
 
-## Create virtual enviornment
-# virtualenv --python=/usr/bin/python3.9 env/dasea
+# Create virtual enviornment
+virtualenv --python=/usr/bin/python3.9 env/dasea
 
-## Activate the virtual enviornment
-# source env/dasea/bin/activate
+# Activate the virtual enviornment
+source env/dasea/bin/activate
 
-## Install virtualbox
+# Install Vagrant
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 sudo apt-get update -y && sudo apt-get install vagrant -y
@@ -37,18 +40,18 @@ vagrant plugin install vagrant-vbguest
 ## Install the extenion pack as it contains the Virtualbox RDP Server
 sudo apt install virtualbox-ext-pack -y
 
-## Enter dasea project
+# Enter dasea project
 cd dasea-tool
 
-## Setup Python version
-# poetry env use /usr/bin/python3.9
+# Setup Python version
+poetry env use /usr/bin/python3.9
 
-## Install dependencies
-# poetry install
+# Install dependencies
+poetry install
 
-## Try out the tool
-# poetry run dasea mine fpm
+# Try out the tool
+poetry run dasea mine fpm
 
 vagrant up freebsd11
 vagrant destroy .f freebsd11
-#bash bin/get_freebsd_ports.sh
+bash bin/get_freebsd_ports.sh

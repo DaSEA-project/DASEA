@@ -32,6 +32,10 @@ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(l
 sudo apt-get update -y && sudo apt-get install vagrant -y
 vagrant plugin install vagrant-reload
 vagrant plugin install vagrant-scp
+vagrant plugin install vagrant-vbguest
+
+## Install the extenion pack as it contains the Virtualbox RDP Server
+sudo apt install virtualbox-ext-pack -y
 
 ## Enter dasea project
 cd dasea-tool

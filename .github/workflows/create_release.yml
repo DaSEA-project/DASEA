@@ -99,4 +99,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             source ~/.profile
-            bash dasea-tool/bin/create_dataset.sh
+            cd dasea-tool
+            poetry env use /usr/bin/python3.9
+            poetry install
+            bash bin/create_dataset.sh

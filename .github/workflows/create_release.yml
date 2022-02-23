@@ -31,7 +31,7 @@ jobs:
         run: >
           doctl compute droplet create
           --image ${{secrets.DO_DASEA_SNAPSHOT_ID}}
-          --size s-1vcpu-1gb
+          --size s-4vcpu-8gb
           --region ams3
           --wait
           --ssh-keys ${{secrets.SSH_PUBLIC_KEY_FINGERPRINT}},${{secrets.DO_SSHKEY_JHI}},${{secrets.DO_SSHKEY_KOLS}},${{secrets.DO_SSHKEY_PEBU}}

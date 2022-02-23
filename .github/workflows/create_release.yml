@@ -97,4 +97,6 @@ jobs:
           host: ${{ needs.provision_droplet.outputs.IPAddress}}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: bash dasea-tool/bin/create_dataset.sh &
+          script: |
+            source ~/.profile
+            bash dasea-tool/bin/create_dataset.sh

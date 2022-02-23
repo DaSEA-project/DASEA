@@ -17,4 +17,4 @@ jobs:
           token: ${{secrets.DO_ACCESS_TOKEN}}
 
       - name: Destroy droplet
-        run: doctl compute droplet delete DASEA-tool
+        run: doctl compute droplet delete DASEA-tool -f

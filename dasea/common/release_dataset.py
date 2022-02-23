@@ -24,7 +24,8 @@ def create_compressed_archive():
         print(f"Cannot create archive {archive_file}", file=sys.stderr)
         sys.exit(1)
     else:
-        print(f"Created {archive_file}")
+        # print(f"Created {archive_file}")
+        print(archive_file)
     return archive_file
     # headers = {"Content-Type": "application/json", "Authorization": f"Bearer {zenodo_api_key}"}
     # r = requests.get(f"{BASE_URL}", headers=headers)
@@ -46,7 +47,7 @@ def update_homepage(new_dataset_url):
     json.dump(file_data, file, indent=4)
 
 
-def push_dataset_to_zenodo(dataset_path, sandbox=False):
+def push_dataset_to_zenodo(dataset_path, sandbox=False, no_verify=False):
     # API Documentation is here:
     # https://developers.zenodo.org/?python#quickstart-upload
     release_date_str = Path(dataset_path).name.replace("dasea_", "").split(".")[0]
@@ -103,7 +104,10 @@ def push_dataset_to_zenodo(dataset_path, sandbox=False):
     r.raise_for_status()
 
     print(f"Double check all information on {deposit_url}")
-    answer = input("Are you sure that you want to finally publish the dataset? [y/N] ")
+    if(no_verify):
+        answer = "y"
+    else:
+        answer = input("Are you sure that you want to finally publish the dataset? [y/N] ")
     if answer == "y":
         print("Publishing the dataset...")
         r = requests.post(publish_url, params=params)

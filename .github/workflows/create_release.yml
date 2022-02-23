@@ -94,7 +94,7 @@ jobs:
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
         with:
-          command_timeout: 200m
+          command_timeout: 360m
           host: ${{ needs.provision_droplet.outputs.IPAddress}}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -104,3 +104,5 @@ jobs:
             poetry env use /usr/bin/python3.9
             poetry install
             bash bin/create_dataset.sh
+            export ZENODO_API_TOKEN=${{ secrets.ZENODO_API_TOKEN }}
+            bash bin/release_dataset.sh

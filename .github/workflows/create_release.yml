@@ -94,6 +94,7 @@ jobs:
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
         with:
+          command_timeout: 200m
           host: ${{ needs.provision_droplet.outputs.IPAddress}}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}

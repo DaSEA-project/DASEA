@@ -1,3 +1,4 @@
+### NB: You need a bigger Digital Ocean droplet with at least 8GB of RAM. We use 8GB RAM / 160GB SSD / 5TB transfer
 
 # Apt update and upgrade
 sudo apt update -y

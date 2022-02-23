@@ -12,21 +12,21 @@ poetry run dasea mine vcpkg
 poetry run dasea mine homebrew
 poetry run dasea mine chromebrew
 
-vagrant up freebsd11
-bash bin/get_freebsd_ports.sh
-vagrant destroy -f freebsd11
+# vagrant up freebsd11
+# bash bin/get_freebsd_ports.sh
+# vagrant destroy -f freebsd11
 
-vagrant up openbsd69
-bash bin/get_openbsd_ports.sh
-vagrant destroy -f openbsd69
+# vagrant up openbsd69
+# bash bin/get_openbsd_ports.sh
+# vagrant destroy -f openbsd69
 
-vagrant up netbsd9
-bash bin/get_netbsd_pkgsrc.sh # Takes a really long time, 2-3h
-vagrant destroy -f netbsd9
+# vagrant up netbsd9
+# bash bin/get_netbsd_pkgsrc.sh # Takes a really long time, 2-3h
+# vagrant destroy -f netbsd9
 
-vagrant up ubuntu2104oneway
-bash bin/get_nimble_pkgs.sh
-vagrant destroy -f ubuntu2104oneway
+# vagrant up ubuntu2104oneway
+# bash bin/get_nimble_pkgs.sh
+# vagrant destroy -f ubuntu2104oneway
 
-poetry run dasea release
+# poetry run dasea release
 # poetry run dasea push --sandbox insert_dataset_file_path_here

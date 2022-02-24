@@ -1,59 +1,39 @@
 #!/usr/bin/env bash
 
-# poetry run dasea mine cargo
-# poetry run dasea mine alire
-# poetry run dasea mine fpm
-# poetry run dasea mine vcpkg
-# poetry run dasea mine homebrew
-# poetry run dasea mine chromebrew
+# Run miners that run quicker
+poetry run dasea mine cargo
+poetry run dasea mine alire
+poetry run dasea mine fpm
+poetry run dasea mine vcpkg
+poetry run dasea mine homebrew
+poetry run dasea mine chromebrew
 
-#vagrant up ubuntu2104
-#vagrant up freebsd11
-# vagrant up openbsd69
-# vagrant up netbsd9
-# vagrant up ubuntu2104oneway
+# Spin up all vagrant machines
+vagrant up ubuntu2104
+vagrant up freebsd11
+vagrant up openbsd69
+vagrant up netbsd9
+vagrant up ubuntu2104oneway
 
+# Run all processes in parallel
+nohup vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan" &
+CONAN_ID=$!
 
-# nohup vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan" &
-# nohup bash bin/get_freebsd_ports.sh &
+nohup bash bin/get_freebsd_ports.sh &
+FREEBSD_ID=$!
 
-nohup poetry run dasea mine fpm &
-FPM_ID=$!
-echo $CARGO_ID
-nohup poetry run dasea mine alire &
-ALIRE_ID=$!
-echo $ALIRE_ID
+nohup bash bin/get_openbsd_ports.sh &
+OPENBSD_ID=$!
 
-while(ps -p $ALIRE_ID > /dev/null)
-do
-    echo "waiting for alire to finish"
-    sleep 1
-done
+nohup bash bin/get_netbsd_ports.sh &
+NETBSD_ID=$!
 
-nohup sh -c 'while ps -p $ALIRE_ID > /dev/null; do echo "Process is running" && sleep 10; done && mv $1 $1_done' vagrant destroy -f ubuntu2104 &
-#nohup sh -c 'while ps -p $1 > /dev/null; do sleep 10; done && mv $2 $2_done' vagrant destroy -f freebsd11 &
+nohup bash bin/get_nimble_pkgs.sh
+NIMBLE_ID=$!
 
-
-# vagrant destroy -f ubuntu2104
-# vagrant destroy -f freebsd11
-
-# vagrant up ubuntu2104
-# vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan"
-# vagrant destroy -f ubuntu2104
-
-
-# vagrant up freebsd11
-# bash bin/get_freebsd_ports.sh
-# vagrant destroy -f freebsd11
-
-# vagrant up openbsd69
-# # bash bin/get_openbsd_ports.sh
-# vagrant destroy -f openbsd69
-
-# # vagrant up netbsd9
-# bash bin/get_netbsd_pkgsrc.sh # Takes a really long time, 2-3h
-# vagrant destroy -f netbsd9
-
-# # vagrant up ubuntu2104oneway
-# bash bin/get_nimble_pkgs.sh
-# vagrant destroy -f ubuntu2104oneway
+# Destroy all machines
+nohup sh -c 'while ps -p $CONAN_ID > /dev/null; do echo "Conan process is running" && sleep 300; done && vagrant destroy -f ubuntu2104'
+nohup sh -c 'while ps -p $FREEBSD_ID > /dev/null; do echo "FreeBSD process is running" && sleep 300; done && vagrant destroy -f freebsd11'
+nohup sh -c 'while ps -p $OPENBSD_ID > /dev/null; do echo "OpenBSD process is running" && sleep 300; done && vagrant destroy -f openbsd69'
+nohup sh -c 'while ps -p $NETBSD_ID > /dev/null; do echo "NetBSD process is running" && sleep 300; done && vagrant destroy -f netbsd9'
+nohup sh -c 'while ps -p $NIMBLE_ID > /dev/null; do echo "Nimble process is running" && sleep 300; done && vagrant destroy -f ubuntu2104oneway'

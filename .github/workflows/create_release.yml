@@ -77,6 +77,11 @@ jobs:
 
       - run: echo ${{ needs.provision_droplet.outputs.IPAddress}}
 
+      - name: Sleep for 15 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '15s'
+
       - name: Clone DaSEA tool
         uses: appleboy/ssh-action@master
         with:

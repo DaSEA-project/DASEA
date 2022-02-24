@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # Run miners that run quicker
-poetry run dasea mine cargo
 poetry run dasea mine alire
-poetry run dasea mine fpm
-poetry run dasea mine vcpkg
-poetry run dasea mine homebrew
+poetry run dasea mine cargo
 poetry run dasea mine chromebrew
+poetry run dasea mine fpm
+poetry run dasea mine homebrew
+poetry run dasea mine vcpkg
 
 # Spin up all vagrant machines
 vagrant up ubuntu2104

@@ -28,7 +28,7 @@ OPENBSD_ID=$!
 nohup bash bin/get_netbsd_ports.sh &
 NETBSD_ID=$!
 
-nohup bash bin/get_nimble_pkgs.sh
+nohup bash bin/get_nimble_pkgs.sh &
 NIMBLE_ID=$!
 
 # Destroy all machines

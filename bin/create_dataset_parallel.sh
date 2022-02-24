@@ -14,11 +14,15 @@ vagrant up freebsd11
 # vagrant up ubuntu2104oneway
 
 
-vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan" &
-bash bin/get_freebsd_ports.sh &
+nohup vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan" &
+nohup bash bin/get_freebsd_ports.sh &
 
-vagrant destroy -f ubuntu2104
-vagrant destroy -f freebsd11
+#nohup sh -c 'while ps -p $0 > /dev/null; do sleep 10; done && mv $1 $1_done' vagrant destroy -f ubuntu2104 &
+#nohup sh -c 'while ps -p $1 > /dev/null; do sleep 10; done && mv $2 $2_done' vagrant destroy -f freebsd11 &
+
+
+# vagrant destroy -f ubuntu2104
+# vagrant destroy -f freebsd11
 
 # vagrant up ubuntu2104
 # vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan"

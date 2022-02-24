@@ -1,0 +1,12 @@
+name: Repository Dispatch
+on:
+  repository_dispatch:
+    types: [example]
+
+jobs:
+  whoami:
+    name: whoami
+    runs-on: ubuntu-latest
+    steps:
+      - name: my-step
+        run: echo "Hello World!"

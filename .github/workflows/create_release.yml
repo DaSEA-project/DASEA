@@ -103,8 +103,10 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            ls
             source ~/.profile
             cd dasea-tool
+            ls
             poetry env use /usr/bin/python3.9
             poetry install
             bash bin/create_dataset.sh

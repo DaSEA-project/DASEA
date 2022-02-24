@@ -31,9 +31,22 @@ NETBSD_ID=$!
 nohup bash bin/get_nimble_pkgs.sh
 NIMBLE_ID=$!
 
+COUNT=0
+
 # Destroy all machines
-nohup sh -c 'while ps -p $CONAN_ID > /dev/null; do echo "Conan process is running" && sleep 300; done && vagrant destroy -f ubuntu2104'
-nohup sh -c 'while ps -p $FREEBSD_ID > /dev/null; do echo "FreeBSD process is running" && sleep 300; done && vagrant destroy -f freebsd11'
-nohup sh -c 'while ps -p $OPENBSD_ID > /dev/null; do echo "OpenBSD process is running" && sleep 300; done && vagrant destroy -f openbsd69'
-nohup sh -c 'while ps -p $NETBSD_ID > /dev/null; do echo "NetBSD process is running" && sleep 300; done && vagrant destroy -f netbsd9'
-nohup sh -c 'while ps -p $NIMBLE_ID > /dev/null; do echo "Nimble process is running" && sleep 300; done && vagrant destroy -f ubuntu2104oneway'
+nohup sh -c 'while ps -p $CONAN_ID > /dev/null; do echo "Conan process is running" && sleep 300; done && $COUNT++ && vagrant destroy -f ubuntu2104'
+nohup sh -c 'while ps -p $FREEBSD_ID > /dev/null; do echo "FreeBSD process is running" && sleep 300; done && $COUNT++ &&  vagrant destroy -f freebsd11'
+nohup sh -c 'while ps -p $OPENBSD_ID > /dev/null; do echo "OpenBSD process is running" && sleep 300; done && $COUNT++ &&  vagrant destroy -f openbsd69'
+nohup sh -c 'while ps -p $NETBSD_ID > /dev/null; do echo "NetBSD process is running" && sleep 300; done && $COUNT++ &&  vagrant destroy -f netbsd9'
+nohup sh -c 'while ps -p $NIMBLE_ID > /dev/null; do echo "Nimble process is running" && sleep 300; done && $COUNT++ &&  vagrant destroy -f ubuntu2104oneway'
+
+# Check if mining is still running
+while [ $COUNT -lt 5 ]; do
+    echo "Waiting for all machines to be destroyed"
+    sleep 3000
+done
+
+# Trigger release dataset
+bash bin/release_dataset.sh
+
+# Push to main repo

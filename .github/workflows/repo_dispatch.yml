@@ -1,12 +1,12 @@
-name: Repository Dispatch
+name: Dispatch droplet destroy
 on:
   repository_dispatch:
-    types: [example]
+    types: [destroy-droplet]
 
 jobs:
-  whoami:
-    name: whoami
+  destroy-droplet:
+    name: destroy
     runs-on: ubuntu-latest
     steps:
-      - name: my-step
+      - name: echo-test
         run: echo "Hello World!"

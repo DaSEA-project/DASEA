@@ -17,14 +17,20 @@
 # nohup vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan" &
 # nohup bash bin/get_freebsd_ports.sh &
 
-nohup poetry run dasea mine cargo &
-CARGO_ID=$!
+nohup poetry run dasea mine fpm &
+FPM_ID=$!
 echo $CARGO_ID
 nohup poetry run dasea mine alire &
 ALIRE_ID=$!
 echo $ALIRE_ID
 
-# nohup sh -c 'while ps -p $CARGO_ID > /dev/null; echo "Process is running"; do sleep 10; done && mv $1 $1_done' vagrant destroy -f ubuntu2104 &
+while(ps -p $ALIRE_ID > /dev/null)
+do
+    echo "waiting for alire to finish"
+    sleep 1
+done
+
+nohup sh -c 'while ps -p $ALIRE_ID > /dev/null; do echo "Process is running" && sleep 10; done && mv $1 $1_done' vagrant destroy -f ubuntu2104 &
 #nohup sh -c 'while ps -p $1 > /dev/null; do sleep 10; done && mv $2 $2_done' vagrant destroy -f freebsd11 &
 
 

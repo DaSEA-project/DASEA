@@ -85,7 +85,7 @@ jobs:
       - name: Clone DaSEA tool
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ steps.SSH_HOST.outputs.value }}
+          host: ${{ needs.provision_droplet.outputs.IPAddress}}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: git clone https://github.com/dependulum/DASEA.git

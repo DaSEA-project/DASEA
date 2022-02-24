@@ -77,14 +77,13 @@ jobs:
 
       - run: echo ${{ needs.provision_droplet.outputs.IPAddress}}
 
-      - name: Copy DaSEA tool
-        uses: appleboy/scp-action@master
+      - name: Clone DaSEA tool
+        uses: appleboy/ssh-action@master
         with:
-          host: ${{ needs.provision_droplet.outputs.IPAddress}}
+          host: ${{ steps.SSH_HOST.outputs.value }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: './'
-          target: 'dasea-tool'
+          script: git clone https://github.com/dependulum/DASEA.git
 
       - name: Sleep for 5 seconds
         uses: jakejarvis/wait-action@master

@@ -107,6 +107,5 @@ jobs:
             cd dasea-tool
             poetry env use /usr/bin/python3.9
             poetry install
-            bash bin/create_dataset_parallel.sh
             export ZENODO_API_TOKEN=${{ secrets.ZENODO_API_TOKEN }}
-            bash bin/release_dataset.sh
+            bash bin/create_dataset_parallel.sh

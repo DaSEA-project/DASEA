@@ -9,7 +9,7 @@ NON_VAGRANT_MINERS_ID=$!
 COUNT=0
 
 # Destroy all machines
-nohup sh -c 'while ps -p $NON_VAGRANT_MINERS_ID > /dev/null; do echo "Non Vagrant Miners process is running" && sleep 300; done && ((COUNT++)) && vagrant destroy -f ubuntu2104'
+nohup sh -c 'while ps -p $NON_VAGRANT_MINERS_ID > /dev/null; do echo "Non Vagrant Miners process is running" && sleep 300; done && ((COUNT++))'
 
 
 ## Once done, trigger release and push to GitHub

@@ -15,7 +15,7 @@ jobs:
   provision_droplet:
     # FIXME:
     # if: ${{ false }} # disable for now
-    name: Provision droplet
+    name: Trigger Steve
     runs-on: ubuntu-latest
     # Map a step output to a job output
     outputs:

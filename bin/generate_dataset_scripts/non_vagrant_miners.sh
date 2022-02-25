@@ -1,5 +1,5 @@
 ## Spin up a DO droplet
-doctl compute droplet create --image 33316478 --size s-4vcpu-8gb --region ams3 --wait --ssh-keys 33315393 DASEA-tool-miner-1
+doctl compute droplet create --image 102629764 --size s-4vcpu-8gb --region ams3 --wait --ssh-keys 33316478 DASEA-tool-miner-1
 
 ## Get the droplet's IP address
 IP_ADDRESS=$(doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool-miner-1)

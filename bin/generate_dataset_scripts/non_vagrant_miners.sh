@@ -1,6 +1,6 @@
 
 ## Copy ssh keys into a variable
-SSH_KEYS=$(cat ~/.ssh/dasea.pub)
+SSH_KEYS=$(cat ~/.ssh/id_rsa.pub)
 echo $SSH_KEYS
 
 ## Spin up a DO droplet
@@ -16,11 +16,12 @@ ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 ## Switch identity
 echo "Switching identity..."
 # exec ssh-agent bash
-ssh-add ~/.ssh/dasea
+# ssh-add ~/.ssh/id_rsa
 
 ## Copy ssh keys into droplet
 echo "Copying SSH keys into droplet..."
-scp -i ~/.ssh/dasea ~/.ssh/miner1.pub root@$IP_ADDRESS:/root/.ssh/
+# scp -i ~/.ssh/id_rsa ~/.ssh/miner1.pub root@$IP_ADDRESS:/root/.ssh/
+scp ~/.ssh/miner1.pub root@$IP_ADDRESS:/root/.ssh/
 
 ## SSH into the droplet
 echo "SSH into the droplet..."

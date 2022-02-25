@@ -3,6 +3,7 @@
 ## Execute in parallel with nohup
 nohup bash bin/generate_dataset_scripts/non_vagrant_miners.sh &
 NON_VAGRANT_MINERS_ID=$!
+echo $NON_VAGRANT_MINERS_ID
 
 ## FreeBSD script... for all Vagrant
 

@@ -29,6 +29,11 @@ ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
 source ~/.profile && git clone https://github.com/dependulum/DASEA.git &&
 cd DASEA && poetry install &&
 poetry run dasea mine alire &&
+poetry run dasea mine cargo &&
+poetry run dasea mine chromebrew &&
+poetry run dasea mine fpm &&
+poetry run dasea mine homebrew &&
+poetry run dasea mine vcpkg &&
 scp -i ~/.ssh/id_rsa -r ./data/out root@157.245.70.200:/root/DASEA/data"
 
 echo "Completed..."

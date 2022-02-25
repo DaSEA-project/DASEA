@@ -15,7 +15,7 @@ ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 
 ## Switch identity
 echo "Switching identity..."
-exec ssh-agent bash
+# exec ssh-agent bash
 ssh-add ~/.ssh/dasea
 
 ## Copy ssh keys into droplet

@@ -2,7 +2,7 @@
 doctl compute droplet create --image 102629764 --size s-4vcpu-8gb --region ams3 --wait --ssh-keys 33316478 DASEA-tool-miner-1
 
 ## Sleep while the droplet boots up
-sleep 30
+sleep 45
 
 ## Get the droplet's IP address
 IP_ADDRESS=$(doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool-miner-1)

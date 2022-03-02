@@ -1,5 +1,5 @@
 ## Spin up a DO droplet
-doctl compute droplet create --image ubuntu-20-04-x64 --size s-1vcpu-1gb --region ams3 --wait --ssh-keys 33249667 kols-test
+doctl compute droplet create --image ubuntu-20-04-x64 --size s-1vcpu-1gb --region ams3 --wait --ssh-keys 33315393 kols-test
 
 ## Sleep while the droplet boots up
 sleep 45

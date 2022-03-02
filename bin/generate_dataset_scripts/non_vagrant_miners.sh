@@ -22,7 +22,7 @@ echo "Copying SSH keys into droplet..."
 scp ~/.ssh/id_rsa root@$IP_ADDRESS:/root/.ssh/
 
 
-## SSH into the droplet
+## SSH into the droplet, Execute all miners sequentially, SCP back data to STEVE
 echo "SSH into the droplet..."
 doctl compute ssh DASEA-tool-miner-1 --ssh-command "
 ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
@@ -38,8 +38,7 @@ scp -i ~/.ssh/id_rsa -r ./data/out root@157.245.70.200:/root/DASEA/data"
 
 echo "Completed..."
 
-## Execute all miners sequentially
+## Persist in json file this miner has completed
 
-## SCP back data to STEVE
 
 ## Destroy droplet

@@ -29,7 +29,7 @@ ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
 source ~/.profile && git clone https://github.com/dependulum/DASEA.git &&
 cd DASEA && poetry install &&
 poetry run dasea mine alire &&
-scp -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.org:/root/DASEA/data"
+scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.org:/root/DASEA/data"
 
 ## SSH into the droplet
 # echo "SSH into the droplet..."

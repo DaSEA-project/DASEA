@@ -19,7 +19,7 @@ ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 ## Copy ssh keys into droplet
 echo "Copying SSH keys into droplet..."
 # scp -i ~/.ssh/id_rsa ~/.ssh/miner1.pub root@$IP_ADDRESS:/root/.ssh/
-scp ~/.ssh/id_rsa root@$IP_ADDRESS:/root/.ssh/
+scp -i ~/.ssh/dasea ~/.ssh/id_rsa root@$IP_ADDRESS:/root/.ssh/
 
 
 ## SSH into the droplet, Execute all miners sequentially, SCP back data to STEVE

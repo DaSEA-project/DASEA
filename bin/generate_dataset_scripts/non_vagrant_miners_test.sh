@@ -14,7 +14,7 @@ ssh-keyscan -H $IP_ADDRESS >> ~/.ssh/known_hosts
 
 ## SSH into the droplet, Execute all miners sequentially, SCP back data to STEVE
 echo "SSH into the droplet..."
-doctl compute ssh kols-test --ssh-command "
+doctl compute ssh kols-test --ssh-key-path ~/.ssh/dasea --ssh-command "
 whoami"
 
 echo "Completed..."

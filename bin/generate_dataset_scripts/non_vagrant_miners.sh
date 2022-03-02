@@ -1,5 +1,5 @@
 ## Spin up a DO droplet
-doctl compute droplet create --image 102629764 --size s-4vcpu-8gb --region ams3 --wait --ssh-keys 33316478 DASEA-tool-miner-1
+doctl compute droplet create --image 102629764 --size s-4vcpu-8gb --region ams3 --wait --ssh-keys 33315393 DASEA-tool-miner-1
 
 ## Sleep while the droplet boots up
 sleep 45
@@ -24,7 +24,7 @@ scp ~/.ssh/id_rsa root@$IP_ADDRESS:/root/.ssh/
 
 ## SSH into the droplet, Execute all miners sequentially, SCP back data to STEVE
 echo "SSH into the droplet..."
-doctl compute ssh DASEA-tool-miner-1 --ssh-command "
+doctl compute ssh DASEA-tool-miner-1 --ssh-key-path ~/.ssh/dasea --ssh-command "
 ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
 source ~/.profile && git clone https://github.com/dependulum/DASEA.git &&
 cd DASEA && poetry install &&
@@ -48,6 +48,8 @@ scp -i ~/.ssh/id_rsa -r ./data/out root@157.245.70.200:/root/DASEA/data"
 echo "Completed..."
 
 ## Persist in json file this miner has completed
+contents="$(jq '.non_vagrant_complete = true' ~/status.json)"
+echo -E "${contents}" > test.json
 
 
 ## Destroy droplet

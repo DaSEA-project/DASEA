@@ -47,9 +47,5 @@ scp -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.org:/root/DASEA/data"
 
 echo "Completed..."
 
-## Persist in json file this miner has completed
-contents="$(jq '.non_vagrant_complete = true' ~/status.json)"
-echo -E "${contents}" > test.json
-
 
 ## Destroy droplet

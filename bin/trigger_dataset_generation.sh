@@ -1,7 +1,7 @@
 
 ## Create JSON file
 sudo apt install jq -y
-echo '{"non_vagrant_complete": false, vagrant_complete: false}' | jq . >> ~/status.json
+echo '{"non_vagrant_complete": false, "vagrant_complete": false}' | jq . >> ~/status.json
 
 ## Execute in parallel with nohup
 bash bin/generate_dataset_scripts/non_vagrant_miners.sh &

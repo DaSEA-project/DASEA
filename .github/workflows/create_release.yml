@@ -2,19 +2,10 @@ name: On-demand dataset release
 on:
   # Only allow manual triggers for now
   workflow_dispatch:
-  # Only trigger, when the build workflow succeeded
-  # TODO: uncomemnt me
-  # workflow_run:
-  #   workflows: ['Build And Test Workflow']
-  #   types:
-  #     - completed
+    manual: true
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   provision_droplet:
-    # FIXME:
-    # if: ${{ false }} # disable for now
     name: Trigger Steve
     runs-on: ubuntu-latest
     # Map a step output to a job output
@@ -22,34 +13,6 @@ jobs:
       IPAddress: ${{ steps.ipAddress.outputs.ipAddress }}
     steps:
       - uses: actions/checkout@v2
-
-      # - name: GitHub Action for DigitalOcean - doctl
-      #   uses: digitalocean/action-doctl@v2.1.0
-      #   with:
-      #     token: ${{secrets.DO_ACCESS_TOKEN}}
-      # - name: Provision droplet
-      #   run: >
-      #     doctl compute droplet create
-      #     --image ${{secrets.DO_DASEA_SNAPSHOT_ID}}
-      #     --size s-4vcpu-8gb
-      #     --region ams3
-      #     --wait
-      #     --ssh-keys ${{secrets.SSH_PUBLIC_KEY_FINGERPRINT}},${{secrets.DO_SSHKEY_JHI}},${{secrets.DO_SSHKEY_KOLS}},${{secrets.DO_SSHKEY_PEBU}}
-      #     DASEA-tool
-
-      # - name: Sleep for 45 seconds
-      #   uses: jakejarvis/wait-action@master
-      #   with:
-      #     time: '45s'
-
-      # - name: Get IP of droplet
-      #   run: |
-      #     echo "::set-output name=value::$(doctl compute droplet get --format "PublicIPv4" --no-header DASEA-tool)"
-      #   id: SSH_HOST
-
-      # - name: Echo IP
-      #   run: |
-      #     echo "IP: ${{ steps.SSH_HOST.outputs.value }}"
 
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
@@ -66,51 +29,3 @@ jobs:
             poetry install
             export ZENODO_API_TOKEN=${{ secrets.ZENODO_API_TOKEN }}
             bash bin/release/trigger_dataset_generation.sh
-
-  # create_and_release_dataset:
-  #   name: Release dataset
-  #   runs-on: ubuntu-latest
-  #   needs: provision_droplet
-  #   timeout-minutes: 360
-  #   steps:
-  #     - uses: actions/checkout@v2
-
-  #     - name: GitHub Action for DigitalOcean - doctl
-  #       uses: digitalocean/action-doctl@v2.1.0
-  #       with:
-  #         token: ${{secrets.DO_ACCESS_TOKEN}}
-
-  #     - run: echo ${{ needs.provision_droplet.outputs.IPAddress}}
-
-  #     - name: Sleep for 15 seconds
-  #       uses: jakejarvis/wait-action@master
-  #       with:
-  #         time: '15s'
-
-  #     - name: Clone DaSEA tool
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ needs.provision_droplet.outputs.IPAddress}}
-  #         username: ${{ secrets.DO_USERNAME }}
-  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         script: git clone https://github.com/dependulum/DASEA.git dasea-tool
-
-  #     - name: Sleep for 5 seconds
-  #       uses: jakejarvis/wait-action@master
-  #       with:
-  #         time: '5s'
-
-  #     - name: SSH into droplet
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         command_timeout: 360m
-  #         host: ${{ needs.provision_droplet.outputs.IPAddress}}
-  #         username: ${{ secrets.DO_USERNAME }}
-  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         script: |
-  #           source ~/.profile
-  #           cd dasea-tool
-  #           poetry env use /usr/bin/python3.9
-  #           poetry install
-  #           export ZENODO_API_TOKEN=${{ secrets.ZENODO_API_TOKEN }}
-  #           bash bin/create_dataset_parallel.sh

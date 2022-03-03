@@ -11,6 +11,6 @@ NON_VAGRANT_MINERS_ID=$!
 # put this while in own file so it can be sent to background
 bash bin/release/background_check_non_vagrant.sh $NON_VAGRANT_MINERS_ID &
 
-bash bin/release/background_check_completion_status.sh &
+bash bin/release/background_check_completion_status.sh # &
 
 echo "trigger_dataset_generation completed..."

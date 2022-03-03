@@ -21,9 +21,10 @@ bash bin/release/release_dataset.sh
 echo "Pushing to GitHub"
 git config --global user.email "daseaITU@gmail.com"
 git config --global user.name "daseaOrg"
+git checkout gh-pages
 git add .
 git commit -m "DaSEA release - $(date)"
-git push origin main
+git push
 
 # delete DASEA folder
 echo "Deleting DASEA folder"

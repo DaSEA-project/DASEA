@@ -54,9 +54,9 @@ jobs:
       - name: SSH into droplet
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ steps.SSH_HOST.outputs.value }}
+          host: ${{ secrets.STEVE_IP_ADDRESS }}
           username: ${{ secrets.DO_USERNAME }}
-          key: ${{ secrets.STEVE_IP_ADDRESS }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             git clone https://github.com/dependulum/DASEA.git
             bash DASEA/bin/release/trigger_dataset_generation.sh

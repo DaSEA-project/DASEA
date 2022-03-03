@@ -19,6 +19,8 @@ bash bin/release_dataset.sh
 
 # push to github
 echo "Pushing to GitHub"
+git config --global user.email "daseaOrg@gmail.com"
+git config --global user.name "daseaOrg"
 git add .
 git commit -m "DaSEA release - $(date)"
 git push origin main

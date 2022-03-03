@@ -58,7 +58,7 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            rm ~/DASEA
+            rm -rf ~/DASEA
             source ~/.profile
             git clone https://github.com/dependulum/DASEA.git
             cd DASEA

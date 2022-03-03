@@ -20,6 +20,7 @@ jobs:
           host: ${{ secrets.STEVE_IP_ADDRESS }}
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: 360m
           script: |
             rm -rf ~/DASEA
             source ~/.profile

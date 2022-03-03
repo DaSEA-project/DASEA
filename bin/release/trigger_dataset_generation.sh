@@ -19,6 +19,6 @@ bash bin/release/background_check_conan.sh $CONAN_MINER_ID &
 
 
 # Check all miners are complete
-bash bin/release/background_check_completion_status.sh # &
+bash bin/release/background_check_completion_status.sh &
 
 echo "trigger_dataset_generation completed..."

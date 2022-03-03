@@ -58,10 +58,10 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            rm ~/DASEA
             source ~/.profile
             git clone https://github.com/dependulum/DASEA.git
             cd DASEA
-            git reset --hard origin/main
             poetry env use /usr/bin/python3.9
             poetry install
             export ZENODO_API_TOKEN=${{ secrets.ZENODO_API_TOKEN }}

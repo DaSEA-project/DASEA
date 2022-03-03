@@ -7,7 +7,7 @@ echo '{"non_vagrant_complete": false, "vagrant_complete": false}' | jq . >> ~/st
 ## Execute in parallel with nohup
 bash bin/release/generate_dataset_scripts/non_vagrant_miners.sh &
 NON_VAGRANT_MINERS_ID=$!
-
+echo "NON_VAGRANT_MINERS_ID: $NON_VAGRANT_MINERS_ID"
 # put this while in own file so it can be sent to background
 bash bin/release/background_check_non_vagrant.sh $NON_VAGRANT_MINERS_ID &
 

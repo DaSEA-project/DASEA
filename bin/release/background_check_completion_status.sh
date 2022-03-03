@@ -6,7 +6,7 @@ echo $non_vagrant
 # freebds=$(cat ~/status.json | jq '.free_bds_complete')
 # echo $freebds
 
-while $non_vagrant == false
+while [ "$non_vagrant" = false ]
 do
     echo "Miners processes still running"
     sleep 50

@@ -15,7 +15,7 @@ echo "All tasks complete"
 
 # release dataset
 echo "Releasing dataset"
-bash bin/release_dataset.sh
+bash bin/release/release_dataset.sh
 
 # push to github
 echo "Pushing to GitHub"

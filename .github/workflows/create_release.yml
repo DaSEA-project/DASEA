@@ -59,7 +59,7 @@ jobs:
           key: ${{ secrets.STEVE_IP_ADDRESS }}
           script: |
             git clone https://github.com/dependulum/DASEA.git
-            bash DASEA/bin/trigger_dataset_generation.sh
+            bash DASEA/bin/release/trigger_dataset_generation.sh
 
   # create_and_release_dataset:
   #   name: Release dataset

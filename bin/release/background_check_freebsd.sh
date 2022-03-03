@@ -1,8 +1,6 @@
 #! /bin/bash
 
-FreeBSD_ID = $1
-
-while ps -p $FreeBSD_ID > /dev/null
+while ps -p $1 > /dev/null
 do
     echo "FreeBDS Miner process is running"
     sleep 5

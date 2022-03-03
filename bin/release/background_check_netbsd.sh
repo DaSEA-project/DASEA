@@ -1,8 +1,6 @@
 #! /bin/bash
 
-NetBSD_ID = $1
-
-while ps -p $NetBSD_ID > /dev/null
+while ps -p $1 > /dev/null
 do
     echo "NetBDS Miner process is running"
     sleep 5

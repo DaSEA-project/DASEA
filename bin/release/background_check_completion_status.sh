@@ -1,15 +1,10 @@
 filepath='~/status.json'
 
-non_vagrant=$(cat ~/status.json | jq '.non_vagrant_complete')
-echo $non_vagrant
 
-# freebds=$(cat ~/status.json | jq '.free_bds_complete')
-# echo $freebds
-
-while [ $(cat ~/status.json | jq '.non_vagrant_complete') = false ]
+while [ $(cat ~/status.json | jq '.non_vagrant_complete') = false ] && [ $(cat ~/status.json | jq '.conan_complete') = false ]
 do
     echo "Miners processes still running"
-    sleep 50
+    sleep 900
 done
 echo "All tasks complete"
 

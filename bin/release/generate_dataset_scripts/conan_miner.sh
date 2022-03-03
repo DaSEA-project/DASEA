@@ -17,7 +17,7 @@ scp -i ~/.ssh/dasea ~/.ssh/id_rsa root@$IP_ADDRESS:/root/.ssh/
 
 ## SSH into the droplet, Execute all miners sequentially, SCP back data to STEVE
 echo "SSH into the droplet..."
-doctl compute ssh DASEA-tool-miner-1 --ssh-key-path ~/.ssh/dasea --ssh-command "
+doctl compute ssh DASEA-tool-conan-miner --ssh-key-path ~/.ssh/dasea --ssh-command "
 ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
 source ~/.profile && git clone https://github.com/dependulum/DASEA.git &&
 cd DASEA && poetry install &&

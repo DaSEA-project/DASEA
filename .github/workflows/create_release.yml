@@ -64,7 +64,7 @@ jobs:
             poetry env use /usr/bin/python3.9
             poetry install
             export ZENODO_API_TOKEN=${{ secrets.ZENODO_API_TOKEN }}
-            bash DASEA/bin/release/trigger_dataset_generation.sh
+            bash bin/release/trigger_dataset_generation.sh
 
   # create_and_release_dataset:
   #   name: Release dataset

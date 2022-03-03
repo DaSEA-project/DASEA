@@ -1,9 +1,9 @@
-filepath='./status.json'
+filepath='~/status.json'
 
-non_vagrant=$(cat status.json | jq '.non_vagrant_complete')
+non_vagrant=$(cat ~/status.json | jq '.non_vagrant_complete')
 echo $non_vagrant
 
-# freebds=$(cat status.json | jq '.free_bds_complete')
+# freebds=$(cat ~/status.json | jq '.free_bds_complete')
 # echo $freebds
 
 while $non_vagrant == "true"

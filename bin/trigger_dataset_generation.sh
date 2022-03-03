@@ -1,5 +1,6 @@
 
 ## Create JSON file
+rm ~/status.json
 sudo apt install jq -y
 echo '{"non_vagrant_complete": false, "vagrant_complete": false}' | jq . >> ~/status.json
 

@@ -21,7 +21,7 @@ do
     sleep 5
 done
 contents="$(jq '.non_vagrant_complete = true' ~/status.json)"
-echo -E "${contents}" > test.json
+echo -E "${contents}" > ~/status.json
 
 # ## Once done, trigger release and push to GitHub
 # nohup sh -c "while [ $COUNT -lt 1 ]; do echo 'Mining is still running' && sleep 5; done && bash bin/release/release_dataset.sh" &

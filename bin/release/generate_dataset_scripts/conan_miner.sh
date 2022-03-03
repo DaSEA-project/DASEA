@@ -24,7 +24,7 @@ cd DASEA && poetry install &&
 vagrant up ubuntu2104
 vagrant ssh ubuntu2104 --command 'cd /vagrant/ && poetry run dasea mine conan'
 vagrant destroy -f ubuntu2104
-scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.org:/root/DASEA/data"
+scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/conan root@steve.dasea.org:/root/DASEA/data/out"
 
 ## Destroy droplet
 echo "Destroying droplet..."

@@ -5,7 +5,7 @@ sudo apt install jq -y
 echo '{"non_vagrant_complete": false, "vagrant_complete": false}' | jq . >> ~/status.json
 
 ## Execute in parallel with nohup
-bash bin/generate_dataset_scripts/non_vagrant_miners.sh &
+bash bin/release/generate_dataset_scripts/non_vagrant_miners.sh &
 NON_VAGRANT_MINERS_ID=$!
 
 # nohup bash bin/generate_dataset_scripts/vagrant_miners.sh &
@@ -25,7 +25,7 @@ contents="$(jq '.non_vagrant_complete = true' ~/status.json)"
 echo -E "${contents}" > ~/status.json
 
 # ## Once done, trigger release and push to GitHub
-# nohup sh -c "while [ $COUNT -lt 1 ]; do echo 'Mining is still running' && sleep 5; done && bash bin/release_dataset.sh" &
+# nohup sh -c "while [ $COUNT -lt 1 ]; do echo 'Mining is still running' && sleep 5; done && bash bin/release/release_dataset.sh" &
 
 
 ## Execute in parallel Vagrant miner

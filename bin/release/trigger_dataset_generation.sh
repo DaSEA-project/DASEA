@@ -7,7 +7,7 @@ echo '{"non_vagrant_complete": false, "conan_complete": false, "freebsd_complete
 # Non-Vagrant Miners
 bash bin/release/generate_dataset_scripts/non_vagrant_miners.sh &
 NON_VAGRANT_MINERS_ID=$!
-bash bin/release/background_check.sh $NON_VAGRANT_MINERS_ID 'Non Vagrant' 'non_vagrant_complete' 
+bash bin/release/background_check.sh $NON_VAGRANT_MINERS_ID 'Non Vagrant' 'non_vagrant_complete' &
 
 # Conan Miner
 bash bin/release/generate_dataset_scripts/conan_miner.sh &

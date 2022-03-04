@@ -1,6 +1,6 @@
 filepath='~/status.json'
 
-while [ $(cat ~/status.json | jq '.non_vagrant_complete') == false ] || [ $(cat ~/status.json | jq '.conan_complete') == false ]
+while [ $(cat ~/status.json | jq '.non_vagrant_complete') == false ] || [ $(cat ~/status.json | jq '.conan_complete') == false ] || [ $(cat ~/status.json | jq '.freebsd_complete') == false ] || [ $(cat ~/status.json | jq '.netbsd_complete') == false ] || [ $(cat ~/status.json | jq '.openbsd_complete') == false ] || [ $(cat ~/status.json | jq '.nimble_complete') == false ]
 do
     echo "Miners processes still running"
     sleep 900

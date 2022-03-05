@@ -14,5 +14,5 @@ do
 done
 echo "$2 Miner has completed"
 
-contents="$(jq '.'$3' = true' ~/test.json)"
-echo -E "${contents}" > ~/test.json
+contents="$(jq '.'$3' = true' ~/status.json)"
+echo -E "${contents}" > ~/status.json

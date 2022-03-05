@@ -33,4 +33,4 @@ scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.
 echo "Destroying droplet..."
 doctl compute droplet delete DASEA-tool-non-vagrant-miners --force
 
-echo "Completed..."
+echo "Completed Non-Vagrant Miners"

@@ -30,4 +30,4 @@ scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/conan root@steve.
 echo "Destroying droplet..."
 doctl compute droplet delete DASEA-tool-conan-miner --force
 
-echo "Completed..."
+echo "Completed Conan Miner"

@@ -9,6 +9,11 @@ bash bin/release/generate_dataset_scripts/non_vagrant_miners.sh &
 NON_VAGRANT_MINERS_ID=$!
 bash bin/release/background_check.sh $NON_VAGRANT_MINERS_ID 'Non Vagrant' 'non_vagrant_complete' &
 
+# NetBSD
+bash bin/release/generate_dataset_scripts/netbsd_miner.sh &
+NETBDS_MINER_ID=$!
+bash bin/release/background_check.sh $NETBDS_MINER_ID 'NetBSD' 'netbsd_complete' &
+
 # Conan Miner
 bash bin/release/generate_dataset_scripts/conan_miner.sh &
 CONAN_MINER_ID=$!
@@ -18,11 +23,6 @@ bash bin/release/background_check.sh $CONAN_MINER_ID 'Conan' 'conan_complete' &
 bash bin/release/generate_dataset_scripts/freebsd_miner.sh &
 FREEBDS_MINER_ID=$!
 bash bin/release/background_check.sh $FREEBDS_MINER_ID 'FreeBSD' 'freebsd_complete' &
-
-# NetBSD
-bash bin/release/generate_dataset_scripts/netbsd_miner.sh &
-NETBDS_MINER_ID=$!
-bash bin/release/background_check.sh $NETBDS_MINER_ID 'NetBSD' 'netbsd_complete' &
 
 # OpenBSD
 bash bin/release/generate_dataset_scripts/openbsd_miner.sh &

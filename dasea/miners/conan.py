@@ -1,7 +1,6 @@
 import sys
 import yaml
 import json
-import shutil
 import logging
 import subprocess
 from glob import glob
@@ -44,7 +43,7 @@ def clone_index_repo():
     else:
         cmd = f"git clone -v {CONAN_INDEX_URL} {CONAN_INDEX_LOCAL}"
 
-    r = subprocess.run(cmd, shell=True)
+    r = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if r.returncode != 0:
         raise IOError("Cannot clone/update Conan registry.")
 
@@ -64,14 +63,14 @@ def collect_dependency_info(name, version):
     outfile = Path(CONAN_METADATA, name, f"{version}.json")
     if not outfile.is_file():
         cmd_linux = f"conan info -s os='Linux' -n requires {name}/{version}@ --json {outfile}"
-        r_lin = subprocess.run(cmd_linux,shell=True)
+        r_lin = subprocess.run(cmd_linux,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if r_lin.returncode != 0:
             # TODO: log cmd error message?
-            LOGGER.error(f"Error getting info from {name}/{version}@ on {sys.platform}, trying with target os as Windows")
+            # LOGGER.error(f"Error getting info from {name}/{version}@ on {sys.platform}, trying with target os as Windows")
             cmd_win = f"conan info -s os='Windows' -n requires {name}/{version}@ --json {outfile}"
-            r_win = subprocess.run(cmd_win, shell=True)
-            if r_win.returncode != 0:
-                LOGGER.error(f"Ommiting {name}/{version}@ with os target Windows on {sys.platform}")
+            r_win = subprocess.run(cmd_win, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            # if r_win.returncode != 0:
+            #     LOGGER.error(f"Ommiting {name}/{version}@ with os target Windows on {sys.platform}")
 
 
 def read_meta_data(name, version):
@@ -139,6 +138,8 @@ def _collect_dependencies(name_version_lst, metadata_lst, pkg_idx_map, version_i
 
 
 def mine():
+    LOGGER.info("Collecting Conan data...")
+
     try:
         clone_index_repo()
     except IOError as e:
@@ -155,6 +156,8 @@ def mine():
     for name, version in name_version_lst:
         collect_dependency_info(name, version)
 
+    LOGGER.info("Creating DaSEA packages...")
+
     # glob for the files here since not all packages have to have metadata, e.g., in case they
     # cannot be build on this os_platform
     glob_pattern = f"{CONAN_METADATA}/*"
@@ -165,9 +168,11 @@ def mine():
     metadata_files = glob(glob_pattern, recursive=True)
     name_version_lst = [(Path(p).parts[-2], Path(p).stem) for p in metadata_files]
 
+    LOGGER.info("Creating DaSEA versions...")
     metadata_lst = [read_meta_data(n, v) for n, v in name_version_lst]
     version_idx_map, versions_lst = _collect_versions(name_version_lst, metadata_lst, pkg_idx_map)
 
+    LOGGER.info("Creating DaSEA dependencies...")
     deps_lst = _collect_dependencies(name_version_lst, metadata_lst, pkg_idx_map, version_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)

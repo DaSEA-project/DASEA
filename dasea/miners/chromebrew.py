@@ -1,12 +1,11 @@
 import sys
-import csv
 import logging
-import requests
-import git
 import os
 import re
 import shutil
+import subprocess
 from datetime import datetime
+from pathlib import Path
 from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
 
@@ -26,10 +25,14 @@ LOGGER = logging.getLogger(__name__)
 
 
 def _collect_pkg_registry():
-    try:
-        git.Repo.clone_from(CHROMEBREW_REGISTRY, TMP_DIR)
-    except Exception as err:
-        raise IOError("Cannot download Chromebew registry.")
+    if Path(TMP_DIR).is_dir():
+        cmd = f"git -C {CHROMEBREW_REGISTRY} pull"
+    else:
+        cmd = f"git clone -v {CHROMEBREW_REGISTRY} {TMP_DIR}"
+
+    r = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if r.returncode != 0:
+        raise IOError("Cannot clone/update Chromebew registry.")
 
 
 def _get_pkg_names():
@@ -43,7 +46,6 @@ def _get_pkg_names():
 
 
 def _collect_packages(metadata_dict):
-    LOGGER.info("Collecting Chromebrew registry...")
     pkg_idx_map = {}
     packages = []
     for idx, pkg_name in enumerate(metadata_dict):
@@ -135,6 +137,7 @@ def _collect_dependencies(versions_lst, pkg_idx_map):
 
 
 def mine():
+    LOGGER.info("Collecting Chromebrew data...")
     try:
         _collect_pkg_registry()
     except IOError as e:

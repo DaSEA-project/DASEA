@@ -30,4 +30,4 @@ scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/ports/openbsd69 r
 echo "Destroying droplet..."
 doctl compute droplet delete DASEA-tool-openBSD-miner --force
 
-echo "Completed NetBDS Miner"
+echo "Completed OpenBDS Miner"

@@ -30,4 +30,4 @@ scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/nimble root@steve
 echo "Destroying droplet..."
 doctl compute droplet delete DASEA-tool-nimble-miner --force
 
-echo "Completed NetBDS Miner"
+echo "Completed Nimble Miner"

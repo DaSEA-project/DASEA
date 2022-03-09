@@ -21,7 +21,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def _collect_pkg_registry():
-    LOGGER.info("Downloading FPM registry...")
+    LOGGER.info("Collecting FPM registry...")
     r = requests.get(FPM_REGISTRY)
     if not r.ok:
         raise IOError("Cannot download FPM registry.")

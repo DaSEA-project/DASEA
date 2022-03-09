@@ -191,12 +191,11 @@ def cleanup():
             shutil.rmtree(f)
 
 def mine():
-    LOGGER.info("Downloading database dump...")
+    LOGGER.info("Collecting Cargo registry...")
     dump_file = Path(TMP_DIR, "db_dump.tar.gz")
     with open(dump_file, "wb") as fp:
         r = requests.get(CARGO_DB_DUMP_URL)
         fp.write(r.content)
-    LOGGER.info("Extracting database dump...")
     with tarfile.open(dump_file) as fp:
         fp.extractall(TMP_DIR)
 
@@ -209,15 +208,15 @@ def mine():
     users_csv = Path(dataset_dir, "users.csv")
     deps_csv = Path(dataset_dir, "dependencies.csv")
 
-    LOGGER.info("Converting packages to dasea...")
+    LOGGER.info("Creating DaSEA packages...")
     _collect_packages(crates_csv)
-    LOGGER.info("Converting versions to dasea...")
+    LOGGER.info("Creating DaSEA versions...")
     _collect_versions(crates_csv, versions_csv, users_csv)
-    LOGGER.info("Converting dependencies to dasea...")
+    LOGGER.info("Creating DaSEA dependencies...")
     _collect_dependencies(crates_csv, versions_csv, deps_csv)
 
     cleanup()
-    
+
 
 if __name__ == "__main__":
     mine()

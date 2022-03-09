@@ -99,7 +99,6 @@ def mine():
     except IOError as e:
         LOGGER.error(str(e))
         sys.exit(1)
-    pkg_names = [d["Name"] for d in metadata_lst]
 
     LOGGER.info("Creating DaSEA dependencies...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_lst)

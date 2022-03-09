@@ -33,13 +33,13 @@ class AlireDependency(Dependency):
 
 
 def clone_index_repo():
-    LOGGER.info("Downloading Alire registry")
+    LOGGER.info("Collecting Alire registry")
     if Path(ALIRE_INDEX_LOCAL).is_dir():
         cmd = f"git -C {ALIRE_INDEX_LOCAL} pull"
     else:
         cmd = f"git clone -v {ALIRE_INDEX_URL} {ALIRE_INDEX_LOCAL}"
 
-    r = subprocess.run(cmd, shell=True)
+    r = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if r.returncode != 0:
         raise IOError("Cannot clone/update Alire registry.")
 

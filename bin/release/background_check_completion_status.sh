@@ -21,4 +21,5 @@ git push origin main
 
 # delete DASEA folder
 echo "Deleting DASEA folder"
-rm -rf DASEA
+cd ..
+rm -rf ~/DASEA

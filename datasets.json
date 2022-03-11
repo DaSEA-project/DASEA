@@ -1,36 +1,37 @@
 {
-    "managers": [
-        "Conan",
-        "FPM",
-        "VCPKG",
-        "Alire",
-        "Homebrew",
-        "Nimble",
-        "Chromebrew",
-        "Ports (FreeBSD)",
-        "Ports (OpenBSD)",
-        "PkgSrc"
-    ],
-    "datasets": [
-        {
-            "date": "15-12-2021",
-            "url": "https://zenodo.org/record/5781670"
-        },
-        {
-            "date": "01-27-2022",
-            "url": "https://sandbox.zenodo.org/record/1003976"
-        },
-        {
-            "date": "03-03-2022",
-            "url": "https://sandbox.zenodo.org/record/1027311"
-        },
-        {
-            "date": "03-06-2022",
-            "url": "https://sandbox.zenodo.org/record/1028974"
-        },
-        {
-            "date": "03-10-2022",
-            "url": "https://sandbox.zenodo.org/record/1031791"
-        }
-    ]
+  "managers": [
+    "Alire",
+    "Cargo",
+    "Chromebrew",
+    "Conan",
+    "FPM",
+    "VCPKG",
+    "Homebrew",
+    "Nimble",
+    "Ports (FreeBSD)",
+    "Ports (OpenBSD)",
+    "Ports (NetBSD)"
+  ],
+  "datasets": [
+    {
+      "date": "15-12-2021",
+      "url": "https://zenodo.org/record/5781670"
+    },
+    {
+      "date": "01-27-2022",
+      "url": "https://sandbox.zenodo.org/record/1003976"
+    },
+    {
+      "date": "03-03-2022",
+      "url": "https://sandbox.zenodo.org/record/1027311"
+    },
+    {
+      "date": "03-06-2022",
+      "url": "https://sandbox.zenodo.org/record/1028974"
+    },
+    {
+      "date": "03-10-2022",
+      "url": "https://sandbox.zenodo.org/record/1031791"
+    }
+  ]
 }

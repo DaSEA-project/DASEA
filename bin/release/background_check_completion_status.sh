@@ -20,6 +20,6 @@ git commit -m "DaSEA release - $(date)"
 git push origin main
 
 # delete DASEA folder
-echo "Deleting DASEA folder"
+echo "Deleting DaSEA folder"
 cd ..
 rm -rf ~/DASEA

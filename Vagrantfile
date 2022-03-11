@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
       pkg install -y python39
       ln -s /usr/local/bin/python3.9 /usr/local/bin/python3
 
-      # Both of the following are needed for lxml, a Python dependency of DASEA
+      # Both of the following are needed for lxml, a Python dependency of DaSEA
       pkg install -y libxml2
       pkg install -y libxslt
 

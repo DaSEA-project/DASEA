@@ -4,7 +4,7 @@
 
 https://docs.digitalocean.com/reference/doctl/how-to/install/
 
-## Clone DASEA
+## Clone DaSEA
 
 git clone https://github.com/dependulum/DASEA.git
 

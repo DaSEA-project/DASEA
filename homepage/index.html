@@ -50,27 +50,24 @@
       <div class="home">
         <p>A continuously updated dataset of software dependencies covering various package manager ecosystems.</p>
         <h2>Currently Supported Package Managers:</h3>
-          <ul id="package-managers"></ul>
+          <ul id="package-managers">
+          </ul>
           <h2>Latest Dataset Releases</h2>
-          <div id="datasets"></div>
+          <ul id="datasets"></ul>
       </div>
     </div>
   </main>
   <footer class="site-footer h-card">
     <data class="u-url" href="/"></data>
     <div class="wrapper">
-      <h2 class="footer-heading">Data for Software Ecosystem Analysis (DASEA)</h2>
+      <h2 class="footer-heading">Data for Software Ecosystem Analysis (DaSEA)</h2>
       <div class="footer-col-wrapper">
         <div class="footer-col footer-col-1">
           <ul class="contact-list">
-            <li class="p-name">Data for Software Ecosystem Analysis (DASEA)</li>
+            <li class="p-name">Data for Software Ecosystem Analysis (DaSEA)</li>
             <li><a class="u-email" href="mailto:daseaITU@gmail.com">daseaITU@gmail.com</a></li>
           </ul>
         </div>
-
-        <!-- <div class="footer-col footer-col-2">
-          <ul class="social-media-list"></ul>
-        </div> -->
       </div>
     </div>
   </footer>
@@ -82,9 +79,9 @@
   fetch("./datasets.json")
     .then(response => response.json())
     .then(json => {
-      const { managers, datasets } = json;
-      const managerList = document.querySelector("#package-managers");
-      managerList.innerHTML = managers.sort().map(manager => `<li>${manager}</li>`).join("");
+      const { packageManagers, datasets } = json;
+      const pckManagerList = document.querySelector("#package-managers");
+      pckManagerList.innerHTML = packageManagers.sort().map(pckManager => `<li><a href="${pckManager.url}" target="_blank">${pckManager.name} (${pckManager.ecosystem})</a></h3></li>`).join("");
       let datasetsList = document.querySelector("#datasets");
       datasetsList.innerHTML = datasets.map(dataset => `<li><a href="${dataset.url}" target="_blank">${dataset.date}</a></li>`).join("");
     });

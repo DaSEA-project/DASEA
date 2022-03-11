@@ -65,11 +65,14 @@ def main():
             from dasea.miners.homebrew import mine as brew_mine
 
             brew_mine()
-
         elif arguments["<pkgmanager>"] == "chromebrew":
             from dasea.miners.chromebrew import mine as chromebrew_mine
 
             chromebrew_mine()
+        elif arguments["<pkgmanager>"] == "clojars":
+            from dasea.miners.clojars import mine as clojars_mine
+
+            clojars_mine()
         else:
             print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
             sys.exit(127)

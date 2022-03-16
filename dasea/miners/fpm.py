@@ -1,5 +1,6 @@
 import sys
 import logging
+from time import clock_getres
 import requests
 from datetime import datetime
 from dasea.common.datamodel import Package, Version, Dependency, Kind
@@ -18,6 +19,20 @@ logging.basicConfig(
 )
 logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
+
+
+versions_lst = []
+
+def _get_version_idx(name, version):
+    print(name, version)
+    global versions_lst
+    print(versions_lst)
+
+    for v in versions_lst:
+        print(v)
+        if v.name == name and v.version == version:
+            return v.idx
+    return None
 
 
 def _collect_pkg_registry():
@@ -71,7 +86,6 @@ def _collect_versions(metadata_dict, pkg_idx_map):
 
 def _collect_dependencies(metadata_dict, pkg_idx_map):
     deps = []
-    version_idx = 0
     for idx, (pkg_name, data) in enumerate(metadata_dict.items()):
         package_versions = []
         for version, version_info in data.items():
@@ -79,7 +93,6 @@ def _collect_dependencies(metadata_dict, pkg_idx_map):
             if version in package_versions:
                 continue
             package_versions.append(version_info["version"])
-
             source_pkg_idx = pkg_idx_map.get(pkg_name, None)
             deps_decl = version_info.get("dependencies", {})
             dev_deps_decl = version_info.get("dev-dependencies", {})
@@ -90,9 +103,10 @@ def _collect_dependencies(metadata_dict, pkg_idx_map):
                 dev_deps_decl = {}
 
             for dep_name, dep_info in deps_decl.items():
+                src_idx = _get_version_idx(pkg_name, version_info["version"])
                 d = Dependency(
                     pkg_idx=source_pkg_idx,
-                    source_idx=version_idx,
+                    source_idx=src_idx,
                     target_idx=pkg_idx_map.get(
                         dep_name, ""
                     ),  # There are packages provided as dependencies, which do not exist on the registry, but which are referred to and downloaded from, e.g., Github
@@ -104,9 +118,10 @@ def _collect_dependencies(metadata_dict, pkg_idx_map):
                 )
                 deps.append(d)
             for dep_name, dep_info in dev_deps_decl.items():
+                src_idx = _get_version_idx(pkg_name, version_info["version"])
                 d = Dependency(
                     pkg_idx=source_pkg_idx,
-                    source_idx=version_idx,
+                    source_idx=src_idx,
                     target_idx=pkg_idx_map.get(dep_name, ""),
                     source_name=version_info["name"],
                     target_name=dep_name,
@@ -115,9 +130,8 @@ def _collect_dependencies(metadata_dict, pkg_idx_map):
                     kind=Kind.DEV.name,
                 )
                 deps.append(d)
-            version_idx += 1
-
     return deps
+
 
 
 def mine():
@@ -127,10 +141,12 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
     pkg_names = list(metadata_dict.keys())
+    
 
     LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
     LOGGER.info("Creating DaSEA versions...")
+    global versions_lst
     versions_lst = _collect_versions(metadata_dict, pkg_idx_map)
     LOGGER.info("Creating DaSEA dependencies...")
     deps_lst = _collect_dependencies(metadata_dict, pkg_idx_map)

@@ -6,6 +6,8 @@ import logging
 
 INDEX_DOC_URL = "https://replicate.npmjs.com/_all_docs"
 INDEX_DOC_FILE = "data/tmp/npm/test.json"
+FULL_DOCS_URL = "https://replicate.npmjs.com/_all_docs?include_docs=true"
+FULL_DOCS_FILE = "data/tmp/npm/full_npm_dump.json"
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"
@@ -26,15 +28,49 @@ def collect_pkg_names():
         with open(INDEX_DOC_FILE, "w") as fp:
             json.dump(proj_json, fp)
 
-    # print(proj_json)
     LOGGER.info("Total rows in npm index document: %s", proj_json['total_rows'])
     proj_names = [p["id"] for p in proj_json["rows"]]  # 1_745_109 Sep 29 -> 1_907_047 March 03
-    LOGGER.info("Collected packages: %s", len(proj_names))
     return proj_names
 
 
+def download_all_docs():
+    """Important: Downloading a data dump from NPM takes quite some time
+    and space (at least 70GB of harddisk space)
+    The advantage of downloading the dataset is that one does not have to send
+    million requests to the NPM API, which would take even longer...
+    """
+    # 60G May 19 2021 69G Sep 30 2021
+    if os.path.isfile(FULL_DOCS_FILE):
+        print("Reusing earlier download...", flush=True)
+        return FULL_DOCS_FILE
+    completely_downloaded = False
+    while not completely_downloaded:
+        if os.path.isfile(FULL_DOCS_FILE):
+            os.remove(FULL_DOCS_FILE)
+        try:
+            print("Downloading database dump...")
+            start_ts = datetime.now()
+            with requests.get(FULL_DOCS_URL, stream=True) as r:
+                r.raise_for_status()
+                with open(FULL_DOCS_FILE, "wb") as fp:
+                    for chunk in r.iter_content(8192, decode_unicode=True):
+                        fp.write(chunk)
+            completely_downloaded = True
+        except:
+            LOGGER.info("Something went wrong, I have to restart the download...")
+
+    time_spent = datetime.now() - start_ts
+    print(f"It took {str(time_spent)} to download the data dump...")
+    return FULL_DOCS_FILE
+
+
 def mine():
-    print(collect_pkg_names())
+    pkgs = collect_pkg_names()
+    LOGGER.info("Collected packages: %s", len(pkgs))
+
+    LOGGER.info("Download NPM data dump, this may take hours...")
+
+
     print("EOF")
 
 if __name__ == "__main__":

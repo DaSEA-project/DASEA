@@ -1,6 +1,6 @@
 {
   "title": "DaSEA - Dataset for Software Ecosystem Analysis",
-  "description": "A continuously updated dataset of dependency networks covering various software ecosystems.",
+  "description": "A continuously updated dataset of dependency networks covering various software ecosystems. Read more on http://dasea.org/",
   "access_right": "open",
   "license": "CC-BY-SA-4.0",
   "upload_type": "dataset",

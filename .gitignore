@@ -28,9 +28,11 @@ data/tmp/conan/*
 !data/tmp/cargo/.gitkeep
 data/tmp/cargo/*
 !data/tmp/chromebrew/.gitkeep
-!data/tmp/chromebrew/*
+data/tmp/rubygems/*
+!data/tmp/rubygems/.gitkeep
 
 data/tmp/nimble/*
+data/tmp/rubygems/*
 
 
 !data/out/cargo/.gitkeep

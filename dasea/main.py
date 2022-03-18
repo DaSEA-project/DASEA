@@ -70,6 +70,11 @@ def main():
             from dasea.miners.chromebrew import mine as chromebrew_mine
 
             chromebrew_mine()
+
+        elif arguments["<pkgmanager>"] == "rubygems":
+            from dasea.miners.rubygems import mine as rubygems_mine
+
+            rubygems_mine()
         else:
             print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
             sys.exit(127)

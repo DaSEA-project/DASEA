@@ -8,6 +8,7 @@
     "VCPKG",
     "Homebrew",
     "Nimble",
+    "RubyGems",
     "Ports (FreeBSD)",
     "Ports (OpenBSD)",
     "Ports (NetBSD)"

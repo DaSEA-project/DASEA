@@ -33,6 +33,13 @@ The following table shows which miners can run on which architecture.
 | ✅
 | ✅
 | ✅
+|RubyGems
+|Ruby
+|
+| ✅
+| ✅
+| ✅
+| ✅
 |Nim
 |Nimble
 |

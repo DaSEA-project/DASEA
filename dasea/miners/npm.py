@@ -17,7 +17,7 @@ FULL_DOCS_URL = "https://replicate.npmjs.com/_all_docs?include_docs=true"
 FULL_DOCS_FILE = "data/tmp/npm/full_npm_dump.json"
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
-PKGS_FILE = f"data/out/conan/conan_packages_{TODAY}.csv"
+PKGS_FILE = f"data/out/npm/npm_packages_{TODAY}.csv"
 
 
 logging.basicConfig(
@@ -78,7 +78,7 @@ def download_all_docs():
     return FULL_DOCS_FILE
 
 def _collect_packages(pkg_name_list):
-    pkg_idx_map = {g: idx for idx, g in enumerate(pkgs)}
+    pkg_idx_map = {g: idx for idx, g in enumerate(pkg_name_list)}
     packages = []
     for pkg_name, idx in pkg_idx_map.items():
         p = Package(idx, pkg_name, "Npm")

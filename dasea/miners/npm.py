@@ -1,11 +1,14 @@
 import os
+import sys
 import json
 import requests
 import logging
+from datetime import datetime
+
 
 
 INDEX_DOC_URL = "https://replicate.npmjs.com/_all_docs"
-INDEX_DOC_FILE = "data/tmp/npm/test.json"
+INDEX_DOC_FILE = "data/tmp/npm/projects.json"
 FULL_DOCS_URL = "https://replicate.npmjs.com/_all_docs?include_docs=true"
 FULL_DOCS_FILE = "data/tmp/npm/full_npm_dump.json"
 
@@ -28,7 +31,7 @@ def collect_pkg_names():
         with open(INDEX_DOC_FILE, "w") as fp:
             json.dump(proj_json, fp)
 
-    LOGGER.info("Total rows in npm index document: %s", proj_json['total_rows'])
+    LOGGER.info(f"Total rows in npm index document {proj_json['total_rows']}")
     proj_names = [p["id"] for p in proj_json["rows"]]  # 1_745_109 Sep 29 -> 1_907_047 March 03
     return proj_names
 
@@ -39,37 +42,38 @@ def download_all_docs():
     The advantage of downloading the dataset is that one does not have to send
     million requests to the NPM API, which would take even longer...
     """
+
     # 60G May 19 2021 69G Sep 30 2021
     if os.path.isfile(FULL_DOCS_FILE):
-        print("Reusing earlier download...", flush=True)
+        LOGGER.info("Reusing earlier database dump...")
         return FULL_DOCS_FILE
     completely_downloaded = False
     while not completely_downloaded:
+        LOGGER.info("Download NPM data dump, this may take hours...")
+
         if os.path.isfile(FULL_DOCS_FILE):
             os.remove(FULL_DOCS_FILE)
         try:
-            print("Downloading database dump...")
+            LOGGER.info("Downloading database dump...")
             start_ts = datetime.now()
             with requests.get(FULL_DOCS_URL, stream=True) as r:
                 r.raise_for_status()
                 with open(FULL_DOCS_FILE, "wb") as fp:
-                    for chunk in r.iter_content(8192, decode_unicode=True):
+                    for chunk in r.iter_content(8192, decode_unicode=False):
                         fp.write(chunk)
             completely_downloaded = True
-        except:
-            LOGGER.info("Something went wrong, I have to restart the download...")
+        except Exception as e:
+            LOGGER.error(f"Error when downloading database dump '{e}' on line {sys.exc_info()[-1].tb_lineno}")
 
     time_spent = datetime.now() - start_ts
-    print(f"It took {str(time_spent)} to download the data dump...")
+    LOGGER.info(f"It took {str(time_spent)} to download the data dump...")
     return FULL_DOCS_FILE
 
 
 def mine():
     pkgs = collect_pkg_names()
-    LOGGER.info("Collected packages: %s", len(pkgs))
-
-    LOGGER.info("Download NPM data dump, this may take hours...")
-
+    download_all_docs()
+    LOGGER.info(f"Collected packages {len(pkgs)}")
 
     print("EOF")
 

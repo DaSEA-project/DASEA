@@ -1,9 +1,13 @@
 import os
+from struct import pack
 import sys
 import json
+from tkinter import Pack
 import requests
 import logging
 from datetime import datetime
+from dasea.common.datamodel import Package, Version, Dependency, Kind
+from dasea.common.utils import _serialize_data
 
 
 
@@ -11,6 +15,10 @@ INDEX_DOC_URL = "https://replicate.npmjs.com/_all_docs"
 INDEX_DOC_FILE = "data/tmp/npm/projects.json"
 FULL_DOCS_URL = "https://replicate.npmjs.com/_all_docs?include_docs=true"
 FULL_DOCS_FILE = "data/tmp/npm/full_npm_dump.json"
+
+TODAY = datetime.today().strftime("%m-%d-%Y")
+PKGS_FILE = f"data/out/conan/conan_packages_{TODAY}.csv"
+
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"
@@ -43,13 +51,13 @@ def download_all_docs():
     million requests to the NPM API, which would take even longer...
     """
 
-    # 60G May 19 2021 69G Sep 30 2021
+    # 60G May 19 2021 69G Sep 30 2021 (10+ hours)
     if os.path.isfile(FULL_DOCS_FILE):
         LOGGER.info("Reusing earlier database dump...")
         return FULL_DOCS_FILE
     completely_downloaded = False
     while not completely_downloaded:
-        LOGGER.info("Download NPM data dump, this may take hours...")
+        LOGGER.info("Download NPM data dump, this may take 10+ hours...")
 
         if os.path.isfile(FULL_DOCS_FILE):
             os.remove(FULL_DOCS_FILE)
@@ -69,11 +77,25 @@ def download_all_docs():
     LOGGER.info(f"It took {str(time_spent)} to download the data dump...")
     return FULL_DOCS_FILE
 
+def _collect_packages(pkg_name_list):
+    pkg_idx_map = {g: idx for idx, g in enumerate(pkgs)}
+    packages = []
+    for pkg_name, idx in pkg_idx_map.items():
+        p = Package(idx, pkg_name, "Npm")
+        packages.append(p)
+        
+    return pkg_idx_map, packages
+
+
 
 def mine():
     pkgs = collect_pkg_names()
     download_all_docs()
     LOGGER.info(f"Collected packages {len(pkgs)}")
+
+    pkg_idx_map, packages_lst = _collect_packages(pkgs)
+
+    _serialize_data(packages_lst, PKGS_FILE)
 
     print("EOF")
 

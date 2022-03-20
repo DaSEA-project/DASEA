@@ -70,6 +70,11 @@ def main():
             from dasea.miners.chromebrew import mine as chromebrew_mine
 
             chromebrew_mine()
+
+        elif arguments["<pkgmanager>"] == "npm":
+            from dasea.miners.npm import mine as npm_mine
+
+            npm_mine()
         else:
             print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
             sys.exit(127)

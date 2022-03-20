@@ -29,6 +29,7 @@ data/tmp/conan/*
 data/tmp/cargo/*
 !data/tmp/chromebrew/.gitkeep
 !data/tmp/chromebrew/*
+data/tmp/npm/*
 
 data/tmp/nimble/*
 

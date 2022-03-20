@@ -2,7 +2,7 @@ import os
 from struct import pack
 import sys
 import json
-from tkinter import Pack
+# from tkinter import Pack
 import requests
 import logging
 from datetime import datetime

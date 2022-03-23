@@ -40,6 +40,13 @@ The following table shows which miners can run on which architecture.
 | ✅
 | ✅
 | ✅
+|Clojure
+|Clojars
+|
+| ✅
+| ✅
+| ✅
+| ✅
 |Nim
 |Nimble
 |

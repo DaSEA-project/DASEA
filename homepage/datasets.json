@@ -1,21 +1,79 @@
 {
   "managers": [
-    "Alire",
-    "Cargo",
-    "Chromebrew",
-    "Conan",
-    "FPM",
-    "VCPKG",
-    "Homebrew",
-    "Nimble",
-    "Ports (FreeBSD)",
-    "Ports (OpenBSD)",
-    "Ports (NetBSD)"
+    {
+      "name": "Alire",
+      "ecosystem": "Ada",
+      "url": "https://alire.ada.dev/"
+    },
+    {
+      "name": "Cargo",
+      "ecosystem": "Rust",
+      "url": "https://crates.io/"
+    },
+    {
+      "name": "Chromebrew",
+      "ecosystem": "ChromeOS",
+      "url": "https://skycocker.github.io/chromebrew/"
+    },
+    {
+      "name": "Clojars",
+      "ecosystem": "Clojure",
+      "url": "https://clojars.org/"
+    },
+    {
+      "name": "Conan",
+      "ecosystem": "C/C++",
+      "url": "https://conan.io/"
+    },
+    {
+      "name": "FPM",
+      "ecosystem": "Fortran",
+      "url": "https://fpm.fortran-lang.org/en/index.html"
+    },
+    {
+      "name": "VCPKG",
+      "ecosystem": "C/C++",
+      "url": "https://vcpkg.io/en/index.html"
+    },
+    {
+      "name": "Homebrew",
+      "ecosystem": "MacOS",
+      "url": "https://brew.sh/"
+    },
+    {
+      "name": "Nimble",
+      "ecosystem": "Nim",
+      "url": "https://nimble.directory/"
+    },
+    {
+      "name": "RubyGems",
+      "ecosystem": "Ruby",
+      "url": "https://rubygems.org/"
+    },
+    {
+      "name": "Ports",
+      "ecosystem": "FreeBSD",
+      "url": "https://www.freebsd.org/ports/"
+    },
+    {
+      "name": "Ports",
+      "ecosystem": "NetBSD",
+      "url": "https://www.openbsd.org/faq/ports/ports.html"
+    },
+    {
+      "name": "Ports",
+      "ecosystem": "OpenBSD",
+      "url": "https://wiki.netbsd.org/ports/"
+    }
   ],
   "datasets": [
     {
       "date": "15-12-2021",
       "url": "https://zenodo.org/record/5781670"
+    },
+    {
+      "date": "03-18-2022",
+      "url": "https://zenodo.org/record/6369420"
     }
   ]
 }

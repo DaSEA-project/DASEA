@@ -56,7 +56,6 @@ def _collect_packages(metadata_dict):
 
 
 def _collect_versions(metadata_dict, pkg_idx_map):
-    # TODO: Kasper does some cleaning of the metadata_dict. Understand what and why!
     versions = []
     version_idx = 0
     for pkg_name, data in metadata_dict.items():

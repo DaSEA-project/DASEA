@@ -26,7 +26,7 @@ class VCPKGDependency(Dependency):
 
 
 def _collect_pkg_registry():
-    LOGGER.info("Collecting vcpkg registry...")
+    LOGGER.info("Collecting VCPKG registry...")
     r = requests.get(VCPKG_REGISTRY)
     if not r.ok:
         raise IOError("Cannot download VCPKG registry.")

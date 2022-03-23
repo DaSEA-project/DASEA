@@ -104,16 +104,18 @@ def push_dataset_to_zenodo(dataset_path, sandbox=False, no_verify=False):
     r.raise_for_status()
 
     print(f"Double check all information on {deposit_url}")
-    if(no_verify):
+    if no_verify:
         answer = "y"
     else:
         answer = input("Are you sure that you want to finally publish the dataset? [y/N] ")
+
     if answer == "y":
         print("Publishing the dataset...")
         r = requests.post(publish_url, params=params)
         r.raise_for_status()
         final_url = r.json()["links"]["latest_html"]
-        update_homepage(final_url)
+        if not no_verify:
+            update_homepage(final_url)
 
         print(f"Published dataset to {final_url}")
     else:

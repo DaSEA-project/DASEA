@@ -41,7 +41,12 @@
 | https://crates.io/api/v1/crates
 | Programming Language
 |`$ poetry run dasea mine cargo`
-
+// RubyGems
+| Ruby
+| RubyGems
+| http://production.cf.rubygems.org/specs.4.8.gz
+| Programming Language
+|`$ poetry run dasea mine rubygems`
 // Homebrew
 | MacOS packages
 | Homebrew

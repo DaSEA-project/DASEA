@@ -1,5 +1,5 @@
 {
-  "packageManagers": [
+  "managers": [
     {
       "name": "Alire",
       "ecosystem": "Ada",
@@ -46,6 +46,11 @@
       "url": "https://nimble.directory/"
     },
     {
+      "name": "RubyGems",
+      "ecosystem": "Ruby",
+      "url": "https://rubygems.org/"
+    },
+    {
       "name": "Ports",
       "ecosystem": "FreeBSD",
       "url": "https://www.freebsd.org/ports/"
@@ -65,6 +70,10 @@
     {
       "date": "15-12-2021",
       "url": "https://zenodo.org/record/5781670"
+    },
+    {
+      "date": "03-18-2022",
+      "url": "https://zenodo.org/record/6369420"
     }
   ]
 }

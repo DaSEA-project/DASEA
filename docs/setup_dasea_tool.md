@@ -45,3 +45,9 @@ poetry run black -l 120 --check ./dasea
 ```bash
 poetry run pytest tests
 ```
+
+## 🆘 Add new dependency
+
+```bash
+poetry add dependency-name
+```

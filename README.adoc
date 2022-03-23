@@ -7,7 +7,7 @@ image:artwork/logo.png[image]
 DaSEA is the name of a dataset of software dependency networks of various ecosystems.
 In this repository is the code and documentation of the `dasea` tool, which mines, creates, and releases new versions of the dataset
 
-The latest versions of the dataset are available from https://dependulum.github.io/DASEA/[DASEA].
+The latest versions of the dataset are available from https://dasea-project.github.io/DASEA/[DASEA].
 
 
 === Setup Project Locally

@@ -3,6 +3,7 @@ from struct import pack
 import sys
 import json
 # from tkinter import Pack
+import ijson  # see https://pypi.org/project/ijson  pip install ijson
 import requests
 import logging
 from datetime import datetime
@@ -18,7 +19,11 @@ FULL_DOCS_FILE = "data/tmp/npm/full_npm_dump.json"
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
 PKGS_FILE = f"data/out/npm/npm_packages_{TODAY}.csv"
+VERSIONS_FILE = f"data/out/npm/npm_versions_{TODAY}.csv"
 
+
+PKG_IDX_MAP = {}
+PKG_IDX = 0
 
 logging.basicConfig(
     level=logging.DEBUG, format="%(asctime)s %(name)-12s %(levelname)-8s %(message)s", datefmt="%Y-%m-%d %H:%M"
@@ -77,14 +82,14 @@ def download_all_docs():
     LOGGER.info(f"It took {str(time_spent)} to download the data dump...")
     return FULL_DOCS_FILE
 
-def _collect_packages(pkg_name_list):
-    pkg_idx_map = {g: idx for idx, g in enumerate(pkg_name_list)}
-    packages = []
-    for pkg_name, idx in pkg_idx_map.items():
-        p = Package(idx, pkg_name, "Npm")
-        packages.append(p)
+# def _collect_packages(pkg_name_list):
+#     pkg_idx_map = {g: idx for idx, g in enumerate(pkg_name_list)}
+#     packages = []
+#     for pkg_name, idx in pkg_idx_map.items():
+#         p = Package(idx, pkg_name, "Npm")
+#         packages.append(p)
         
-    return pkg_idx_map, packages
+#     return pkg_idx_map, packages
 
 
 
@@ -92,12 +97,55 @@ def mine():
     pkgs = collect_pkg_names()
     download_all_docs()
     LOGGER.info(f"Collected packages {len(pkgs)}")
+    PKG_IDX = VERSION_IDX = 0
 
-    pkg_idx_map, packages_lst = _collect_packages(pkgs)
 
-    _serialize_data(packages_lst, PKGS_FILE)
+    # pkg_idx_map, packages_lst = _collect_packages(pkgs)
 
-    print("EOF")
+    # _serialize_data(packages_lst, PKGS_FILE)
 
+    # populate the project index map
+    PKG_IDX_MAP = {g: idx for idx, g in enumerate(pkgs)}
+    packages_lst = []
+    versions_lst = []
+    with open(FULL_DOCS_FILE, "r") as fi:
+        pkg_json_objects = ijson.items(fi, "rows.item")
+
+        for pkg_json_object in pkg_json_objects:
+            pkg_doc = pkg_json_object["doc"]
+            if not "name" in pkg_doc.keys():
+                # A package without a name is likely broken, e.g., bb-mobile
+                # https://www.npmjs.com/package/bb-mobile
+                # so we skip it completely
+                # Shall I do some sanety checking to avoid ??? in dependencies later?
+                continue
+
+            pkg_name = pkg_doc["name"]
+            p = Package(PKG_IDX, pkg_name, "test")
+            packages_lst.append(p)
+            PKG_IDX += 1
+    
+    # Serialize works for packages
+    # _serialize_data(packages_lst, PKGS_FILE)
+
+            for version_number, v_info in pkg_doc.get("versions", {}).items():
+                #idx,pkg_idx,name,version,license,description,homepage,repository,author,maintainer,os_platform
+
+                for col in [
+                    "name",
+                    "version",
+                    "license",
+                    "description",
+                    "repository",
+                    "maintainers",
+                ]:
+
+                    v = Version(VERSION_IDX ,PKG_IDX, pkg_name, "1", "2", "3", "4", "5", "6", "7")
+                    versions_lst.append(v)
+    
+    
+    # Serialize doesnt work for versions (yet)
+    _serialize_data(versions_lst, VERSIONS_FILE)     
+    # zzzdreams, 1910020
 if __name__ == "__main__":
     mine()

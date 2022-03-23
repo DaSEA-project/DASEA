@@ -104,48 +104,48 @@ def mine():
 
     # _serialize_data(packages_lst, PKGS_FILE)
 
-    # populate the project index map
-    PKG_IDX_MAP = {g: idx for idx, g in enumerate(pkgs)}
-    packages_lst = []
-    versions_lst = []
-    with open(FULL_DOCS_FILE, "r") as fi:
-        pkg_json_objects = ijson.items(fi, "rows.item")
+    # # populate the project index map
+    # PKG_IDX_MAP = {g: idx for idx, g in enumerate(pkgs)}
+    # packages_lst = []
+    # versions_lst = []
+    # with open(FULL_DOCS_FILE, "r") as fi:
+    #     pkg_json_objects = ijson.items(fi, "rows.item")
 
-        for pkg_json_object in pkg_json_objects:
-            pkg_doc = pkg_json_object["doc"]
-            if not "name" in pkg_doc.keys():
-                # A package without a name is likely broken, e.g., bb-mobile
-                # https://www.npmjs.com/package/bb-mobile
-                # so we skip it completely
-                # Shall I do some sanety checking to avoid ??? in dependencies later?
-                continue
+    #     for pkg_json_object in pkg_json_objects:
+    #         pkg_doc = pkg_json_object["doc"]
+    #         if not "name" in pkg_doc.keys():
+    #             # A package without a name is likely broken, e.g., bb-mobile
+    #             # https://www.npmjs.com/package/bb-mobile
+    #             # so we skip it completely
+    #             # Shall I do some sanety checking to avoid ??? in dependencies later?
+    #             continue
 
-            pkg_name = pkg_doc["name"]
-            p = Package(PKG_IDX, pkg_name, "test")
-            packages_lst.append(p)
-            PKG_IDX += 1
+    #         pkg_name = pkg_doc["name"]
+    #         p = Package(PKG_IDX, pkg_name, "test")
+    #         packages_lst.append(p)
+    #         PKG_IDX += 1
     
-    # Serialize works for packages
-    # _serialize_data(packages_lst, PKGS_FILE)
+    # # Serialize works for packages
+    # # _serialize_data(packages_lst, PKGS_FILE)
 
-            for version_number, v_info in pkg_doc.get("versions", {}).items():
-                #idx,pkg_idx,name,version,license,description,homepage,repository,author,maintainer,os_platform
+    #         for version_number, v_info in pkg_doc.get("versions", {}).items():
+    #             #idx,pkg_idx,name,version,license,description,homepage,repository,author,maintainer,os_platform
 
-                for col in [
-                    "name",
-                    "version",
-                    "license",
-                    "description",
-                    "repository",
-                    "maintainers",
-                ]:
+    #             for col in [
+    #                 "name",
+    #                 "version",
+    #                 "license",
+    #                 "description",
+    #                 "repository",
+    #                 "maintainers",
+    #             ]:
 
-                    v = Version(VERSION_IDX ,PKG_IDX, pkg_name, "1", "2", "3", "4", "5", "6", "7")
-                    versions_lst.append(v)
+    #                 v = Version(VERSION_IDX ,PKG_IDX, pkg_name, "1", "2", "3", "4", "5", "6", "7")
+    #                 versions_lst.append(v)
     
     
-    # Serialize doesnt work for versions (yet)
-    _serialize_data(versions_lst, VERSIONS_FILE)     
+    # # Serialize doesnt work for versions (yet)
+    # _serialize_data(versions_lst, VERSIONS_FILE)     
     # zzzdreams, 1910020
 if __name__ == "__main__":
     mine()

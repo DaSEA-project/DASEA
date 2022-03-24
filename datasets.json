@@ -1,5 +1,5 @@
 {
-  "managers": [
+  "packageManagers": [
     {
       "name": "Alire",
       "ecosystem": "Ada",

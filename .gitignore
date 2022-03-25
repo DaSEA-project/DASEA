@@ -31,11 +31,19 @@ data/tmp/cargo/*
 !data/tmp/chromebrew/*
 data/tmp/npm/*
 
+data/tmp/rubygems/*
+!data/tmp/rubygems/.gitkeep
+
 data/tmp/nimble/*
 
-
-!data/out/cargo/.gitkeep
 data/out/cargo/*
+!data/out/cargo/.gitkeep
+
+data/out/clojars/*
+!data/out/clojars/.gitkeep
+
+data/out/rubygems/*
+!data/out/rubygems/.gitkeep
 
 *.zip
 data/out/dasea_*

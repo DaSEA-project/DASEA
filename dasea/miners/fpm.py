@@ -24,12 +24,9 @@ LOGGER = logging.getLogger(__name__)
 versions_lst = []
 
 def _get_version_idx(name, version):
-    print(name, version)
     global versions_lst
-    print(versions_lst)
 
     for v in versions_lst:
-        print(v)
         if v.name == name and v.version == version:
             return v.idx
     return None
@@ -56,7 +53,6 @@ def _collect_packages(metadata_dict):
 
 
 def _collect_versions(metadata_dict, pkg_idx_map):
-    # TODO: Kasper does some cleaning of the metadata_dict. Understand what and why!
     versions = []
     version_idx = 0
     for pkg_name, data in metadata_dict.items():
@@ -142,7 +138,7 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
     pkg_names = list(metadata_dict.keys())
-    
+
 
     LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)

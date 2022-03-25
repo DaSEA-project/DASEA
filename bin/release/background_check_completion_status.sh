@@ -1,6 +1,6 @@
 filepath='~/status.json'
 
-while [ $(cat ~/status.json | jq '.non_vagrant_complete') == false ] || [ $(cat ~/status.json | jq '.conan_complete') == false ] || [ $(cat ~/status.json | jq '.freebsd_complete') == false ] || [ $(cat ~/status.json | jq '.netbsd_complete') == false ] || [ $(cat ~/status.json | jq '.openbsd_complete') == false ] || [ $(cat ~/status.json | jq '.nimble_complete') == false ]
+while [ $(cat ~/status.json | jq '.non_vagrant_complete') == false ] || [ $(cat ~/status.json | jq '.conan_complete') == false ] || [ $(cat ~/status.json | jq '.freebsd_complete') == false ] || [ $(cat ~/status.json | jq '.netbsd_complete') == false ] || [ $(cat ~/status.json | jq '.openbsd_complete') == false ] || [ $(cat ~/status.json | jq '.nimble_complete') == false ] || [ $(cat ~/status.json | jq '.rubygems_complete') == false ] || [ $(cat ~/status.json | jq '.clojars_complete') == false ]
 do
     echo "Miners processes still running"
     sleep 900
@@ -20,6 +20,6 @@ git commit -m "DaSEA release - $(date)"
 git push origin main
 
 # delete DASEA folder
-echo "Deleting DaSEA folder"
-cd ..
-rm -rf ~/DASEA
+# echo "Deleting DaSEA folder"
+# cd ..
+# rm -rf ~/DASEA

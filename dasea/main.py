@@ -14,7 +14,6 @@ Options:
 import sys
 from docopt import docopt
 
-
 def main():
     # TODO: Adjust version to what is given in pyproject.toml
     arguments = docopt(__doc__, version="0.1.0")
@@ -65,16 +64,22 @@ def main():
             from dasea.miners.homebrew import mine as brew_mine
 
             brew_mine()
-
         elif arguments["<pkgmanager>"] == "chromebrew":
             from dasea.miners.chromebrew import mine as chromebrew_mine
 
             chromebrew_mine()
-
         elif arguments["<pkgmanager>"] == "npm":
             from dasea.miners.npm import mine as npm_mine
 
             npm_mine()
+        elif arguments["<pkgmanager>"] == "clojars":
+            from dasea.miners.clojars import mine as clojars_mine
+
+            clojars_mine()
+        elif arguments["<pkgmanager>"] == "rubygems":
+            from dasea.miners.rubygems import mine as rubygems_mine
+
+            rubygems_mine()
         else:
             print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
             sys.exit(127)

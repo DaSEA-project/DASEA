@@ -1,6 +1,0 @@
-site_name: DaSEA Documentation
-site_url: https://<orgname>.github.io/DASEA
-nav:
-    - Home: index.md
-    - About: about.md
-theme: readthedocs

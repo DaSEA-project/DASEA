@@ -15,7 +15,7 @@ from dasea.common.utils import _serialize_data
 # https://guides.rubygems.org/rubygems-org-rate-limits/
 
 RUBYGEMS_REGISTRY = "http://production.cf.rubygems.org/specs.4.8.gz"
-TMP_REGISTRY_FILE = "data/tmp/rubygems/rubygems_index"
+TMP_REGISTRY_FILE = "./data/tmp/rubygems/rubygems_index"
 
 PKG_URL = "https://rubygems.org/api/v1/gems/{pkg_name}.json"
 VERSIONS_URL = "https://rubygems.org/api/v1/versions/{pkg_name}.json"
@@ -43,17 +43,12 @@ LOGGER = logging.getLogger(__name__)
 
 
 def _collect_pkg_registry():
-    # if not os.path.isfile(TMP_REGISTRY_FILE):
-    # Download and unpack index file
-    r = requests.get(RUBYGEMS_REGISTRY)
-    content = gzip.decompress(r.content)
-    print(len(r.content))
-    print(r.status_code)
-    if not r.ok:
-        print(r.status_code)
-        print("THIS FAILS")
-    with open(TMP_REGISTRY_FILE, "wb") as fp:
-        fp.write(content)
+    if not os.path.isfile(TMP_REGISTRY_FILE):
+        # Download and unpack index file
+        r = requests.get(RUBYGEMS_REGISTRY)
+        content = gzip.decompress(r.content)
+        with open(TMP_REGISTRY_FILE, "wb") as fp:
+            fp.write(content)
 
     ## TODO: Maybe consider as Vagrant miner?
     # OBS, there needs to be a Ruby interpreter installed as `ruby` on the host
@@ -74,12 +69,12 @@ def _collect_packages(metadata_dict):
         p = Package(idx, pkg_name, "RubyGems")
         packages.append(p)
         pkg_idx_map[pkg_name] = idx
-    print(pkg_idx_map)
+
     return pkg_idx_map, packages
 
 
 # SEE: https://guides.rubygems.org/rubygems-org-rate-limits/
-# @RateLimiter(max_calls=10, period=1)
+@RateLimiter(max_calls=10, period=1)
 def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
     versions = dependencies = []
     version_idx = 0
@@ -87,10 +82,8 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
     for pkg_name in tqdm(metadata_dict):
         # Request the package versions data
         pkg_url = RUBYGEMS_VERSIONS_URL.format(pkg_name=pkg_name)
-        print(pkg_url)
         r = requests.get(pkg_url, headers=HEADERS)
         if not r.ok:
-            print(r.status_code)
             LOGGER.error(r.status_code, "VERSION", pkg_name)
             continue
 
@@ -147,10 +140,7 @@ def mine():
     except IOError as e:
         LOGGER.error(str(e))
         sys.exit(1)
-    print(metadata_dict)
-    if (len(metadata_dict) == 0):
-        LOGGER.error("No packages found")
-        sys.exit(1)
+
     LOGGER.info("Creating metadata_dict packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
 

@@ -24,12 +24,9 @@ LOGGER = logging.getLogger(__name__)
 versions_lst = []
 
 def _get_version_idx(name, version):
-    print(name, version)
     global versions_lst
-    print(versions_lst)
 
     for v in versions_lst:
-        print(v)
         if v.name == name and v.version == version:
             return v.idx
     return None
@@ -141,7 +138,7 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
     pkg_names = list(metadata_dict.keys())
-    
+
 
     LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)

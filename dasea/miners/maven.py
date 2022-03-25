@@ -196,7 +196,7 @@ def get_pom_links():
         if not l:
             break
 
-        # print(l)
+        # (l)
         links_from_page = get_links_from_page(l)
         link_to_pom = contains_link_to_pom(links_from_page)
 
@@ -288,7 +288,6 @@ def parse_pom(pom_path):
         deps = soup.find_all("dependency")
         for dep_xml in deps:
             pass
-            # print(_parse_dependency(dep_xml))
     return {
         "group_id": group_id,
         "artifactid_id": artifactid_id,

@@ -69,12 +69,12 @@ def _collect_packages(metadata_dict):
         p = Package(idx, pkg_name, "RubyGems")
         packages.append(p)
         pkg_idx_map[pkg_name] = idx
-
+    print(pkg_idx_map)
     return pkg_idx_map, packages
 
 
 # SEE: https://guides.rubygems.org/rubygems-org-rate-limits/
-@RateLimiter(max_calls=10, period=1)
+# @RateLimiter(max_calls=10, period=1)
 def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
     versions = dependencies = []
     version_idx = 0
@@ -82,8 +82,10 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
     for pkg_name in tqdm(metadata_dict):
         # Request the package versions data
         pkg_url = RUBYGEMS_VERSIONS_URL.format(pkg_name=pkg_name)
+        print(pkg_url)
         r = requests.get(pkg_url, headers=HEADERS)
         if not r.ok:
+            print(r.status_code)
             LOGGER.error(r.status_code, "VERSION", pkg_name)
             continue
 

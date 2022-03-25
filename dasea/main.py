@@ -14,7 +14,6 @@ Options:
 import sys
 from docopt import docopt
 
-
 def main():
     # TODO: Adjust version to what is given in pyproject.toml
     arguments = docopt(__doc__, version="0.1.0")

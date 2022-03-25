@@ -709,8 +709,7 @@ category = "main"
 optional = false
 python-versions = ">=3.6"
 
-[package.dependencies]
-cryptography = ">=35.0"
+
 
 [package.extras]
 docs = ["sphinx", "sphinx-rtd-theme"]

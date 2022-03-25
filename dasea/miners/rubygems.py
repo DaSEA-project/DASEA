@@ -47,6 +47,9 @@ def _collect_pkg_registry():
         # Download and unpack index file
         r = requests.get(RUBYGEMS_REGISTRY)
         content = gzip.decompress(r.content)
+        if not r.ok:
+            print(r.status_code)
+            print("THIS FAILS")
         with open(TMP_REGISTRY_FILE, "wb") as fp:
             fp.write(content)
 
@@ -142,7 +145,7 @@ def mine():
     except IOError as e:
         LOGGER.error(str(e))
         sys.exit(1)
-
+    print(metadata_dict)
     LOGGER.info("Creating metadata_dict packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
 

@@ -44,16 +44,16 @@ LOGGER = logging.getLogger(__name__)
 
 def _collect_pkg_registry():
     # if not os.path.isfile(TMP_REGISTRY_FILE):
-        # Download and unpack index file
-        r = requests.get(RUBYGEMS_REGISTRY)
-        content = gzip.decompress(r.content)
-        print(len(r.content))
+    # Download and unpack index file
+    r = requests.get(RUBYGEMS_REGISTRY)
+    content = gzip.decompress(r.content)
+    print(len(r.content))
+    print(r.status_code)
+    if not r.ok:
         print(r.status_code)
-        if not r.ok:
-            print(r.status_code)
-            print("THIS FAILS")
-        with open(TMP_REGISTRY_FILE, "wb") as fp:
-            fp.write(content)
+        print("THIS FAILS")
+    with open(TMP_REGISTRY_FILE, "wb") as fp:
+        fp.write(content)
 
     ## TODO: Maybe consider as Vagrant miner?
     # OBS, there needs to be a Ruby interpreter installed as `ruby` on the host
@@ -148,6 +148,9 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
     print(metadata_dict)
+    if (len(metadata_dict) == 0):
+        LOGGER.error("No packages found")
+        sys.exit(1)
     LOGGER.info("Creating metadata_dict packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
 

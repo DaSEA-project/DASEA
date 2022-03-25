@@ -21,7 +21,7 @@ doctl compute ssh DASEA-tool-rubygems-miners --ssh-key-path ~/.ssh/dasea --ssh-c
 ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
 source ~/.profile && git clone https://github.com/dependulum/DASEA.git &&
 cd DASEA && poetry install &&
-poetry run dasea mine rubygems &&
+poetry run dasea mine rubygems
 scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.org:/root/DASEA/data"
 
 ## Destroy droplet

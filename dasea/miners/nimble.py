@@ -27,6 +27,8 @@ logging.basicConfig(
 logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
 
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.HTTPWarning)
+
 # Nimble package manager has to be available
 if not which("nimble"):
     LOGGER.error("Nimble package manager has to be installed and on PATH.")
@@ -108,7 +110,7 @@ def _collect_versions(pkgs_lst, pkg_idx_map):
                 # Only clone the repository if it still seems to be there
                 continue
 
-        r = subprocess.run(cmd, shell=True)
+        r = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         if r.returncode != 0:
             LOGGER.warn(f"Cannot clone {repo_url}.")
 

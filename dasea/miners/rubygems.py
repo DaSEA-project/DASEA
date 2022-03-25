@@ -15,7 +15,7 @@ from dasea.common.utils import _serialize_data
 # https://guides.rubygems.org/rubygems-org-rate-limits/
 
 RUBYGEMS_REGISTRY = "http://production.cf.rubygems.org/specs.4.8.gz"
-TMP_REGISTRY_FILE = "./data/tmp/rubygems/rubygems_index"
+TMP_REGISTRY_FILE = "data/tmp/rubygems/rubygems_index"
 
 PKG_URL = "https://rubygems.org/api/v1/gems/{pkg_name}.json"
 VERSIONS_URL = "https://rubygems.org/api/v1/versions/{pkg_name}.json"

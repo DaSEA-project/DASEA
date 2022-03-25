@@ -43,7 +43,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def _collect_pkg_registry():
-    if not os.path.isfile(TMP_REGISTRY_FILE):
+    # if not os.path.isfile(TMP_REGISTRY_FILE):
         # Download and unpack index file
         r = requests.get(RUBYGEMS_REGISTRY)
         content = gzip.decompress(r.content)

@@ -52,7 +52,7 @@ def _collect_pkg_registry():
     if not r.ok:
         print(r.status_code)
         print("THIS FAILS")
-    with open(TMP_REGISTRY_FILE, "wb") as fp:
+    with open(TMP_REGISTRY_FILE, "r") as fp:
         fp.write(content)
 
     ## TODO: Maybe consider as Vagrant miner?

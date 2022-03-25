@@ -47,6 +47,7 @@ def _collect_pkg_registry():
         # Download and unpack index file
         r = requests.get(RUBYGEMS_REGISTRY)
         content = gzip.decompress(r.content)
+        print(r.content)
         if not r.ok:
             print(r.status_code)
             print("THIS FAILS")

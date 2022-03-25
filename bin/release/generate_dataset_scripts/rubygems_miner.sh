@@ -19,6 +19,7 @@ scp -i ~/.ssh/dasea ~/.ssh/id_rsa root@$IP_ADDRESS:/root/.ssh/
 echo "SSH into the droplet..."
 doctl compute ssh DASEA-tool-rubygems-miners --ssh-key-path ~/.ssh/dasea --ssh-command "
 ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
+sudo apt install ruby -y &&
 source ~/.profile && git clone https://github.com/dependulum/DASEA.git &&
 cd DASEA && poetry install &&
 poetry run dasea mine rubygems

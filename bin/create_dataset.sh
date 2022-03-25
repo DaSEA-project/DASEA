@@ -11,6 +11,7 @@ poetry run dasea mine fpm
 poetry run dasea mine vcpkg
 poetry run dasea mine homebrew
 poetry run dasea mine chromebrew
+poetry run dasea mine npm
 
 vagrant up freebsd11
 bash bin/get_freebsd_ports.sh

@@ -68,6 +68,10 @@ def main():
             from dasea.miners.chromebrew import mine as chromebrew_mine
 
             chromebrew_mine()
+        elif arguments["<pkgmanager>"] == "npm":
+            from dasea.miners.npm import mine as npm_mine
+
+            npm_mine()
         elif arguments["<pkgmanager>"] == "clojars":
             from dasea.miners.clojars import mine as clojars_mine
 

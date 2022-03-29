@@ -1,5 +1,5 @@
 ## Spin up a DO droplet
-doctl compute droplet create --image 102629764 --size s-4vcpu-8gb --region ams3 --wait --ssh-keys 33315393 DASEA-tool-npm-miner
+doctl compute droplet create --image 102629764 --size s-8vcpu-16gb --region ams3 --wait --ssh-keys 33315393 DASEA-tool-npm-miner
 
 ## Sleep while the droplet boots up
 sleep 45

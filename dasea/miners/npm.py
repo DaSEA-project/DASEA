@@ -107,7 +107,7 @@ def download_all_docs():
 #     for pkg_name, idx in pkg_idx_map.items():
 #         p = Package(idx, pkg_name, "Npm")
 #         packages.append(p)
-        
+
 #     return pkg_idx_map, packages
 
 
@@ -147,7 +147,7 @@ def mine():
             if len(packages_lst) >= CHUNK_SIZE:
                 _serialize_data_rows(packages_lst, PKGS_FILE)
                 packages_lst = []
-    
+
             for version_number, v_info in pkg_doc.get("versions", {}).items():
                 repository = v_info.get("repository", {})
 
@@ -158,11 +158,11 @@ def mine():
 
                 v = Version(
                     idx = VERSION_IDX,
-                    pkg_idx = PKG_IDX, 
+                    pkg_idx = PKG_IDX,
                     name = pkg_name,
                     version = version_number,
                     license = v_info.get("license", ""),
-                    description = v_info.get("description", ""), 
+                    description = v_info.get("description", ""),
                     homepage = v_info.get("homepage", ""),
                     repository = repo_url,
                     author = _extract_name_details(v_info.get("author", "")),
@@ -174,13 +174,13 @@ def mine():
                 if len(versions_lst) >= CHUNK_SIZE:
                     _serialize_data_rows(versions_lst, VERSIONS_FILE)
                     versions_lst = []
-                
+
                 dep_kinds = {
                             "dependencies": "runtime",
                             "devDependencies": "dev",
                             "optionalDependencies": "optional",
                         }
-                
+
                 for dep_kind in dep_kinds.keys():
                     dep_docs = v_info.get(dep_kind, {})
                     if not dep_docs:
@@ -200,7 +200,6 @@ def mine():
                                 target_version = v_constraint,
                                 kind = dep_kinds[dep_kind]
                                 )
-                            print(f"dep: {d}")
                             dependencies_lst.append(d)
 
                             if len(dependencies_lst) >= CHUNK_SIZE:
@@ -230,7 +229,7 @@ def mine():
         CDEP += len(dependencies_lst)
         print(f"Remaining dependencies chunk is {len(dependencies_lst)}")
         _serialize_data_rows(dependencies_lst, DEPENDENCIES_FILE)
-    
+
     print(f"Total packages: {PKG_IDX}")
     print(f"Total versions: {VERSION_IDX}")
     print(f"Total dependencies: {CDEP}")

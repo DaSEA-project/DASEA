@@ -2,8 +2,7 @@ import os
 from struct import pack
 import sys
 import json
-# from tkinter import Pack
-import ijson  # see https://pypi.org/project/ijson  pip install ijson
+import ijson  # see https://pypi.org/project/ijson
 import requests
 import logging
 from datetime import datetime
@@ -100,16 +99,6 @@ def download_all_docs():
     time_spent = datetime.now() - start_ts
     LOGGER.info(f"It took {str(time_spent)} to download the data dump...")
     return FULL_DOCS_FILE
-
-# def _collect_packages(pkg_name_list):
-#     pkg_idx_map = {g: idx for idx, g in enumerate(pkg_name_list)}
-#     packages = []
-#     for pkg_name, idx in pkg_idx_map.items():
-#         p = Package(idx, pkg_name, "Npm")
-#         packages.append(p)
-
-#     return pkg_idx_map, packages
-
 
 
 def mine():

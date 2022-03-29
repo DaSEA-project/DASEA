@@ -7,7 +7,7 @@ import subprocess
 import shutil
 from datetime import datetime
 from tqdm import tqdm
-from ratelimiter import RateLimiter
+# from ratelimiter import RateLimiter
 from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
 
@@ -74,7 +74,7 @@ def _collect_packages(metadata_dict):
 
 
 # SEE: https://guides.rubygems.org/rubygems-org-rate-limits/
-@RateLimiter(max_calls=10, period=1)
+# @RateLimiter(max_calls=10, period=1)
 def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
     versions = dependencies = []
     version_idx = 0

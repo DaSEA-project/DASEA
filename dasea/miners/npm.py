@@ -10,11 +10,10 @@ from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data, _serialize_data_rows
 
 
-
 INDEX_DOC_URL = "https://replicate.npmjs.com/_all_docs"
-INDEX_DOC_FILE = "data/tmp/npm/projects.json"
+INDEX_DOC_FILE = "./data/tmp/npm/projects.json"
 FULL_DOCS_URL = "https://replicate.npmjs.com/_all_docs?include_docs=true"
-FULL_DOCS_FILE = "data/tmp/npm/full_npm_dump.json"
+FULL_DOCS_FILE = "./data/tmp/npm/full_npm_dump.json"
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
 PKGS_FILE = f"data/out/npm/npm_packages_{TODAY}.csv"
@@ -103,6 +102,7 @@ def download_all_docs():
 
 def mine():
     pkgs = collect_pkg_names()
+    LOGGER.info(f"Downloaded packages {len(pkgs)}")
     download_all_docs()
     LOGGER.info(f"Collected packages {len(pkgs)}")
     PKG_IDX = VERSION_IDX = 0

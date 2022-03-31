@@ -45,6 +45,9 @@ data/out/clojars/*
 data/out/rubygems/*
 !data/out/rubygems/.gitkeep
 
+data/out/npm/*
+!data/out/npm/.gitkeep
+
 *.zip
 data/out/dasea_*
 data/*.tar.bz2

@@ -57,7 +57,8 @@ def _collect_packages(metadata_dict):
 
 
 def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
-    versions = dependencies = []
+    versions = []
+    dependencies = []
     version_idx = 0
     for pkg_name in tqdm(metadata_dict):
         # Request the package data

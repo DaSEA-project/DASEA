@@ -76,7 +76,8 @@ def _collect_packages(metadata_dict):
 # SEE: https://guides.rubygems.org/rubygems-org-rate-limits/
 # @RateLimiter(max_calls=10, period=1)
 def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
-    versions = dependencies = []
+    versions = []
+    dependencies = []
     version_idx = 0
 
     for pkg_name in tqdm(metadata_dict):
@@ -131,6 +132,7 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                     )
                     dependencies.append(d)
         version_idx += 1
+
     return versions, dependencies
 
 def mine():

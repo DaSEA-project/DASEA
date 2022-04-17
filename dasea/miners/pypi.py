@@ -1,14 +1,10 @@
 from cmath import log
 import sys
-import gzip
 import os
 import logging
 import requests
-import subprocess
-import shutil
 from datetime import datetime
 from tqdm import tqdm
-# from ratelimiter import RateLimiter
 from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
 from bs4 import BeautifulSoup
@@ -82,8 +78,6 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
     version_idx = 0
 
     for pkg_name in tqdm(metadata_dict):
-        if pkg_name == "17MonIP":
-            break
         # Request the package versions data
         pkg_url = PKG_URL.format(pkg_name=pkg_name)
         r = requests.get(pkg_url, headers=HEADERS)

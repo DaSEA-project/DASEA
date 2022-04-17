@@ -19,7 +19,7 @@ To setup the project, see link:https://github.com/dependulum/DASEA/blob/main/doc
 
 === Supported Miners
 
-See link:https://github.com/dependulum/DASEA/blob/main/docs/available_commands.adoc[available_commands.adoc] file
+See link: https://github.com/dependulum/DASEA/blob/main/docs/available_commands.adoc[available_commands.adoc] file
 
 
 === Compatibility

@@ -2,7 +2,7 @@
 ## Create JSON file
 rm ~/status.json
 sudo apt install jq -y
-echo '{"non_vagrant_complete": false, "conan_complete": false, "freebsd_complete": false, "netbsd_complete": false, "openbsd_complete": false, "nimble_complete": false,"clojars_complete": false}, "rubygems_complete": false, "npm_complete": false}' | jq . >> ~/status.json
+echo '{"non_vagrant_complete": false, "conan_complete": false, "freebsd_complete": false, "netbsd_complete": false, "openbsd_complete": false, "nimble_complete": false,"clojars_complete": false}, "rubygems_complete": false, "npm_complete": false, "pypi_complete": false}' | jq . >> ~/status.json
 
 # Non-Vagrant Miners
 bash bin/release/generate_dataset_scripts/non_vagrant_miners.sh &
@@ -49,6 +49,10 @@ bash bin/release/generate_dataset_scripts/npm_miner.sh &
 NPM_MINER_ID=$!
 bash bin/release/background_check.sh $NPM_MINER_ID 'NPM' 'npm_complete' &
 
+# NPM
+bash bin/release/generate_dataset_scripts/pypi_miner.sh &
+PYPI_MINER_ID=$!
+bash bin/release/background_check.sh $PYPI_MINER_ID 'PyPi' 'pypi_complete' &
 
 # Check all miners are complete
 bash bin/release/background_check_completion_status.sh &

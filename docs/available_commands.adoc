@@ -50,9 +50,21 @@
 // RubyGems
 | Ruby
 | RubyGems
-| http://production.cf.rubygems.org/specs.4.8.gz
+| https://replicate.npmjs.com/_all_docs
 | Programming Language
 |`$ poetry run dasea mine rubygems`
+// NPM
+| JavaScript
+| npm
+| http://production.cf.rubygems.org/specs.4.8.gz
+| Programming Language
+|`$ poetry run dasea mine npm`
+// PyPi
+| Python
+| PyPi
+| https://pypi.python.org/simple/
+| Programming Language
+|`$ poetry run dasea mine pypi`
 // Homebrew
 | MacOS packages
 | Homebrew

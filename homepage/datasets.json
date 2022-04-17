@@ -51,6 +51,11 @@
       "url": "https://rubygems.org/"
     },
     {
+      "name": "PyPi",
+      "ecosystem": "Python",
+      "url": "https://pypi.org/"
+    },
+    {
       "name": "Ports",
       "ecosystem": "FreeBSD",
       "url": "https://www.freebsd.org/ports/"

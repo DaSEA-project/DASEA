@@ -80,6 +80,10 @@ def main():
             from dasea.miners.rubygems import mine as rubygems_mine
 
             rubygems_mine()
+        elif arguments["<pkgmanager>"] == "pypi":
+            from dasea.miners.pypi import mine as pypi_mine
+
+            pypi_mine()
         else:
             print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
             sys.exit(127)

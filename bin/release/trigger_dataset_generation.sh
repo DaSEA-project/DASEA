@@ -14,11 +14,6 @@ bash bin/release/generate_dataset_scripts/netbsd_miner.sh &
 NETBDS_MINER_ID=$!
 bash bin/release/background_check.sh $NETBDS_MINER_ID 'NetBSD' 'netbsd_complete' &
 
-# Conan Miner
-bash bin/release/generate_dataset_scripts/conan_miner.sh &
-CONAN_MINER_ID=$!
-bash bin/release/background_check.sh $CONAN_MINER_ID 'Conan' 'conan_complete' &
-
 # FreeBSD
 bash bin/release/generate_dataset_scripts/freebsd_miner.sh &
 FREEBDS_MINER_ID=$!

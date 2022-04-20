@@ -45,7 +45,7 @@ LOGGER = logging.getLogger(__name__)
 def _collect_pkg_registry():
     if not os.path.isfile(TMP_REGISTRY_FILE):
         # Download and unpack index file
-        r = requests.get(RUBYGEMS_REGISTRY)
+        r = requests.get(RUBYGEMS_REGISTRY, headers=HEADERS)
         content = gzip.decompress(r.content)
         with open(TMP_REGISTRY_FILE, "wb") as fp:
             fp.write(content)
@@ -74,7 +74,8 @@ def _collect_packages(metadata_dict):
 
 
 # SEE: https://guides.rubygems.org/rubygems-org-rate-limits/
-# @RateLimiter(max_calls=10, period=1)
+# FIXME: times out after a while
+# @RateLimiter(max_calls=10, period=1) //
 def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
     versions = []
     dependencies = []

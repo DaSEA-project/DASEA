@@ -16,9 +16,6 @@ vagrant up netbsd9
 vagrant up ubuntu2104oneway
 
 # Run all processes in parallel
-nohup vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan" &
-CONAN_ID=$!
-
 nohup bash bin/get_freebsd_ports.sh &
 FREEBSD_ID=$!
 
@@ -34,11 +31,10 @@ NIMBLE_ID=$!
 COUNT=0
 
 # Destroy all machines
-nohup sh -c 'while ps -p $CONAN_ID > /dev/null; do echo "Conan process is running" && sleep 300; done && ((COUNT++)) && vagrant destroy -f ubuntu2104'
 nohup sh -c 'while ps -p $FREEBSD_ID > /dev/null; do echo "FreeBSD process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f freebsd11'
 nohup sh -c 'while ps -p $OPENBSD_ID > /dev/null; do echo "OpenBSD process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f openbsd69'
 nohup sh -c 'while ps -p $NETBSD_ID > /dev/null; do echo "NetBSD process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f netbsd9'
 nohup sh -c 'while ps -p $NIMBLE_ID > /dev/null; do echo "Nimble process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f ubuntu2104oneway'
 
 # Check if mining is still running
-nohup sh -c 'while [ $COUNT -lt 5 ]; do echo "Mining is still running" && sleep 3000; done && bash bin/release_dataset.sh'
+nohup sh -c 'while [ $COUNT -lt 4 ]; do echo "Mining is still running" && sleep 3000; done && bash bin/release_dataset.sh'

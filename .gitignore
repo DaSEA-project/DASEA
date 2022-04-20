@@ -23,9 +23,6 @@ README.html
 data/**/*.csv
 data/tmp/alire/*
 !data/tmp/alire/.gitkeep
-data/tmp/conan/*
-!data/tmp/conan/.gitkeep
-!data/tmp/cargo/.gitkeep
 data/tmp/cargo/*
 !data/tmp/chromebrew/.gitkeep
 data/tmp/chromebrew/*

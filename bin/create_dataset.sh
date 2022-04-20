@@ -2,16 +2,15 @@
 
 poetry run dasea mine cargo
 poetry run dasea mine alire
-
-vagrant up ubuntu2104
-vagrant ssh ubuntu2104 --command "cd /vagrant/ && poetry run dasea mine conan"
-vagrant destroy -f ubuntu2104
-
 poetry run dasea mine fpm
 poetry run dasea mine vcpkg
 poetry run dasea mine homebrew
 poetry run dasea mine chromebrew
-poetry run dasea mine npm
+poetry run dasea mine npm # takes very long time
+poetry run dasea mine pypi # takes very long time
+poetry run dasea mine clojars
+poetry run dasea mine rubygems # takes very long time
+poetry run dasea mine conan
 
 vagrant up freebsd11
 bash bin/get_freebsd_ports.sh

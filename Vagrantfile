@@ -144,39 +144,6 @@ Vagrant.configure("2") do |config|
   end
   # End NetBSD VM
 
-  # Start Conan VM
-  config.vm.define "ubuntu2104", primary: false do |ubuntu|
-    ubuntu.vm.box = "bento/ubuntu-21.04"
-    # To make the two-way sync work, the vbguest plugin has to be installed:
-    # vagrant plugin install vagrant-vbguest
-    ubuntu.vm.synced_folder "./", "/vagrant", type: "virtualbox"
-
-    ubuntu.vm.provider "virtualbox" do |vb|
-      # TODO: Are less resources doable?
-      vb.memory = "4096"
-      vb.cpus = "2"
-    end
-
-    ubuntu.vm.hostname = "ubuntu2104"
-    ubuntu.vm.provision "shell", privileged: true, inline: <<-SHELL
-      echo "Hej from Ubuntu 21.04"
-      apt update
-
-      # echo "Setting up Python for dataset creation..."
-      apt install -y python3 python3.9-venv
-      apt install -y gcc make  # Conan needs a C/C++ compiler
-    SHELL
-    ubuntu.vm.provision "shell", privileged: false, inline: <<-SHELL
-      curl -sSL https://install.python-poetry.org | python3 -
-      echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-      source $HOME/.bashrc
-
-      cd /vagrant
-      $HOME/.local/bin/poetry install
-    SHELL
-  end
-  # End Conan VM
-
   # Start Nible VM
   config.vm.define "ubuntu2104oneway", primary: false do |ubuntu|
     ubuntu.vm.box = "bento/ubuntu-21.04"

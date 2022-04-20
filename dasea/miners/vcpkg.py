@@ -100,11 +100,11 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
 
-    LOGGER.info("Creating DaSEA dependencies...")
+    LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_lst)
     LOGGER.info("Creating DaSEA versions...")
     versions_lst = _collect_versions(metadata_lst, pkg_idx_map)
-    LOGGER.info("Creating DaSEA packages...")
+    LOGGER.info("Creating DaSEA dependencies...")
     deps_lst = _collect_dependencies(metadata_lst, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)

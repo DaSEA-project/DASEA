@@ -1,5 +1,7 @@
+from cmath import log
 import sys
-import yaml
+import requests
+from tqdm import tqdm
 import json
 import logging
 import subprocess
@@ -10,10 +12,19 @@ from dataclasses import dataclass
 from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
 
+# Based on the requests executed here:
+# https://conan.io/center/glib
 
-CONAN_INDEX_URL = "https://github.com/conan-io/conan-center-index"
-CONAN_INDEX_LOCAL = "data/tmp/conan/conan-center-index"
-CONAN_METADATA = "data/tmp/conan/metadata"
+CONAN_REGISTRY = "https://conan.io/center/api/ui/allpackages"
+CONAN_PACKAGE_URL ="https://conan.io/center/api/ui/details?name={pkg_name}&user=_&channel=_"
+CONAN_REVISIONS_URL = "https://conan.io/center/api/ui/revisions?name={pkg_name}&version={version}&user=_&channel=_"
+CONAN_DEPENDENCIES_URL = "https://conan.io/center/api/ui/dependencies?name={pkg_name}&version={version}&user=_&channel=_&revision={revision}"
+
+
+HEADERS = {
+    "User-Agent": "DaSEA Research Project (Please don't ban, daseaITU@gmail.com)",
+    "From": "daseaITU@gmail.com",
+}
 
 TODAY = datetime.today().strftime("%m-%d-%Y")
 PKGS_FILE = f"data/out/conan/conan_packages_{TODAY}.csv"
@@ -26,154 +37,141 @@ logging.basicConfig(
 logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
 
-
-@dataclass
-class ConanVersion(Version):
-    os_platform: str
-
-
 @dataclass
 class ConanDependency(Dependency):
-    target_version_idx: str
+    revision: str
 
+def _collect_pkg_registry():
+    r = requests.get(CONAN_REGISTRY, headers=HEADERS)
+    if not r.ok:
+        raise IOError("Cannot download CONAN registry.")
+    metadata_lst = r.json()["packages"]
+    return metadata_lst
 
-def clone_index_repo():
-    if Path(CONAN_INDEX_LOCAL).is_dir():
-        cmd = f"git -C {CONAN_INDEX_LOCAL} pull"
-    else:
-        cmd = f"git clone -v {CONAN_INDEX_URL} {CONAN_INDEX_LOCAL}"
-
-    r = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    if r.returncode != 0:
-        raise IOError("Cannot clone/update Conan registry.")
-
-
-def create_name_version_lst(pkg_config_files):
-    name_version_lst = []
-    for conf_file in pkg_config_files:
-        with open(conf_file) as fp:
-            conf_data = yaml.safe_load(fp)
-        name = Path(conf_file).parts[-2]
-        name_version_lst += [(name, version) for version in conf_data["versions"].keys()]
-    return name_version_lst
-
-
-def collect_dependency_info(name, version):
-    # Remember that the `conan` tool has to be on PATH
-    outfile = Path(CONAN_METADATA, name, f"{version}.json")
-    if not outfile.is_file():
-        cmd_linux = f"conan info -s os='Linux' -n requires {name}/{version}@ --json {outfile}"
-        r_lin = subprocess.run(cmd_linux,shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        if r_lin.returncode != 0:
-            # TODO: log cmd error message?
-            # LOGGER.error(f"Error getting info from {name}/{version}@ on {sys.platform}, trying with target os as Windows")
-            cmd_win = f"conan info -s os='Windows' -n requires {name}/{version}@ --json {outfile}"
-            r_win = subprocess.run(cmd_win, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            # if r_win.returncode != 0:
-            #     LOGGER.error(f"Ommiting {name}/{version}@ with os target Windows on {sys.platform}")
-
-
-def read_meta_data(name, version):
-    metafile = Path(CONAN_METADATA, name, f"{version}.json")
-    with open(metafile) as fp:
-        d = json.load(fp)
-    return d
-
-
-def _collect_packages(pkg_names_lst):
-    pkg_idx_map = {name: idx for idx, name in enumerate(pkg_names_lst)}
+def _collect_packages(metadata_lst):
+    pkg_idx_map = {d["name"]: idx for idx, d in enumerate(metadata_lst)}
     packages = []
     for pkg_name, idx in pkg_idx_map.items():
         p = Package(idx, pkg_name, "Conan")
         packages.append(p)
-
     return pkg_idx_map, packages
 
-
-def _collect_versions(name_version_lst, metadata_lst, pkg_idx_map):
+def _collect_versions(metadata_lst, pkg_idx_map):
     versions = []
-    version_idx_map = {}
-    for version_idx, (pkg_name, version) in enumerate(name_version_lst):
-        version_info = metadata_lst[version_idx][0]  # Entries for dependencies are provided after the first element
+    version_idx = 0
 
-        v = ConanVersion(
-            idx=version_idx,
-            pkg_idx=pkg_idx_map.get(pkg_name, None),
-            name=pkg_name,
-            version=version,
-            license=version_info["license"],
-            description=version_info["description"],
-            homepage=version_info["homepage"],
-            repository=None,  # There is no information about it in the data
-            author=None,
-            maintainer=None,
-            os_platform=sys.platform,
-        )
-        versions.append(v)
-        version_idx_map[version_info["reference"]] = version_idx
+    for pkg in tqdm(metadata_lst):
+        pkg_name = pkg["name"]
+        pkg_idx = pkg_idx_map.get(pkg_name, None)
+        versions_url = CONAN_PACKAGE_URL.format(pkg_name=pkg_name)
 
-    return version_idx_map, versions
+        versions_req = requests.get(versions_url, headers=HEADERS)
+        if not versions_req.ok:
+            LOGGER.error(versions_req.status_code, "PACKAGE VERSIONS", pkg_name)
+            continue
+
+        versions_data = versions_req.json()["versions"]
+        additional_package_data = versions_req.json()
+        for version_data in versions_data:
+            v = Version(
+                idx=version_idx,
+                pkg_idx=pkg_idx,
+                name=pkg_name,
+                version=version_data.get("version", ""),
+                license=version_data.get("license", ""),
+                description=pkg.get("description"),
+                homepage=additional_package_data.get("homepage", ""),
+                repository=None,
+                author=None,
+                maintainer=None,
+            )
+            versions.append(v)
+            version_idx += 1
+
+    return versions
 
 
-def _collect_dependencies(name_version_lst, metadata_lst, pkg_idx_map, version_idx_map):
-    deps = []
-    for version_idx, (pkg_name, version) in enumerate(name_version_lst):
-        version_info = metadata_lst[version_idx][0]
+def _collect_dependencies(versions_lst, pkg_idx_map):
+    dependencies = []
 
-        for dep in version_info.get("requires", []):
-            dep_name, dep_version = dep.split("/")
+    for version_data in tqdm(versions_lst):
+        pkg_name = version_data.name
+        source_pkg_idx = version_data.pkg_idx
+        version_idx = version_data.idx
+        source_version = version_data.version
+
+        ## Get latest revision for version
+        revisions_url = CONAN_REVISIONS_URL.format(pkg_name=pkg_name, version=source_version)
+        revisions_req = requests.get(revisions_url, headers=HEADERS)
+        if not revisions_req.ok:
+            LOGGER.error(revisions_req.status_code, "VERSION REVISIONS", source_version)
+            continue
+
+        ## Based on how they fetch data for a package on their website, ex: https://conan.io/center/openssl
+
+        if len(revisions_req.json()["revisions"]) == 0:
+            LOGGER.error("MISSING REVISIONS", pkg_name, source_version)
+            continue
+
+        latest_revision = revisions_req.json()["revisions"][0]
+
+
+        ## Get dependencies for version + latest revision
+        dependencies_url = CONAN_DEPENDENCIES_URL.format(pkg_name=pkg_name, version=source_version, revision=latest_revision)
+
+        dep_req = requests.get(dependencies_url, headers=HEADERS)
+        if not dep_req.ok:
+            LOGGER.error(dep_req.status_code, "VERSION REVISIONS", source_version)
+            continue
+        dependencies_data = dep_req.json()
+
+        for dependency in dependencies_data.get("dependencies", []):
+            if dependency["name_version"] == '':
+                continue
+
+            split_name_and_version = dependency["name_version"].split("/")
+            if(len(split_name_and_version) != 2):
+                LOGGER.error("Invalid dependency name_version", dependency["name_version"])
+                continue
+
+            dep_name = split_name_and_version[0]
+            dep_version = split_name_and_version[1]
+
             d = ConanDependency(
-                pkg_idx=pkg_idx_map.get(pkg_name, None),
+                pkg_idx=source_pkg_idx,
                 source_idx=version_idx,
                 target_idx=pkg_idx_map[dep_name],
                 source_name=pkg_name,
                 target_name=dep_name,
-                source_version=version,
+                source_version=source_version,
                 target_version=dep_version,
                 kind=Kind.BUILD.name,
-                target_version_idx=version_idx_map.get(dep, ""),
+                revision=latest_revision
             )
-            deps.append(d)
-    return deps
+            dependencies.append(d)
+    return dependencies
+
 
 
 def mine():
-    LOGGER.info("Collecting Conan data...")
-
+    LOGGER.info("Collecting Conan registry")
     try:
-        clone_index_repo()
+        metadata_lst = _collect_pkg_registry()
     except IOError as e:
         LOGGER.error(str(e))
         sys.exit(1)
 
-    # Collect information about what packages exist in which versions
-    glob_pattern = f"{CONAN_INDEX_LOCAL}/recipes/**/config.yml"
-    pkg_config_files = glob(glob_pattern, recursive=True)
-    name_version_lst = create_name_version_lst(pkg_config_files)
 
-    # Collect for each package version a metadata JSON file via the `conan` tool
-    # This takes ca. two hours, and collects information for packages build on Linux or Windows.
-    for name, version in name_version_lst:
-        collect_dependency_info(name, version)
+    print("len(metadata_lst) = ", len(metadata_lst))
 
     LOGGER.info("Creating DaSEA packages...")
-
-    # glob for the files here since not all packages have to have metadata, e.g., in case they
-    # cannot be build on this os_platform
-    glob_pattern = f"{CONAN_METADATA}/*"
-    pkg_names_lst = sorted([Path(p).stem for p in glob(glob_pattern)])
-    pkg_idx_map, packages_lst = _collect_packages(pkg_names_lst)
-
-    glob_pattern = f"{CONAN_METADATA}/**/*.json"
-    metadata_files = glob(glob_pattern, recursive=True)
-    name_version_lst = [(Path(p).parts[-2], Path(p).stem) for p in metadata_files]
+    pkg_idx_map, packages_lst = _collect_packages(metadata_lst)
 
     LOGGER.info("Creating DaSEA versions...")
-    metadata_lst = [read_meta_data(n, v) for n, v in name_version_lst]
-    version_idx_map, versions_lst = _collect_versions(name_version_lst, metadata_lst, pkg_idx_map)
+    versions_lst = _collect_versions(metadata_lst, pkg_idx_map)
 
     LOGGER.info("Creating DaSEA dependencies...")
-    deps_lst = _collect_dependencies(name_version_lst, metadata_lst, pkg_idx_map, version_idx_map)
+    deps_lst = _collect_dependencies(versions_lst, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)

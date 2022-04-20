@@ -161,9 +161,6 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
 
-
-    print("len(metadata_lst) = ", len(metadata_lst))
-
     LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_lst)
 

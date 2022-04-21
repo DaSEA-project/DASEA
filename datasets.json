@@ -56,6 +56,16 @@
       "url": "https://pypi.org/"
     },
     {
+      "name": "npm",
+      "ecosystem": "JavaScript",
+      "url": "https://www.npmjs.com/"
+    },
+    {
+      "name": "Lua",
+      "ecosystem": "LuaRocks",
+      "url": "https://luarocks.org/"
+    },
+    {
       "name": "Ports",
       "ecosystem": "FreeBSD",
       "url": "https://www.freebsd.org/ports/"

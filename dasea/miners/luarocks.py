@@ -128,7 +128,7 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
             try:
                 for target_name in version_info["dependencies"]:
                     source_pkg_idx = pkg_idx_map.get(pkg_name, None)
-                    target_idx = pkg_idx_map.get(target_name, ""),
+                    target_idx = pkg_idx_map.get(target_name, None),
 
                     d = Dependency(
                         pkg_idx=source_pkg_idx,

@@ -138,7 +138,7 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                         # Dep declarations may contain optional values:
                         # https://stackoverflow.com/questions/46775346/what-do-square-brackets-mean-in-pip-install
                         if target_name.lower().endswith("]"):
-                            target_id = pkg_idx_map.get(target_name.lower().split("[")[0], "???")
+                            target_id = pkg_idx_map.get(target_name.lower().split("[")[0], None)
 
                     d = Dependency(
                         pkg_idx=pkg_idx,

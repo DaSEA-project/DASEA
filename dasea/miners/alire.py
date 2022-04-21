@@ -96,7 +96,7 @@ def _collect_dependencies(metadata_lst, pkg_idx_map):
                             d = AlireDependency(
                                 pkg_idx=source_pkg_idx,
                                 source_idx=version_idx,
-                                target_idx=pkg_idx_map.get(target_name, ""),
+                                target_idx=pkg_idx_map.get(target_name, None),
                                 source_name=pkg_name,
                                 target_name=target_name,
                                 source_version=version_info["version"],
@@ -108,7 +108,7 @@ def _collect_dependencies(metadata_lst, pkg_idx_map):
                     d = AlireDependency(
                         pkg_idx=source_pkg_idx,
                         source_idx=version_idx,
-                        target_idx=pkg_idx_map.get(target_name, ""),
+                        target_idx=pkg_idx_map.get(target_name, None),
                         source_name=pkg_name,
                         target_name=target_name,
                         source_version=version_info["version"],

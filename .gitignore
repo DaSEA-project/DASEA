@@ -31,21 +31,18 @@ data/tmp/rubygems/*
 !data/tmp/rubygems/.gitkeep
 data/tmp/pypi/*
 !data/tmp/pypi/.gitkeep
-
 data/tmp/pypi/*
 !data/tmp/pypi/.gitkeep
-
 data/tmp/nimble/*
 
 data/out/cargo/*
 !data/out/cargo/.gitkeep
-
 data/out/clojars/*
 !data/out/clojars/.gitkeep
-
 data/out/rubygems/*
 !data/out/rubygems/.gitkeep
-
+data/out/luarocks/*
+!data/out/luarocks/.gitkeep
 data/out/npm/*
 !data/out/npm/.gitkeep
 

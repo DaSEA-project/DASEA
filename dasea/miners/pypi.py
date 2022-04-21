@@ -24,7 +24,7 @@ VERSION_URL = "https://pypi.python.org/pypi/{pkg_name}/{version}/json"
 # Due to rate limiting and fair use, we have to set such a header
 # https://warehouse.pypa.io/api-reference/#rate-limiting
 HEADERS = {
-    "User-Agent": "DaSEA Research Project (Please don't ban, daseaITU@gmail.com)",
+    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea.org)",
     "From": "daseaITU@gmail.com",
 }
 
@@ -103,7 +103,6 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                 version_info = req.json()["info"]
                 pkg_idx = pkg_idx_map.get(pkg_name, None)
 
-                print(version_url)
                 v = Version(
                         idx=version_idx,
                         pkg_idx=pkg_idx,
@@ -187,7 +186,7 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
 
-    LOGGER.info("Creating metadata_dict packages...")
+    LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
 
     LOGGER.info("Creating DaSEA versions with dependencies...")

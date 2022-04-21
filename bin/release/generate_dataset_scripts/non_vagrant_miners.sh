@@ -28,6 +28,7 @@ poetry run dasea mine fpm &&
 poetry run dasea mine homebrew &&
 poetry run dasea mine vcpkg &&
 poetry run dasea mine conan &&
+poetry run dasea mine luarocks &&
 scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.org:/root/DASEA/data"
 
 ## Destroy droplet

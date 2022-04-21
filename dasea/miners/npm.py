@@ -182,7 +182,7 @@ def mine():
                             d = Dependency(
                                 pkg_idx = PKG_IDX,
                                 source_idx = VERSION_IDX,
-                                target_idx = PKG_IDX_MAP.get(target_name, ""),
+                                target_idx = PKG_IDX_MAP.get(target_name, None),
                                 source_name = pkg_name,
                                 target_name = target_name,
                                 source_version = version_number,

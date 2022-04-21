@@ -65,6 +65,12 @@
 | https://pypi.python.org/simple/
 | Programming Language
 |`$ poetry run dasea mine pypi`
+// LuaRocks
+| Lua
+| LuaRocks
+| https://luarocks.org/modules
+| Programming Language
+|`$ poetry run dasea mine luarocks`
 // Homebrew
 | MacOS packages
 | Homebrew

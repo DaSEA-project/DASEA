@@ -15,7 +15,7 @@ CLOJARS_PACKAGE_URL =  "https://clojars.org/api/artifacts/{jar_name}"
 CLOJARS_VERSION_URL = "https://clojars.org/{pkg_name}/versions/{version}"
 
 HEADERS = {
-    "User-Agent": "DaSEA Research Project (Please don't ban, daseaITU@gmail.com)",
+    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea.org)",
     "From": "daseaITU@gmail.com",
 }
 
@@ -174,7 +174,7 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
 
-    LOGGER.info("Creating metadata_dict packages...")
+    LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
     LOGGER.info("Creating DaSEA versions with dependencies...")
 

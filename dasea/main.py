@@ -84,6 +84,10 @@ def main():
             from dasea.miners.pypi import mine as pypi_mine
 
             pypi_mine()
+        elif arguments["<pkgmanager>"] == "luarocks":
+            from dasea.miners.luarocks import mine as luarocks_mine
+
+            luarocks_mine()
         else:
             print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
             sys.exit(127)

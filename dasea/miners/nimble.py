@@ -33,15 +33,7 @@ requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.
 if not which("nimble"):
     LOGGER.error("Nimble package manager has to be installed and on PATH.")
     sys.exit(1)
-
-
-@dataclass
-class NimblePackage(Package):
-    repository: str
-    description: str
-    license: str
-    homepage: str
-
+    
 
 def _collect_pkg_registry():
     LOGGER.info("Collecting Nimble registry...")
@@ -60,14 +52,10 @@ def _collect_packages(pkgs_lst):
         if pkg_info.get("alias", ""):
             alias_packages.append((pkg_info["name"], pkg_info["alias"]))
         else:
-            p = NimblePackage(
+            p = Package(
                 pkg_idx,
                 name=pkg_info["name"],
                 pkgman="Nimble",
-                repository=pkg_info.get("url", ""),
-                description=pkg_info.get("description", ""),
-                license=pkg_info.get("license", ""),
-                homepage=pkg_info.get("web", ""),
             )
             packages.append(p)
             pkg_idx_map[pkg_info["name"]] = pkg_idx
@@ -123,7 +111,7 @@ def _collect_versions(pkgs_lst, pkg_idx_map):
         cmd = f"nimble dump {m}"
         r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         metadata_lines = r.stdout.splitlines()
-        pkg_name = version = author = desc = license = requirements = ""
+        pkg_name = version = author = desc = license = requirements = homepage = repository = ""
         reqs_lst = []
         for line in metadata_lines:
             if line.startswith("name: "):
@@ -142,6 +130,9 @@ def _collect_versions(pkgs_lst, pkg_idx_map):
                 if requirements:
                     reqs_lst = [(r.split()[0], " ".join(r.split()[1:])) for r in requirements.split(",")]
 
+        homepage = next((x for x in pkgs_lst if x["name"] == pkg_name), "").get("web", "")
+        repository = next((x for x in pkgs_lst if x["name"] == pkg_name), "").get("url", "")
+
         v = Version(
             idx=version_idx,
             pkg_idx=pkg_idx_map.get(pkg_name, None),
@@ -149,8 +140,8 @@ def _collect_versions(pkgs_lst, pkg_idx_map):
             version=version,
             license=license,
             description=desc,
-            homepage="",
-            repository="",
+            homepage=homepage,
+            repository=repository,
             author=author,
             maintainer="",
         )

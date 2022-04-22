@@ -32,7 +32,7 @@ def _collect_packages(crates_csv):
     df.fillna("", inplace=True)
     df["pkgman"] = "Cargo"
 
-    df = df[["id", "name", "pkgman", "description", "homepage", "repository"]]
+    df = df[["id", "name", "pkgman"]]
     df.to_csv(PKGS_FILE, index=False)
 
 

@@ -64,10 +64,6 @@ def _collect_packages(pkgs_lst):
                 pkg_idx,
                 name=pkg_info["name"],
                 pkgman="Nimble",
-                # repository=pkg_info.get("url", ""),
-                # description=pkg_info.get("description", ""),
-                # license=pkg_info.get("license", ""),
-                # homepage=pkg_info.get("web", ""),
             )
             packages.append(p)
             pkg_idx_map[pkg_info["name"]] = pkg_idx

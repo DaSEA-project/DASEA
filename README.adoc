@@ -7,33 +7,33 @@ image:artwork/logo.png[image]
 DaSEA is the name of a dataset of software dependency networks of various ecosystems.
 In this repository is the code and documentation of the `dasea` tool, which mines, creates, and releases new versions of the dataset
 
-The latest versions of the dataset are available from https://dasea-project.github.io/DASEA/[DASEA].
+The latest versions of the dataset are available from http://dasea.org[DASEA].
 
 
 === Setup Project Locally
 
 Every ecosystem that can be mined remotely, i.e., by sending requests to web-APIs, text mining in cloned remote repositories, etc., can be mined directly on a Linux/Unix host.
 
-To setup the project, see link:https://github.com/dependulum/DASEA/blob/main/docs/setup_dasea_tool.md/[setup_dasea_tool.md] file
+To setup the project, see link:https://github.com/DaSEA-project/DASEA/blob/main/docs/setup_dasea_tool.md[setup_dasea_tool.md] file
 
 
 === Supported Miners
 
-See link: https://github.com/dependulum/DASEA/blob/main/docs/available_commands.adoc[available_commands.adoc] file
+See link:https://github.com/DaSEA-project/DASEA/blob/main/docs/available_commands.adoc[available_commands.adoc] file
 
 
 === Compatibility
 
-See link:https://github.com/dependulum/DASEA/blob/main/docs/compatibility.adoc[compatibility.adoc] file
+See link:https://github.com/DaSEA-project/DASEA/blob/main/docs/compatibility.adoc[compatibility.adoc] file
 
 === Using the dataset
 
-See link:https://github.com/dependulum/DASEA/blob/main/docs/using_the_dataset.md[using_the_dataset.md] file
+See link:https://github.com/DaSEA-project/DASEA/blob/main/docs/using_the_dataset.md[using_the_dataset.md] file
 
 === Contribute
 
-See link:https://github.com/dependulum/DASEA/blob/main/CONTRIBUTE.md[CONTRIBUTE.md] file
+See link:https://github.com/DaSEA-project/DASEA/blob/main/CONTRIBUTE.md[CONTRIBUTE.md] file
 
 === License
 
-The source code in this repository, i.e., the `dasea` tool is licensed under link:https://github.com/dependulum/DASEA/blob/main/LICENSE[GNU Affero General Public License v3.0]
+The source code in this repository, i.e., the `dasea` tool is licensed under link: https://github.com/DaSEA-project/DASEA/blob/main/LICENSE[GNU Affero General Public License v3.0]

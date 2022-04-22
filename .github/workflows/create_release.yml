@@ -24,7 +24,7 @@ jobs:
           script: |
             rm -rf ~/DASEA
             source ~/.profile
-            git clone git@github.com:dependulum/DASEA.git
+            git clone git@github.com:DaSEA-project/DASEA.git
             cd DASEA
             poetry env use /usr/bin/python3.9
             poetry install

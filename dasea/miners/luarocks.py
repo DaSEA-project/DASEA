@@ -116,11 +116,11 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                 pkg_idx=pkg_idx,
                 name=pkg_name,
                 version=version_number,
-                license=version_info["license"],
-                description=version_info["description"],
-                homepage=version_info["homepage"],
-                repository=version_info["repository"],
-                author=version_info["author"],
+                license=version_info.get("license", None),
+                description=version_info.get("description", None),
+                homepage=version_info.get("homepage", None),
+                repository=version_info.get("repository", None),
+                author=version_info.get("author", None),
                 maintainer=None # There is no information
             )
             versions.append(v)
@@ -154,7 +154,15 @@ def scrape_package_version_info(pkg_name, pkg_url, version_number):
     r = requests.get(version_url, headers=HEADERS)
     if not r.ok:
         print(r.status_code, "VERSION", pkg_name, version_number)
-        return None
+        return {
+          "version": version_number,
+          "license": "",
+          "description": "",
+          "repository": "",
+          "author": "",
+          "dependencies": "",
+          "homepage": ""
+        }
     body = r.text
 
     try:

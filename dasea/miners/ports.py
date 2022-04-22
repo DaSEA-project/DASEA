@@ -313,15 +313,6 @@ def _extract_dep_port_tree_id(dep_decl_str):
             dep_port_tree_id = dep_els[1].replace("../../", "")
     return dep_port_tree_id
 
-
-# for _, v in mk_file_metadata_map.items():
-#     if oi := _extract_dep_port_tree_id(v["DEPENDS"]):
-#         if oi.startswith("www/p5-Plack"):
-#             print(v)
-#             break
-
-
-
 def _collect_dependencies(mk_file_metadata_map, pkg_idx_map):
     dep_kind_map = {
                         "LIB_DEPENDS": Kind.LIB,

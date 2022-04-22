@@ -26,7 +26,7 @@ RUBYGEMS_VERSIONS_URL = "https://rubygems.org/api/v1/versions/{pkg_name}.json"
 RUBYGEMS_VERSION_URL = "https://rubygems.org/api/v2/rubygems/{pkg_name}/versions/{version}.json"
 
 HEADERS = {
-    "User-Agent": "DaSEA Research Project (Please don't ban, daseaITU@gmail.com)",
+    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea.org)",
     "From": "daseaITU@gmail.com",
 }
 
@@ -144,7 +144,7 @@ def mine():
         LOGGER.error(str(e))
         sys.exit(1)
 
-    LOGGER.info("Creating metadata_dict packages...")
+    LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
 
     LOGGER.info("Creating DaSEA versions with dependencies...")

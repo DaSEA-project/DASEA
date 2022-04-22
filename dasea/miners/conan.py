@@ -22,7 +22,7 @@ CONAN_DEPENDENCIES_URL = "https://conan.io/center/api/ui/dependencies?name={pkg_
 
 
 HEADERS = {
-    "User-Agent": "DaSEA Research Project (Please don't ban, daseaITU@gmail.com)",
+    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea.org)",
     "From": "daseaITU@gmail.com",
 }
 

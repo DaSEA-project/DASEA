@@ -35,6 +35,8 @@ data/tmp/pypi/*
 !data/tmp/pypi/.gitkeep
 data/tmp/nimble/*
 
+!data/out/README.md
+
 data/out/cargo/*
 !data/out/cargo/.gitkeep
 data/out/clojars/*

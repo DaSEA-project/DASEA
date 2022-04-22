@@ -20,7 +20,7 @@ echo "SSH into the droplet..."
 doctl compute ssh DASEA-tool-pypi-miner --ssh-key-path ~/.ssh/dasea --ssh-command "
 ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
 sudo apt install ruby -y &&
-source ~/.profile && git clone https://github.com/dependulum/DASEA.git &&
+source ~/.profile && git clone https://github.com/DaSEA-project/DASEA.git &&
 cd DASEA && poetry install &&
 poetry run dasea mine pypi &&
 scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.org:/root/DASEA/data"

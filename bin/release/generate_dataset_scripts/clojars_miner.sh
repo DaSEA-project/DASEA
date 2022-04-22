@@ -19,7 +19,7 @@ scp -i ~/.ssh/dasea ~/.ssh/id_rsa root@$IP_ADDRESS:/root/.ssh/
 echo "SSH into the droplet..."
 doctl compute ssh DASEA-tool-clojars-miner --ssh-key-path ~/.ssh/dasea --ssh-command "
 ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
-source ~/.profile && git clone https://github.com/dependulum/DASEA.git &&
+source ~/.profile && git clone https://github.com/DaSEA-project/DASEA.git &&
 cd DASEA && poetry install &&
 poetry run dasea mine clojars &&
 scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out root@steve.dasea.org:/root/DASEA/data"

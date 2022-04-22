@@ -289,6 +289,7 @@ def mine():
 
         for line in bin_contents.splitlines():
             if not line:
+                continue
         # TODO: do the same with src
 
 

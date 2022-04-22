@@ -33,7 +33,7 @@ requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.
 if not which("nimble"):
     LOGGER.error("Nimble package manager has to be installed and on PATH.")
     sys.exit(1)
-    
+
 
 def _collect_pkg_registry():
     LOGGER.info("Collecting Nimble registry...")
@@ -129,9 +129,9 @@ def _collect_versions(pkgs_lst, pkg_idx_map):
                 requirements = line.replace("requires: ", "")[1:-1]
                 if requirements:
                     reqs_lst = [(r.split()[0], " ".join(r.split()[1:])) for r in requirements.split(",")]
-
-        homepage = next((x for x in pkgs_lst if x["name"] == pkg_name), "").get("web", "")
-        repository = next((x for x in pkgs_lst if x["name"] == pkg_name), "").get("url", "")
+        if pkg_name:
+            homepage = next((x for x in pkgs_lst if x["name"] == pkg_name), "").get("web", "")
+            repository = next((x for x in pkgs_lst if x["name"] == pkg_name), "").get("url", "")
 
         v = Version(
             idx=version_idx,

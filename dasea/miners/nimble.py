@@ -33,15 +33,7 @@ requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.
 if not which("nimble"):
     LOGGER.error("Nimble package manager has to be installed and on PATH.")
     sys.exit(1)
-
-
-@dataclass
-class NimblePackage(Package):
-    repository: str
-    description: str
-    license: str
-    homepage: str
-
+    
 
 def _collect_pkg_registry():
     LOGGER.info("Collecting Nimble registry...")

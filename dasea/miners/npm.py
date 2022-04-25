@@ -1,13 +1,12 @@
 import os
-from struct import pack
 import sys
 import json
 import ijson  # see https://pypi.org/project/ijson
-import requests
 import logging
+import requests
 from datetime import datetime
-from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data, _serialize_data_rows
+from dasea.common.datamodel import Package, Version, Dependency
+from dasea.common.utils import _serialize_data_rows
 
 
 INDEX_DOC_URL = "https://replicate.npmjs.com/_all_docs"

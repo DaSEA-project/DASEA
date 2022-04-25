@@ -1,13 +1,13 @@
-import sys
-import logging
 import os
 import re
+import sys
 import shutil
+import logging
 import subprocess
-from datetime import datetime
 from pathlib import Path
-from dasea.common.datamodel import Package, Version, Dependency, Kind
+from datetime import datetime
 from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 CHROMEBREW_REGISTRY = "https://github.com/skycocker/chromebrew"
 TMP_DIR = "./data/tmp/chromebrew"

@@ -1,14 +1,13 @@
-from cmath import log
-import sys
 import os
+import sys
+import pickle
 import logging
 import requests
-from datetime import datetime
 from tqdm import tqdm
-from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data
 from bs4 import BeautifulSoup
-import pickle
+from datetime import datetime
+from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 # Based on the documentation form here:
 # https://stackoverflow.com/questions/21419009/json-api-for-pypi-how-to-list-packages

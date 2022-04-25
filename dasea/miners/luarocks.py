@@ -1,13 +1,12 @@
-from cmath import log
+import re
 import sys
 import logging
 import requests
+from tqdm import tqdm
 from datetime import datetime
 from bs4 import BeautifulSoup
-from tqdm import tqdm
-from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
-import re
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 
 # Based on:

@@ -1,11 +1,11 @@
 import requests
 import subprocess
+from tqdm import tqdm
 from dataclasses import dataclass
-from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data
 from collections import defaultdict
 from mongita import MongitaClientDisk
-from tqdm import tqdm
+from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 
 PKGS_FILE = "data/out/ubuntu/packages.csv"
@@ -292,15 +292,11 @@ def mine():
                 continue
         # TODO: do the same with src
 
+        versions_lst, version_dicts = _collect_versions(pkg_names, pkg_idx_map)
+        deps_lst = _collect_dependencies(version_dicts, pkg_idx_map)
 
-
-
-
-#     versions_lst, version_dicts = _collect_versions(pkg_names, pkg_idx_map)
-#     deps_lst = _collect_dependencies(version_dicts, pkg_idx_map)
-
-#     _serialize_data(versions_lst, VERSIONS_FILE)
-#     _serialize_data(deps_lst, DEPS_FILE)
+        _serialize_data(versions_lst, VERSIONS_FILE)
+        _serialize_data(deps_lst, DEPS_FILE)
 
 
 # libc6-x32:amd64

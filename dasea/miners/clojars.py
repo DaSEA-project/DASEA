@@ -1,11 +1,11 @@
 import sys
 import logging
 import requests
-from datetime import datetime
-from bs4 import BeautifulSoup
 from tqdm import tqdm
-from dasea.common.datamodel import Package, Version, Dependency, Kind
+from bs4 import BeautifulSoup
+from datetime import datetime
 from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 # Based on the documentation form here:
 # https://github.com/clojars/clojars-web/wiki/Data

@@ -1,16 +1,11 @@
-from cmath import log
 import sys
+import logging
 import requests
 from tqdm import tqdm
-import json
-import logging
-import subprocess
-from glob import glob
-from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
-from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 # Based on the requests executed here:
 # https://conan.io/center/glib

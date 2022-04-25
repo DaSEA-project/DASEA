@@ -1,8 +1,8 @@
-import requests
 import logging
+import requests
 from datetime import datetime
-from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency, Kind
 
 # The API documentation is here: https://formulae.brew.sh/docs/api/
 #  It does not mention any rate limits

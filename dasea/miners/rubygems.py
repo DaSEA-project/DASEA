@@ -1,15 +1,14 @@
+import os
 import sys
 import gzip
-import os
+import shutil
 import logging
 import requests
 import subprocess
-import shutil
-from datetime import datetime
 from tqdm import tqdm
-# from ratelimiter import RateLimiter
-from dasea.common.datamodel import Package, Version, Dependency, Kind
+from datetime import datetime
 from dasea.common.utils import _serialize_data
+from dasea.common.datamodel import Package, Version, Dependency
 
 # Based on the documentation form here:
 # https://guides.rubygems.org/rubygems-org-rate-limits/

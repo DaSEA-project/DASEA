@@ -24,7 +24,7 @@ cd DASEA && poetry install &&
 vagrant up openbsd69
 bash bin/get_openbsd_ports.sh
 vagrant destroy -f openbsd69
-scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/ports/openbsd69 root@steve.dasea.org:/root/DASEA/data/out/ports"
+scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/ports/openbsd69 root@steve.dasea.org:/root/DASEA/data/out/ports/"
 
 ## Destroy droplet
 echo "Destroying droplet..."

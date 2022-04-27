@@ -24,7 +24,7 @@ cd DASEA && poetry install &&
 vagrant up netbsd9
 bash bin/get_netbsd_pkgsrc.sh
 vagrant destroy -f netbsd9
-scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/ports/netbsd9 root@steve.dasea.org:/root/DASEA/data/out/ports"
+scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/ports/netbsd9 root@steve.dasea.org:/root/DASEA/data/out/ports/"
 
 ## Destroy droplet
 echo "Destroying droplet..."

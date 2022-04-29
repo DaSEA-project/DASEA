@@ -66,29 +66,29 @@
       "url": "https://luarocks.org/"
     },
     {
+      "name": "pkgsrc",
+      "ecosystem": "NetBSD",
+      "url": "https://www.netbsd.org/docs/pkgsrc/"
+    },
+    {
       "name": "Ports",
       "ecosystem": "FreeBSD",
       "url": "https://www.freebsd.org/ports/"
     },
     {
       "name": "Ports",
-      "ecosystem": "NetBSD",
-      "url": "https://www.openbsd.org/faq/ports/ports.html"
-    },
-    {
-      "name": "Ports",
       "ecosystem": "OpenBSD",
-      "url": "https://wiki.netbsd.org/ports/"
+      "url": "https://www.openbsd.org/faq/ports/ports.html"
     }
   ],
   "datasets": [
     {
-      "date": "12-15-2021",
-      "url": "https://zenodo.org/record/5781670"
-    },
-    {
       "date": "03-18-2022",
       "url": "https://zenodo.org/record/6369420"
+    },
+    {
+      "date": "12-15-2021",
+      "url": "https://zenodo.org/record/5781670"
     }
   ]
 }

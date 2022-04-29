@@ -43,8 +43,8 @@ def update_homepage(new_dataset_url):
 
         file_data["datasets"].insert(0, latest_release)
 
-        file.seek(0)
-        json.dump(file_data, file, indent=4)
+        fp.seek(0)
+        json.dump(file_data, fp, indent=4)
 
 
 def push_dataset_to_zenodo(dataset_path, sandbox=False, no_verify=False):

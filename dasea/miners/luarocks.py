@@ -62,7 +62,7 @@ def _collect_pkg_registry():
                 "name": pkg.text,
                 "url": pkg.get("href")
             })
-    print(packageNames)
+
     return packageNames
 
 def _collect_packages(metadata_dict):

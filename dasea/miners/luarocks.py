@@ -11,9 +11,10 @@ import re
 
 
 # Based on:
-# https://luarocks.org/modules
+# https://luarocks.org/m/root
 
-LUAROCKS_REGISTRY = "https://luarocks.org/modules"
+# LUAROCKS_REGISTRY = "https://luarocks.org/modules" # includes development modules, which has duplicates.
+LUAROCKS_REGISTRY = "https://luarocks.org/m/root"
 LUAROCKS_PACKAGE_URL =  "https://luarocks.org{pkg_url}"
 LUAROCKS_VERSION_URL = "https://luarocks.org{pkg_url}-{version}.rockspec"
 
@@ -62,7 +63,7 @@ def _collect_pkg_registry():
                 "name": pkg.text,
                 "url": pkg.get("href")
             })
-
+    print(packageNames)
     return packageNames
 
 def _collect_packages(metadata_dict):

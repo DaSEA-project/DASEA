@@ -1,0 +1,52 @@
+=== Mining time
+The following table shows an approximate mining time for each ecosystem since the last release.
+
+[options="header",]
+|===
+|Ecosystem |Package Manager | Mining tiem (approximate)
+|Ada
+|Alire
+|Instantaneous
+|C/C++
+|Conan
+| ❓
+|C/C++
+|VCPKG
+|Instantaneous
+|Fortran
+|FPM
+|Instantaneous
+|RubyGems
+|Ruby
+| ❓
+|Clojure
+|Clojars
+| ❓
+|Nim
+|Nimble
+| ❓
+|Rust
+|Cargo
+| ❓
+|npm packages
+|JavaScript
+|~3 days
+|LuaRocks packages
+|Lua
+|
+|macOS packages
+|Homebrew
+|Instantaneous
+|ChromOS packages
+|Chromebrew
+|Instantaneous
+|FreeBSD ports
+|Ports
+| 
+|NetBSD pacakges
+|PkgSrc
+|
+|OpenBSD
+|Ports
+|
+|===

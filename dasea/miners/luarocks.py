@@ -9,7 +9,6 @@ from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
 import re
 
-
 # Based on:
 # https://luarocks.org/m/root
 
@@ -70,6 +69,7 @@ def _collect_packages(metadata_dict):
     pkg_idx_map = {}
     packages = []
     for idx, pkg in enumerate(metadata_dict):
+      # TODO: Check https://github.com/luarocks/luarocks/issues/633, maybe lowercase?
         pkg_name = pkg['name']
         p = Package(idx, pkg_name, "LuaRocks")
         packages.append(p)

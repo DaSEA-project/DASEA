@@ -26,7 +26,7 @@ RUBYGEMS_VERSIONS_URL = "https://rubygems.org/api/v1/versions/{pkg_name}.json"
 RUBYGEMS_VERSION_URL = "https://rubygems.org/api/v2/rubygems/{pkg_name}/versions/{version}.json"
 
 HEADERS = {
-    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea.org)",
+    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea-project.github.io/DASEA)",
     "From": "daseaITU@gmail.com",
 }
 

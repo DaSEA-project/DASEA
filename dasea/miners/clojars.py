@@ -15,7 +15,7 @@ CLOJARS_PACKAGE_URL =  "https://clojars.org/api/artifacts/{jar_name}"
 CLOJARS_VERSION_URL = "https://clojars.org/{pkg_name}/versions/{version}"
 
 HEADERS = {
-    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea.org)",
+    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea-project.github.io/DASEA)",
     "From": "daseaITU@gmail.com",
 }
 

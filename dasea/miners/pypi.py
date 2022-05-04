@@ -24,7 +24,7 @@ VERSION_URL = "https://pypi.python.org/pypi/{pkg_name}/{version}/json"
 # Due to rate limiting and fair use, we have to set such a header
 # https://warehouse.pypa.io/api-reference/#rate-limiting
 HEADERS = {
-    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea.org)",
+    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea-project.github.io/DASEA)",
     "From": "daseaITU@gmail.com",
 }
 

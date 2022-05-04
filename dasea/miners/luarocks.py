@@ -18,7 +18,7 @@ LUAROCKS_PACKAGE_URL =  "https://luarocks.org{pkg_url}"
 LUAROCKS_VERSION_URL = "https://luarocks.org{pkg_url}-{version}.rockspec"
 
 HEADERS = {
-    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea.org)",
+    "User-Agent": "DaSEA Research Project (Please don't ban, https://dasea-project.github.io/DASEA)",
     "From": "daseaITU@gmail.com",
 }
 

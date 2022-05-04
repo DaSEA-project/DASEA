@@ -2,7 +2,7 @@
 ## Create JSON file
 rm ~/status.json
 sudo apt install jq -y
-echo '{"non_vagrant_complete": false, "conan_complete": false, "freebsd_complete": false, "netbsd_complete": false, "openbsd_complete": false, "nimble_complete": false,"clojars_complete": false}, "rubygems_complete": false, "npm_complete": false, "pypi_complete": true}' | jq . >> ~/status.json
+echo '{"non_vagrant_complete": false, "conan_complete": false, "freebsd_complete": false, "netbsd_complete": false, "openbsd_complete": false, "nimble_complete": false,"clojars_complete": false, "rubygems_complete": false, "npm_complete": false, "pypi_complete": true}' | jq . >> ~/status.json
 
 # Non-Vagrant Miners
 bash bin/release/generate_dataset_scripts/non_vagrant_miners.sh > non_vagrant.out 2> non_vagrant.out < /dev/null &

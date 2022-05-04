@@ -30,7 +30,8 @@
 
 <body>
   <header class="site-header" role="banner">
-    <div class="wrapper"><a class="site-title" rel="author" href="https://github.com/DaSEA-project/DASEA"><img src="assets/logo.png"></a>
+    <div class="wrapper"><a class="site-title" rel="author" href="https://github.com/DaSEA-project/DASEA"><img
+          src="assets/logo.png"></a>
       <nav class="site-nav">
         <input type="checkbox" id="nav-trigger" class="nav-trigger" />
         <label for="nav-trigger">
@@ -49,16 +50,20 @@
     <div class="wrapper">
       <div class="home">
         <p>A continuously updated dataset of software dependencies covering various package manager ecosystems. </p>
-        
-        <p>The dataset is created with code from the DaSEA project 👉 <a href="https://github.com/DaSEA-project/DASEA"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a>
-        </p> 
+
+        <p>The dataset is created with code from the DaSEA project 👉 <a
+            href="https://github.com/DaSEA-project/DASEA"><img
+              src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a>
+        </p>
 
         <h2>Latest Dataset Releases</h2>
         <ul id="datasets"></ul>
-        
+
         <h2>License</h2>
-        The DaSEA dataset is distributed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a>
-           license.
+        <p>The DaSEA dataset is distributed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons
+            Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</a>
+          license.</p>
 
         <h2>Currently Supported Package Managers</h2>
         <ul id="package-managers"></ul>
@@ -92,6 +97,12 @@
       const pckManagerList = document.querySelector("#package-managers");
       pckManagerList.innerHTML = packageManagers.sort().map(pckManager => `<li><a href="${pckManager.url}" target="_blank">${pckManager.name} (${pckManager.ecosystem})</a></h3></li>`).join("");
       let datasetsList = document.querySelector("#datasets");
-      datasetsList.innerHTML = datasets.map(dataset => `<li><a href="${dataset.url}" target="_blank">${dataset.date}</a></li>`).join("");
+      datasetsList.innerHTML = datasets.sort(sortByDate).map(dataset => `<li><a href="${dataset.url}" target="_blank">${dataset.date}</a></li>`).join("");
     });
+
+  function sortByDate(a, b) {
+    a = a.date.split('-').reverse().join('');
+    b = b.date.split('-').reverse().join('');
+    return a > b ? -1 : a < b ? 1 : 0;
+  }
 </script>

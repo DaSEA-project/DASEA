@@ -51,7 +51,7 @@
       "url": "https://rubygems.org/"
     },
     {
-      "name": "PyPi",
+      "name": "PyPI",
       "ecosystem": "Python",
       "url": "https://pypi.org/"
     },
@@ -66,19 +66,19 @@
       "url": "https://luarocks.org/"
     },
     {
+      "name": "pkgsrc",
+      "ecosystem": "NetBSD",
+      "url": "https://www.netbsd.org/docs/pkgsrc/"
+    },
+    {
       "name": "Ports",
       "ecosystem": "FreeBSD",
       "url": "https://www.freebsd.org/ports/"
     },
     {
       "name": "Ports",
-      "ecosystem": "NetBSD",
-      "url": "https://www.openbsd.org/faq/ports/ports.html"
-    },
-    {
-      "name": "Ports",
       "ecosystem": "OpenBSD",
-      "url": "https://wiki.netbsd.org/ports/"
+      "url": "https://www.openbsd.org/faq/ports/ports.html"
     }
   ],
   "datasets": [

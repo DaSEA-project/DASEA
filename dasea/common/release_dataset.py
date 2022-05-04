@@ -34,17 +34,17 @@ def create_compressed_archive():
 
 
 def update_homepage(new_dataset_url):
-    filename = "homepage/datasets.json"
-    file = open(filename, "r+")
-    file_data = json.load(file)
-    print(file_data)
-
     latest_release = {"date": TODAY, "url": new_dataset_url}
 
-    file_data["datasets"].append(latest_release)
+    filename = "homepage/datasets.json"
+    with open(filename, "r+") as fp:
+        file_data = json.load(fp)
+        print(file_data)
 
-    file.seek(0)
-    json.dump(file_data, file, indent=4)
+        file_data["datasets"].insert(0, latest_release)
+
+        fp.seek(0)
+        json.dump(file_data, fp, indent=4)
 
 
 def push_dataset_to_zenodo(dataset_path, sandbox=False, no_verify=False):
@@ -68,7 +68,7 @@ def push_dataset_to_zenodo(dataset_path, sandbox=False, no_verify=False):
     params = {"access_token": zenodo_api_token}
 
     fileExists = os.path.exists(Path(dataset_path))
-    if (not fileExists):
+    if not fileExists:
         print(f"Cannot find file with path {dataset_path}", file=sys.stderr)
         sys.exit(1)
 

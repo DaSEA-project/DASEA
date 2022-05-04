@@ -28,5 +28,5 @@ jobs:
             cd DASEA
             poetry env use /usr/bin/python3.9
             poetry install
-            export ZENODO_API_TOKEN=${{ secrets.ZENODO_API_KEY_SANDBOX }}
+            export ZENODO_API_TOKEN=${{ secrets.ZENODO_API_KEY }}
             nohup bash bin/release/trigger_dataset_generation.sh > trigger.out 2> trigger.err < /dev/null &

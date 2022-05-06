@@ -4,6 +4,7 @@ import shutil
 import logging
 import requests
 import subprocess
+from tqdm import tqdm
 from glob import glob
 from shutil import which
 from pathlib import Path
@@ -48,6 +49,7 @@ def _collect_packages(pkgs_lst):
     packages = []
     alias_packages = []
     pkg_idx = 0
+
     for pkg_info in pkgs_lst:
         if pkg_info.get("alias", ""):
             alias_packages.append((pkg_info["name"], pkg_info["alias"]))
@@ -69,7 +71,12 @@ def _collect_packages(pkgs_lst):
 
 
 def _collect_versions(pkgs_lst, pkg_idx_map):
-    for pkg_info in pkgs_lst:
+    ## required, otherwise cloning fails
+    cmd = "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+    r = subprocess.run(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+    print("Collect version info")
+    for pkg_info in tqdm(pkgs_lst):
         if pkg_info.get("alias", ""):
             continue  # Don't collect anything for an alias to a package
 
@@ -107,7 +114,9 @@ def _collect_versions(pkgs_lst, pkg_idx_map):
 
     versions = []
     deps = []
-    for version_idx, m in enumerate(metadata_files_lst):
+    print("Extract version info")
+
+    for version_idx, m in tqdm(enumerate(metadata_files_lst)):
         cmd = f"nimble dump {m}"
         r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         metadata_lines = r.stdout.splitlines()
@@ -129,9 +138,12 @@ def _collect_versions(pkgs_lst, pkg_idx_map):
                 requirements = line.replace("requires: ", "")[1:-1]
                 if requirements:
                     reqs_lst = [(r.split()[0], " ".join(r.split()[1:])) for r in requirements.split(",")]
+
         if pkg_name:
-            homepage = next((x for x in pkgs_lst if x["name"] == pkg_name), "").get("web", "")
-            repository = next((x for x in pkgs_lst if x["name"] == pkg_name), "").get("url", "")
+            homepageInfo =  next((x for x in pkgs_lst if x["name"] == pkg_name), "")
+            homepage = homepageInfo if isinstance(homepageInfo, str) else homepageInfo.get("web", "")
+            repositoryInfo = next((x for x in pkgs_lst if x["name"] == pkg_name), "")
+            repository =  repositoryInfo if isinstance(repositoryInfo, str) else repositoryInfo.get("url", "")
 
         v = Version(
             idx=version_idx,

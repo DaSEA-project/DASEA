@@ -60,11 +60,11 @@
 | Programming Language
 |`$ poetry run dasea mine npm`
 // PyPi
-| Python
-| PyPi
-| https://pypi.python.org/simple/
-| Programming Language
-|`$ poetry run dasea mine pypi`
+//| Python
+//| PyPi
+//| https://pypi.python.org/simple/
+//| Programming Language
+//|`$ poetry run dasea mine pypi`
 // LuaRocks
 | Lua
 | LuaRocks
@@ -89,7 +89,7 @@
 | `portsnap --interactive fetch` +
 `portsnap --interactive extract`
 | Operating system
-|`$ vagrant up freebsd11` +
+|`$ vagrant up freebsd12` +
 `$ bash bin/get_freebsd_ports.sh`
 // NetBSD
 | NetBSD packages

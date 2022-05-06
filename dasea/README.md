@@ -11,7 +11,7 @@ DaSEA
 |   |   ├── helpers.py
 │   ├── miners/ # Individual miners
 |   |   |   └── main.py # Entry point
-|   |   |   └── pypi.py
+|   |   |   └── alire.py
 |   |   |   └── npm.py
 |   |   |   └── ...
 ```

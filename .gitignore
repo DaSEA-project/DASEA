@@ -54,6 +54,12 @@ data/*.tar.bz2
 
 dist
 
+
+# Miners log files
+logs/*
+!logs/.gitkeep
+
+
 # OS files
 .DS_Store
 

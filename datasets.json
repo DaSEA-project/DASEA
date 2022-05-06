@@ -51,11 +51,6 @@
       "url": "https://rubygems.org/"
     },
     {
-      "name": "PyPI",
-      "ecosystem": "Python",
-      "url": "https://pypi.org/"
-    },
-    {
       "name": "npm",
       "ecosystem": "JavaScript",
       "url": "https://www.npmjs.com/"

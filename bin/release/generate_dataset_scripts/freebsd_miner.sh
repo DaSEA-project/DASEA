@@ -21,10 +21,10 @@ doctl compute ssh DASEA-tool-freeBSD-miner --ssh-key-path ~/.ssh/dasea --ssh-com
 ssh-keyscan -H 157.245.70.200 >> ~/.ssh/known_hosts &&
 source ~/.profile && git clone https://github.com/DaSEA-project/DASEA.git &&
 cd DASEA && poetry install &&
-vagrant up freebsd11
+vagrant up freebsd12
 bash bin/get_freebsd_ports.sh
-vagrant destroy -f freebsd11
-scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/ports/freebsd11 root@steve.dasea.org:/root/DASEA/data/out/ports/"
+vagrant destroy -f freebsd12
+scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -r ./data/out/ports/freebsd12 root@steve.dasea.org:/root/DASEA/data/out/ports/"
 
 ## Destroy droplet
 echo "Destroying droplet..."

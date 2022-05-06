@@ -2,8 +2,10 @@ Vagrant.configure("2") do |config|
 
   # TODO: How to handle new OS version?
   # Start FreeBSD VM
-  config.vm.define "freebsd11", primary: false do |freebsd|
-    freebsd.vm.box = "bento/freebsd-11"
+  config.vm.define "freebsd12", primary: false do |freebsd|
+    # Uses https://app.vagrantup.com/generic/boxes/freebsd12
+    # but a newer version is also available https://app.vagrantup.com/generic/boxes/freebsd13
+    freebsd.vm.box = "generic/freebsd12"
 
     # Needed on MacOS: https://github.com/dotless-de/vagrant-vbguest/issues/362
     if Vagrant.has_plugin?("vagrant-vbguest")
@@ -26,7 +28,7 @@ Vagrant.configure("2") do |config|
       vb.cpus = "2"
     end
 
-    freebsd.vm.hostname = "freebsd11"
+    freebsd.vm.hostname = "freebsd12"
     freebsd.vm.provision "shell", privileged: true, inline: <<-SHELL
       echo "Hej from FreeBSD"
 
@@ -59,8 +61,8 @@ Vagrant.configure("2") do |config|
       curl -sSL https://install.python-poetry.org | python3 -
       echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
 
-      mkdir -p /vagrant/data/tmp/ports/freebsd11
-      mkdir -p /vagrant/data/out/ports/freebsd11
+      mkdir -p /vagrant/data/tmp/ports/freebsd12
+      mkdir -p /vagrant/data/out/ports/freebsd12
 
       cd /vagrant/
       $HOME/.local/bin/poetry install

@@ -53,6 +53,6 @@ poetry install
 # Try out the tool
 poetry run dasea mine fpm
 
-vagrant up freebsd11
-vagrant destroy .f freebsd11
+vagrant up freebsd12
+vagrant destroy .f freebsd12
 bash bin/get_freebsd_ports.sh

@@ -10,7 +10,7 @@ poetry run dasea mine vcpkg
 
 # Spin up all vagrant machines
 vagrant up ubuntu2104
-vagrant up freebsd11
+vagrant up freebsd12
 vagrant up openbsd69
 vagrant up netbsd9
 vagrant up ubuntu2104oneway
@@ -31,7 +31,7 @@ NIMBLE_ID=$!
 COUNT=0
 
 # Destroy all machines
-nohup sh -c 'while ps -p $FREEBSD_ID > /dev/null; do echo "FreeBSD process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f freebsd11'
+nohup sh -c 'while ps -p $FREEBSD_ID > /dev/null; do echo "FreeBSD process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f freebsd12'
 nohup sh -c 'while ps -p $OPENBSD_ID > /dev/null; do echo "OpenBSD process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f openbsd69'
 nohup sh -c 'while ps -p $NETBSD_ID > /dev/null; do echo "NetBSD process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f netbsd9'
 nohup sh -c 'while ps -p $NIMBLE_ID > /dev/null; do echo "Nimble process is running" && sleep 300; done && ((COUNT++)) &&  vagrant destroy -f ubuntu2104oneway'

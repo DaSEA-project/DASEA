@@ -61,13 +61,13 @@ The following table shows which miners can run on which architecture.
 | ✅
 | ✅
 | ❌
-|PyPi packages
-|Pyton
-|
-| ✅
-| ✅
-| ✅
-| ✅
+//|PyPi packages
+//|Pyton
+//|
+//| ✅
+//| ✅
+//| ✅
+//| ✅
 |npm packages
 |JavaScript
 |

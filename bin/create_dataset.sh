@@ -21,7 +21,7 @@ bash bin/get_openbsd_ports.sh
 vagrant destroy -f openbsd69
 
 vagrant up netbsd9
-bash bin/get_netbsd_pkgsrc.sh # Takes a really long time, 2-3h
+bash bin/get_netbsd_pkgsrc.sh
 vagrant destroy -f netbsd9
 
 vagrant up ubuntu2104oneway

@@ -148,7 +148,7 @@ def mine():
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
 
     LOGGER.info("Creating DaSEA versions with dependencies...")
-    versions_lst, deps_lst = _collect_versions_with_dependencies([metadata_dict], pkg_idx_map)
+    versions_lst, deps_lst = _collect_versions_with_dependencies(metadata_dict, pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)

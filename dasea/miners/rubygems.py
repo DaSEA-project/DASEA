@@ -91,48 +91,48 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
 
         version_numbers = [v["number"] for v in r.json()][::-1]
         for version_number in version_numbers:
-                # Request the specific version data
-                version_url = RUBYGEMS_VERSION_URL.format(pkg_name=pkg_name, version=version_number)
-                req = requests.get(version_url, headers=HEADERS)
-                if not req.ok:
-                    LOGGER.error(r.status_code, "VERSION", pkg_name, version_number)
-                    continue
+            # Request the specific version data
+            version_url = RUBYGEMS_VERSION_URL.format(pkg_name=pkg_name, version=version_number)
+            req = requests.get(version_url, headers=HEADERS)
+            if not req.ok:
+                LOGGER.error(r.status_code, "VERSION", pkg_name, version_number)
+                continue
 
-                version_info = req.json()
-                pkg_idx = pkg_idx_map.get(pkg_name, None)
-                v = Version(
-                        idx=version_idx,
-                        pkg_idx=pkg_idx,
-                        name=pkg_name,
-                        version=version_number,
-                        # licenses sometimes is an array, sometimes a string
-                        license=','.join(version_info["licenses"]) if version_info["licenses"] else None,
-                        description=version_info["description"],
-                        homepage=version_info["homepage_uri"],
-                        repository=version_info["source_code_uri"],
-                        author=version_info["authors"],
-                        maintainer=None # No such info in RubyGems
-                    )
-                versions.append(v)
+            version_info = req.json()
+            pkg_idx = pkg_idx_map.get(pkg_name, None)
+            v = Version(
+                    idx=version_idx,
+                    pkg_idx=pkg_idx,
+                    name=pkg_name,
+                    version=version_number,
+                    # licenses sometimes is an array, sometimes a string
+                    license=','.join(version_info["licenses"]) if version_info["licenses"] else None,
+                    description=version_info["description"],
+                    homepage=version_info["homepage_uri"],
+                    repository=version_info["source_code_uri"],
+                    author=version_info["authors"],
+                    maintainer=None # No such info in RubyGems
+                )
+            versions.append(v)
 
-                for kind, deps in version_info["dependencies"].items():
-                    for d in deps:
-                        target_name = d["name"]
-                        version_constraint = d["requirements"]
-                        target_idx = pkg_idx_map.get(target_name, None)
+            for kind, deps in version_info["dependencies"].items():
+                for d in deps:
+                    target_name = d["name"]
+                    version_constraint = d["requirements"]
+                    target_idx = pkg_idx_map.get(target_name, None)
 
-                    d = Dependency(
-                        pkg_idx=pkg_idx,
-                        source_idx=version_idx,
-                        target_idx=target_idx,
-                        source_name=pkg_name,
-                        target_name=target_name,
-                        source_version=version_number,
-                        target_version=version_constraint,
-                        kind=kind,
-                    )
-                    dependencies.append(d)
-        version_idx += 1
+                d = Dependency(
+                    pkg_idx=pkg_idx,
+                    source_idx=version_idx,
+                    target_idx=target_idx,
+                    source_name=pkg_name,
+                    target_name=target_name,
+                    source_version=version_number,
+                    target_version=version_constraint,
+                    kind=kind,
+                )
+                dependencies.append(d)
+            version_idx += 1
 
     return versions, dependencies
 
@@ -148,7 +148,7 @@ def mine():
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
 
     LOGGER.info("Creating DaSEA versions with dependencies...")
-    versions_lst, deps_lst = _collect_versions_with_dependencies(metadata_dict, pkg_idx_map)
+    versions_lst, deps_lst = _collect_versions_with_dependencies([metadata_dict][:1000], pkg_idx_map)
 
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)

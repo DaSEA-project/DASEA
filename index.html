@@ -97,13 +97,6 @@
       const pckManagerList = document.querySelector("#package-managers");
       pckManagerList.innerHTML = packageManagers.sort().map(pckManager => `<li><a href="${pckManager.url}" target="_blank">${pckManager.name} (${pckManager.ecosystem})</a></h3></li>`).join("");
       let datasetsList = document.querySelector("#datasets");
-      datasetsList.innerHTML = datasets.sort(sortByDate).map(dataset => `<li><a href="${dataset.url}" target="_blank">${dataset.date}</a></li>`).join("");
+      datasetsList.innerHTML = datasets.map(dataset => `<li><a href="${dataset.url}" target="_blank">${dataset.date}</a></li>`).join("");
     });
-
-  function sortByDate(a, b) {
-    a = new Date(a.date);
-    b = new Date(b.date);
-
-    return a > b ? -1 : a < b ? 1 : 0;
-  }
 </script>

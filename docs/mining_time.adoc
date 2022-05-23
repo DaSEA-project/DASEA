@@ -9,7 +9,7 @@ The following table shows an approximate mining time for each ecosystem since th
 |Instantaneous
 |C/C++
 |Conan
-| ❓
+|~30 minutes
 |C/C++
 |VCPKG
 |Instantaneous
@@ -18,22 +18,22 @@ The following table shows an approximate mining time for each ecosystem since th
 |Instantaneous
 |RubyGems
 |Ruby
-| ❓
+|~5 days
 |Clojure
 |Clojars
-| ❓
+|~3 days
 |Nim
 |Nimble
-| ❓
+|~4 hours
 |Rust
 |Cargo
-| ❓
+|Instantaneous
 |npm packages
 |JavaScript
-|~3 days
+|~2 days
 |LuaRocks packages
 |Lua
-|
+|~2 hours
 |macOS packages
 |Homebrew
 |Instantaneous
@@ -42,11 +42,11 @@ The following table shows an approximate mining time for each ecosystem since th
 |Instantaneous
 |FreeBSD ports
 |Ports
-| 
+|~2 hours
 |NetBSD pacakges
 |PkgSrc
-|
+|~4 hours
 |OpenBSD
 |Ports
-|
+|~2 hours
 |===

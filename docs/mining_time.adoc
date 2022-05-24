@@ -28,16 +28,16 @@ The following table shows an approximate mining time for each ecosystem since th
 |Rust
 |Cargo
 |Instantaneous
-|npm packages
+|npm
 |JavaScript
 |~2 days
-|LuaRocks packages
+|LuaRocks
 |Lua
 |~2 hours
-|macOS packages
+|macOS
 |Homebrew
 |Instantaneous
-|ChromOS packages
+|ChromOS
 |Chromebrew
 |Instantaneous
 |FreeBSD ports

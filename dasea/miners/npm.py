@@ -7,7 +7,7 @@ import requests
 import logging
 from datetime import datetime
 from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data, _serialize_data_rows
+from dasea.common.utils import _serialize_data_rows
 
 
 INDEX_DOC_URL = "https://replicate.npmjs.com/_all_docs"

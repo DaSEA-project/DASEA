@@ -45,9 +45,9 @@ NPM_MINER_ID=$!
 bash bin/release/background_check.sh $NPM_MINER_ID 'NPM' 'npm_complete' &
 
 # # PyPI
-# bash bin/release/generate_dataset_scripts/pypi_miner.sh > logs/pypi.out &
-# PYPI_MINER_ID=$!
-# bash bin/release/background_check.sh $PYPI_MINER_ID 'PyPI' 'pypi_complete' &
+bash bin/release/generate_dataset_scripts/pypi_miner.sh > logs/pypi.out &
+PYPI_MINER_ID=$!
+bash bin/release/background_check.sh $PYPI_MINER_ID 'PyPI' 'pypi_complete' &
 
 # Check all miners are complete
 bash bin/release/background_check_completion_status.sh &

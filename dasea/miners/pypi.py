@@ -122,6 +122,7 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                         maintainer=version_info["maintainer"]
                     )
                 versions.append(v)
+                
                 # Parse dependencies
                 deps = req.json()["info"]["requires_dist"]
                 if not deps:

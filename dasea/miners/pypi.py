@@ -14,8 +14,6 @@ import pickle
 # Based on the documentation form here:
 # https://stackoverflow.com/questions/21419009/json-api-for-pypi-how-to-list-packages
 
-CHUNK_SIZE = 5;
-
 PYPI_REGISTRY = "https://pypi.python.org/simple/"
 TMP_REGISTRY_FILE = "./data/tmp/pypi/pkg_names.pkl"
 
@@ -61,9 +59,7 @@ def _collect_pkg_registry():
 
 # Write chunks to csv, and empty array to save memory
 def _write_chunk_to_csv(array, file):
-    if len(array) >= CHUNK_SIZE:
-        _serialize_data_rows(array, file)
-        array = []
+    _serialize_data_rows(array, file)
 
 
 def _collect_packages(metadata_dict):
@@ -80,11 +76,11 @@ def _collect_packages(metadata_dict):
 
 
 def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
-    versions = []
-    dependencies = []
     version_idx = 0
 
     for pkg_name in tqdm(metadata_dict):
+        versions = []
+        dependencies = []
         # Request the package versions data
         pkg_url = PKG_URL.format(pkg_name=pkg_name)
 
@@ -93,9 +89,6 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
             LOGGER.error(r.status_code, r, "PACKAGE", pkg_name)
             continue
         pkg_doc = r.json()
-
-        if (pkg_name == '24to25'):
-            break
 
         version_numbers = list(pkg_doc["releases"].keys())
 
@@ -161,15 +154,11 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                     )
                     dependencies.append(d)
                 version_idx += 1
-        ## Write to file once in a while
-        _write_chunk_to_csv(versions, VERSIONS_FILE)
-        _write_chunk_to_csv(dependencies, DEPS_FILE)
-
-    if versions:
-        _serialize_data_rows(versions, VERSIONS_FILE)
-    if dependencies:
-        _serialize_data_rows(dependencies, DEPS_FILE)
-    return
+        ## Write to file after each version
+        if versions:
+            _write_chunk_to_csv(versions, VERSIONS_FILE)
+        if dependencies:
+            _write_chunk_to_csv(dependencies, DEPS_FILE)
 
 def _parse_version_deps(dependency):
 

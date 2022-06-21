@@ -1,4 +1,5 @@
 from cmath import log
+import shutil
 import sys
 import os
 import logging
@@ -6,19 +7,17 @@ import requests
 from datetime import datetime
 from tqdm import tqdm
 from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data
+from dasea.common.utils import _serialize_data, _serialize_data_rows
 from bs4 import BeautifulSoup
 import pickle
 
 # Based on the documentation form here:
 # https://stackoverflow.com/questions/21419009/json-api-for-pypi-how-to-list-packages
 
-
 PYPI_REGISTRY = "https://pypi.python.org/simple/"
 TMP_REGISTRY_FILE = "./data/tmp/pypi/pkg_names.pkl"
 
 PKG_URL = "https://pypi.python.org/pypi/{pkg_name}/json"
-VERSIONS_URL = "https://rubygems.org/api/v1/versions/{pkg_name}.json"
 VERSION_URL = "https://pypi.python.org/pypi/{pkg_name}/{version}/json"
 
 # Due to rate limiting and fair use, we have to set such a header
@@ -58,6 +57,10 @@ def _collect_pkg_registry():
 
     return pkg_names
 
+# Write chunks to csv, and empty array to save memory
+def _write_chunk_to_csv(array, file):
+    _serialize_data_rows(array, file)
+
 
 def _collect_packages(metadata_dict):
     pkg_idx_map = {}
@@ -73,19 +76,20 @@ def _collect_packages(metadata_dict):
 
 
 def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
-    versions = []
-    dependencies = []
     version_idx = 0
 
-    for pkg_name in tqdm(metadata_dict):
+    for name in tqdm(metadata_dict):
+        pkg_name = name.lower()
+        versions = []
+        dependencies = []
         # Request the package versions data
         pkg_url = PKG_URL.format(pkg_name=pkg_name)
+
         r = requests.get(pkg_url, headers=HEADERS)
         if not r.ok:
-            LOGGER.error(r.status_code, "PACKAGE", pkg_name)
+            LOGGER.error(r.status_code, r, "PACKAGE", pkg_name)
             continue
         pkg_doc = r.json()
-
 
         version_numbers = list(pkg_doc["releases"].keys())
 
@@ -94,7 +98,7 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                 version_url = VERSION_URL.format(pkg_name=pkg_name, version=version_number)
                 req = requests.get(version_url, headers=HEADERS)
                 if not req.ok:
-                    LOGGER.error(r.status_code, "VERSION", pkg_name, version_number)
+                    LOGGER.error(r.status_code, r, "VERSION", pkg_name, version_number)
                     continue
 
                 # Parse general information about the version
@@ -117,7 +121,6 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                         maintainer=version_info["maintainer"]
                     )
                 versions.append(v)
-
 
                 # Parse dependencies
                 deps = req.json()["info"]["requires_dist"]
@@ -151,9 +154,12 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                         kind=Kind.RUN.name, # TODO: Check if this is correct
                     )
                     dependencies.append(d)
-        version_idx += 1
-
-    return versions, dependencies
+                version_idx += 1
+        ## Write to file after each version
+        if versions:
+            _write_chunk_to_csv(versions, VERSIONS_FILE)
+        if dependencies:
+            _write_chunk_to_csv(dependencies, DEPS_FILE)
 
 def _parse_version_deps(dependency):
 
@@ -188,16 +194,13 @@ def mine():
 
     LOGGER.info("Creating DaSEA packages...")
     pkg_idx_map, packages_lst = _collect_packages(metadata_dict)
+    _serialize_data(packages_lst, PKGS_FILE)
 
     LOGGER.info("Creating DaSEA versions with dependencies...")
-    versions_lst, deps_lst = _collect_versions_with_dependencies(metadata_dict, pkg_idx_map)
-
-    _serialize_data(packages_lst, PKGS_FILE)
-    _serialize_data(versions_lst, VERSIONS_FILE)
-    _serialize_data(deps_lst, DEPS_FILE)
+    _collect_versions_with_dependencies(metadata_dict, pkg_idx_map)
 
     # delete tmp files
-    # shutil.rmtree(TMP_REGISTRY_FILE, ignore_errors=True)
+    shutil.rmtree(TMP_REGISTRY_FILE, ignore_errors=True)
 
 if __name__ == "__main__":
     mine()

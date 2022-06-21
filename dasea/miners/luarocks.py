@@ -70,7 +70,7 @@ def _collect_packages(metadata_dict):
     packages = []
     for idx, pkg in enumerate(metadata_dict):
       # TODO: Check https://github.com/luarocks/luarocks/issues/633, maybe lowercase?
-        pkg_name = pkg['name']
+        pkg_name = pkg['name'].lower()
         p = Package(idx, pkg_name, "LuaRocks")
         packages.append(p)
         pkg_idx_map[pkg_name] = idx
@@ -84,7 +84,7 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
     version_idx = 0
 
     for pckg in tqdm(metadata_dict):
-        pkg_name = pckg['name']
+        pkg_name = pckg['name'].lower()
         pkg_url = pckg['url']
 
         # Get the package versions
@@ -127,7 +127,8 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
             versions.append(v)
 
             try:
-                for target_name in version_info["dependencies"]:
+                for trg_name in version_info["dependencies"]:
+                    target_name = trg_name.strip().lower()
                     source_pkg_idx = pkg_idx_map.get(pkg_name, None)
                     target_idx = pkg_idx_map.get(target_name, None)
 

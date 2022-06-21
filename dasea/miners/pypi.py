@@ -14,8 +14,6 @@ import pickle
 # Based on the documentation form here:
 # https://stackoverflow.com/questions/21419009/json-api-for-pypi-how-to-list-packages
 
-CHUNK_SIZE = 5;
-
 PYPI_REGISTRY = "https://pypi.python.org/simple/"
 TMP_REGISTRY_FILE = "./data/tmp/pypi/pkg_names.pkl"
 
@@ -122,7 +120,7 @@ def _collect_versions_with_dependencies(metadata_dict, pkg_idx_map):
                         maintainer=version_info["maintainer"]
                     )
                 versions.append(v)
-                
+
                 # Parse dependencies
                 deps = req.json()["info"]["requires_dist"]
                 if not deps:

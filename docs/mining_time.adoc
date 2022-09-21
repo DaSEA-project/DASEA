@@ -1,5 +1,5 @@
 === Mining time
-The following table shows an approximate mining time for each ecosystem since the last release. Miners run in parallel.
+The following table shows an approximate mining time for each ecosystem since the last release.
 
 [options="header",]
 |===

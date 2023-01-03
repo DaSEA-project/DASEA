@@ -88,6 +88,10 @@ def main():
             from dasea.miners.luarocks import mine as luarocks_mine
 
             luarocks_mine()
+        elif arguments["<pkgmanager>"] == "opam":
+            from dasea.miners.opam import mine as opam_mine
+
+            opam_mine()
         else:
             print(f'No miner for {arguments["<pkgmanager>"]} implemented', file=sys.stderr)
             sys.exit(127)

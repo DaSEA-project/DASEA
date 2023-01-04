@@ -4,11 +4,13 @@ import os
 import re
 import shutil
 import subprocess
+from shutil import which
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from dasea.common.datamodel import Package, Version, Dependency, Kind
 from dasea.common.utils import _serialize_data
+
 
 OPAM_REGISTRY = "https://github.com/ocaml/opam-repository.git"
 TMP_DIR = "./data/tmp/opam"
@@ -23,6 +25,10 @@ logging.basicConfig(
 )
 logging.getLogger("urllib3.connectionpool").setLevel(logging.ERROR)
 LOGGER = logging.getLogger(__name__)
+
+if not which("opam"):
+    LOGGER.error("OPAM package manager needs to be installed and on PATH.")
+    sys.exit(1)
 
 METADATA_FIELDS = (
     "opam-version",
@@ -285,20 +291,14 @@ def mine():
 
     LOGGER.info("Creating DaSEA versions...")
     metadata_dict = _retrieve_opam_metadata()
-
     versions_lst = _collect_versions(pkg_idx_map, metadata_dict)
 
     LOGGER.info("Creating DaSEA dependencies...")
-
     deps_lst = _collect_dependencies(pkg_idx_map, metadata_dict)
 
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)
     _serialize_data(deps_lst, DEPS_FILE)
-
-    # # delete cloned repo
-    # shutil.rmtree(TMP_DIR, ignore_errors=True)
-
 
 if __name__ == "__main__":
     mine()

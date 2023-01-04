@@ -1,16 +1,16 @@
-import sys
 import logging
 import os
 import re
 import shutil
 import subprocess
-from shutil import which
+import sys
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from dasea.common.datamodel import Package, Version, Dependency, Kind
-from dasea.common.utils import _serialize_data
+from shutil import which
 
+from dasea.common.datamodel import Dependency, Kind, Package, Version
+from dasea.common.utils import _serialize_data
 
 OPAM_REGISTRY = "https://github.com/ocaml/opam-repository.git"
 TMP_DIR = "./data/tmp/opam"
@@ -299,6 +299,7 @@ def mine():
     _serialize_data(packages_lst, PKGS_FILE)
     _serialize_data(versions_lst, VERSIONS_FILE)
     _serialize_data(deps_lst, DEPS_FILE)
+
 
 if __name__ == "__main__":
     mine()

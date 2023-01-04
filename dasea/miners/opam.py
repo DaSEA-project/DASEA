@@ -1,7 +1,4 @@
 import logging
-import os
-import re
-import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -99,12 +96,6 @@ def _collect_packages(pkg_names: list):
         pkg_idx_map[pkg_name] = idx
 
     return pkg_idx_map, packages
-
-
-def get_opam_contents(opam_metadata_file):
-    with open(opam_metadata_file) as fp:
-        contents = fp.readlines()
-    return contents
 
 
 def _retrieve_opam_metadata():
@@ -251,8 +242,6 @@ def _collect_dependencies(pkg_idx_map, metadata_dict):
 
     for pkg_name, pkg_metadata in metadata_dict.items():
         for pkg_version in pkg_metadata.keys():
-
-            pkg_idx = pkg_idx_map.get(pkg_name, None)
 
             dependency_specs = _parse_opam_dependency_info(pkg_name, pkg_version, metadata_dict)
 

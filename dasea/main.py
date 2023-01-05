@@ -13,10 +13,13 @@ Options:
 """
 import sys
 from docopt import docopt
+import importlib.metadata
+
+VERSION = importlib.metadata.version("dasea")
+
 
 def main():
-    # TODO: Adjust version to what is given in pyproject.toml
-    arguments = docopt(__doc__, version="0.1.0")
+    arguments = docopt(__doc__, version=str(VERSION))
 
     # Imports are inlined below to allow for incomplete setups on remote miners
     if arguments["mine"]:
@@ -40,26 +43,18 @@ def main():
             from dasea.miners.alire import mine as alire_mine
 
             alire_mine()
-        # elif arguments["<pkgmanager>"] == "maven":
-        #     from dasea.miners.maven import mine as maven_mine
-
-        #     maven_mine()
         elif arguments["<pkgmanager>"] == "nimble":
             from dasea.miners.nimble import mine as nimble_mine
 
             nimble_mine()
-        # elif arguments["<pkgmanager>"] == "apt":
-        #     from dasea.miners.apt import mine as apt_mine
-
-        #     apt_mine()
         elif arguments["<pkgmanager>"] == "ports":
             from dasea.miners.ports import mine as ports_mine
 
             ports_mine()
-        # elif arguments["<pkgmanager>"] == "pkgsrc":
-        #     from dasea.miners.ports import mine as pkgsrc_mine
+        elif arguments["<pkgmanager>"] == "pkgsrc":
+            from dasea.miners.ports import mine as pkgsrc_mine
 
-        #     pkgsrc_mine()
+            pkgsrc_mine()
         elif arguments["<pkgmanager>"] == "homebrew":
             from dasea.miners.homebrew import mine as brew_mine
 

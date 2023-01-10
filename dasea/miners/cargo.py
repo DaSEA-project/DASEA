@@ -197,7 +197,26 @@ def mine():
         r = requests.get(CARGO_DB_DUMP_URL)
         fp.write(r.content)
     with tarfile.open(dump_file) as fp:
-        fp.extractall(TMP_DIR)
+        def is_within_directory(directory, target):
+            
+            abs_directory = os.path.abspath(directory)
+            abs_target = os.path.abspath(target)
+        
+            prefix = os.path.commonprefix([abs_directory, abs_target])
+            
+            return prefix == abs_directory
+        
+        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+        
+            for member in tar.getmembers():
+                member_path = os.path.join(path, member.name)
+                if not is_within_directory(path, member_path):
+                    raise Exception("Attempted Path Traversal in Tar File")
+        
+            tar.extractall(path, members, numeric_owner=numeric_owner) 
+            
+        
+        safe_extract(fp, TMP_DIR)
 
     os.remove(dump_file)
     dataset_dir = glob(TMP_DIR + "*")[0]  # TODO: is it always the last?
